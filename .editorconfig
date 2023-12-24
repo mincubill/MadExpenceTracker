@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# S2737: "catch" clauses should do more than rethrow
+dotnet_diagnostic.S2737.severity = none
