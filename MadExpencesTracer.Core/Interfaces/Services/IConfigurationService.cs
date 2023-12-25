@@ -11,6 +11,6 @@ namespace MadExpenceTracker.Core.Interfaces.Services
     {
         Configuration GetConfiguration();
         Configuration SetConfiguration(Configuration configurationToSave);
-        bool UpdateConfiguration(Configuration configurationToSave);
+        Configuration UpdateConfiguration(Configuration configurationToSave);
     }
 }

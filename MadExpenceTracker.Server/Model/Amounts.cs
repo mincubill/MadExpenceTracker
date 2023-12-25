@@ -1,9 +1,9 @@
 ﻿namespace MadExpenceTracker.Server.Model
 {
-    public class Amounts
+    public class AmountsApi
     {
-        public string ObjectId { get; set; }
+        public Guid Id { get; set; }
         public string RunningMonth { get; set; }
-        public IEnumerable<Amount> Amount { get; set; }
+        public IEnumerable<AmountApi> Amount { get; set; }
     }
 }

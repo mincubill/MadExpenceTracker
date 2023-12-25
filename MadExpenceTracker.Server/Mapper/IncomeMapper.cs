@@ -3,7 +3,7 @@ using MadExpenceTracker.Server.Model;
 
 namespace MadExpenceTracker.Server.Mapper
 {
-    public class IncomeMapper
+    public static class IncomeMapper
     {
         public static IncomesApi MapToApi(Incomes input)
         {
@@ -24,6 +24,36 @@ namespace MadExpenceTracker.Server.Mapper
                 RunningMonth = input.RunningMonth,
                 Income = expencesList
             };
+        }
+
+        public static IncomeApi MapToApi(Income input)
+        {
+            return new IncomeApi()
+            {
+                Id = input.Id,
+                Name = input.Name,
+                Amount = input.Amount,
+                Date = input.Date
+            };
+        }
+
+        public static IEnumerable<IncomesApi> MapToApi(IEnumerable<Incomes> input)
+        {
+            foreach (var income in input)
+            {
+                yield return new IncomesApi()
+                {
+                    Id = income.Id,
+                    RunningMonth = income.RunningMonth,
+                    Income = income.Income.Select(e => new IncomeApi
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        Amount = e.Amount,
+                        Date = e.Date
+                    })
+                };
+            }
         }
 
         public static Income MapToModel(IncomeApi input)
@@ -65,36 +95,6 @@ namespace MadExpenceTracker.Server.Mapper
                         Name = i.Name,
                         Amount = i.Amount,
                         Date = i.Date
-                    })
-                };
-            }
-        }
-
-        public static IncomeApi MapToApi(Income input)
-        {
-            return new IncomeApi()
-            {
-                Id = input.Id,
-                Name = input.Name,
-                Amount = input.Amount,
-                Date = input.Date
-            };
-        }
-
-        public static IEnumerable<IncomesApi> MapToApi(IEnumerable<Incomes> input)
-        {
-            foreach (var income in input)
-            {
-                yield return new IncomesApi()
-                {
-                    Id = income.Id,
-                    RunningMonth = income.RunningMonth,
-                    Income = income.Income.Select(e => new IncomeApi
-                    {
-                        Id = e.Id,
-                        Name = e.Name,
-                        Amount = e.Amount,
-                        Date = e.Date
                     })
                 };
             }
