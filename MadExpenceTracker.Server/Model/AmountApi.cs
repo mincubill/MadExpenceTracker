@@ -1,6 +1,6 @@
 ﻿namespace MadExpenceTracker.Server.Model
 {
-    public class Amount
+    public class AmountApi
     {
         public Guid Id { get; set; }
         public long TotalBaseExpences { get; set; }

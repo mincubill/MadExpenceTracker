@@ -9,8 +9,9 @@ namespace MadExpenceTracker.Core.Interfaces.Services
 {
     public interface IAmountsService
     {
-        Amounts GetAmounts(Guid id);
+        Amount GetAmount(Guid expencesId, Guid incomesId);
         Amount GetAmount(Guid id);
+        Amounts GetAmounts();
         Amounts Create(Amount amount);
     }
 }

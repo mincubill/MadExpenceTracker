@@ -3,7 +3,7 @@ using MadExpenceTracker.Server.Model;
 
 namespace MadExpenceTracker.Server.Mapper
 {
-    public class ExpencesMapper
+    public static class ExpencesMapper
     {
         public static ExpencesApi MapToApi(Expences input)
         {
@@ -25,6 +25,38 @@ namespace MadExpenceTracker.Server.Mapper
                 RunningMonth = input.RunningMonth,
                 Expence = expencesList
             };
+        }
+
+        public static ExpenceApi MapToApi(Expence input)
+        {
+            return new ExpenceApi()
+            {
+                Id = input.Id,
+                Name = input.Name,
+                Amount = input.Amount,
+                Date = input.Date,
+                ExpenceType = (Model.ExpenceType)input.ExpenceType
+            };
+        }
+
+        public static IEnumerable<ExpencesApi> MapToApi(IEnumerable<Expences> input)
+        {
+            foreach (var expences in input)
+            {
+                yield return new ExpencesApi()
+                {
+                    Id = expences.Id,
+                    RunningMonth = expences.RunningMonth,
+                    Expence = expences.Expence.Select(e => new ExpenceApi
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        Amount = e.Amount,
+                        Date = e.Date,
+                        ExpenceType = (Model.ExpenceType)e.ExpenceType,
+                    })
+                };
+            }
         }
 
         public static Expence MapToModel(ExpenceApi input)
@@ -69,38 +101,6 @@ namespace MadExpenceTracker.Server.Mapper
                         Amount = e.Amount,
                         Date = e.Date,
                         ExpenceType = (Core.Model.ExpenceType) e.ExpenceType,
-                    })
-                };
-            }
-        }
-
-        public static ExpenceApi MapToApi(Expence input)
-        {
-            return new ExpenceApi()
-            {
-                Id = input.Id,
-                Name = input.Name,
-                Amount = input.Amount,
-                Date = input.Date,
-                ExpenceType = (Model.ExpenceType) input.ExpenceType
-            };
-        }
-
-        public static IEnumerable<ExpencesApi> MapToApi(IEnumerable<Expences> input)
-        {
-            foreach (var expences in input)
-            {
-                yield return new ExpencesApi()
-                {
-                    Id = expences.Id,
-                    RunningMonth = expences.RunningMonth,
-                    Expence = expences.Expence.Select(e => new ExpenceApi
-                    {
-                        Id = e.Id,
-                        Name = e.Name,
-                        Amount = e.Amount,
-                        Date = e.Date,
-                        ExpenceType = (Model.ExpenceType)e.ExpenceType,
                     })
                 };
             }

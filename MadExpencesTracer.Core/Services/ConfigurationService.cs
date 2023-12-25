@@ -23,9 +23,16 @@ namespace MadExpenceTracker.Core.Services
             return _persistence.SetConfiguration(configurationToSave);
         }
 
-        public bool UpdateConfiguration(Configuration configurationToSave)
+        public Configuration UpdateConfiguration(Configuration configurationToSave)
         {
-            return _persistence.UpdateConfiguration(configurationToSave);
+            if(_persistence.UpdateConfiguration(configurationToSave))
+            {
+                return configurationToSave;
+            }
+            else
+            {
+                throw new Exception("Error updating the configuration");
+            }
         }
     }
 }

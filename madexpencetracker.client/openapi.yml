@@ -302,24 +302,40 @@
           '500':
             description: Internal server error
             
-    /amounts:
+    /amount/{expenceId}/{incomeId}:
       get:
         tags:
           - Amounts
         summary: Returns a map of Amounts
         description: Returns a map of Amounts
-        operationId: getAmounts
+        operationId: getAmount
+        parameters:
+          - name: expenceId
+            in: path
+            description: ID of Income to delete
+            required: true
+            schema:
+              type: string
+              format: guid
+          - name: incomeId
+            in: path
+            description: ID of Income to delete
+            required: true
+            schema:
+              type: string
+              format: guid
         responses:
           '200':
             description: Successful operation
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/Amounts'
+                  $ref: '#/components/schemas/Amount'
           '204':
             description: No Expences registered
           '500':
             description: Internal server error
+    /amount:
       post:
         tags:
           - Amounts
@@ -338,7 +354,25 @@
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/Amount'
+                  $ref: '#/components/schemas/Amount'        
+    /amounts:
+      get:
+        tags:
+          - Amounts
+        summary: Returns a map of Amounts
+        description: Returns a map of Amounts
+        operationId: getAmounts
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Amounts'
+          '204':
+            description: No Expences registered
+          '500':
+            description: Internal server error
     /amounts/{Id}:
       get:
         tags:
