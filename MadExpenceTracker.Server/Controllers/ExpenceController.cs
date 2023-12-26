@@ -57,5 +57,12 @@ namespace MadExpenceTracker.Server.Controllers
         {
             return StatusCode( 200, ExpencesMapper.MapToApi(_service.GetAll().First(e => e.Id == id)) );
         }
+
+        [HttpGet]
+        [Route("/expences/current")]
+        public IActionResult GetCurrentExpences()
+        {
+            return StatusCode( 200, ExpencesMapper.MapToApi(_service.GetExpences(true)) );
+        }
     }
 }

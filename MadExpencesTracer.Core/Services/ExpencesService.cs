@@ -23,6 +23,11 @@ namespace MadExpenceTracker.Core.Services
             return _persistence.Get(id);
         }
 
+        public Expences GetExpences(bool isActive)
+        {
+            return _persistence.GetByActive(isActive);
+        }
+
         public Expence GetExpence(Guid id)
         {
             return _persistence.Get(id).Expence.First(e => e.Id == id);
@@ -30,6 +35,7 @@ namespace MadExpenceTracker.Core.Services
 
         public Expences Create(Expence expence)
         {
+            expence.Id = expence.Id == Guid.Empty ? Guid.NewGuid() : expence.Id;
             return _persistence.AddExpence(expence);
         }
 
@@ -59,5 +65,7 @@ namespace MadExpenceTracker.Core.Services
         {
             return _persistence.UpdateExpencesIsActive(false, month);
         }
+
+        
     }
 }

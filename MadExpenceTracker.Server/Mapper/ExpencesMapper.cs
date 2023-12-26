@@ -71,6 +71,23 @@ namespace MadExpenceTracker.Server.Mapper
             };
         }
 
+        public static Expences MapToModel(ExpencesApi input)
+        {
+            return new Expences()
+            {
+                Id = input.Id,
+                RunningMonth = input.RunningMonth,
+                Expence = input.Expence.Select(e => new Expence
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Amount = e.Amount,
+                    Date = e.Date,
+                    ExpenceType = (Core.Model.ExpenceType)e.ExpenceType,
+                })
+            };
+        }
+
         public static IEnumerable<Expence> MapToModel(IEnumerable<ExpenceApi> input)
         {
             foreach (var item in input)

@@ -1,5 +1,6 @@
 ﻿using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Server.Model;
+using static MongoDB.Driver.WriteConcern;
 
 namespace MadExpenceTracker.Server.Mapper
 {
@@ -67,6 +68,23 @@ namespace MadExpenceTracker.Server.Mapper
                 TotalAditionalExpences = input.TotalAditionalExpences,
                 TotalBaseExpences = input.TotalBaseExpences,
                 TotalIncomes = input.TotalIncomes
+            };
+        }
+
+        public static Amounts MapToModel(AmountsApi input)
+        {
+            return new Amounts()
+            {
+                Id = input.Id,
+                RunningMonth = input.RunningMonth,
+                Amount = input.Amount.Select(a => new Amount
+                {
+                    Id = a.Id,
+                    Savings = a.Savings,
+                    TotalAditionalExpences = a.TotalAditionalExpences,
+                    TotalBaseExpences = a.TotalBaseExpences,
+                    TotalIncomes = a.TotalIncomes
+                })
             };
         }
 

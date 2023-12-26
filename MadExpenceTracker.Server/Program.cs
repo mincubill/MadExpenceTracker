@@ -1,6 +1,8 @@
 using MadExpenceTracker.Core.Interfaces.Services;
+using MadExpenceTracker.Core.Interfaces.UseCase;
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Core.Services;
+using MadExpenceTracker.Core.UseCase;
 using MadExpenceTracker.Persistence.MongoDB.MongoConfiguration;
 using MadExpenceTracker.Persistence.MongoDB.Persistence;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,7 +73,22 @@ builder.Services.AddScoped<IAmountsService, AmountsService>(o =>
 });
 builder.Services.AddScoped<IConfigurationService, ConfigurationService>();
 builder.Services.AddScoped<IMonthIndexingService, MonthIndexingService>();
+builder.Services.AddScoped<IExpencesService, ExpencesService>();
+builder.Services.AddScoped<IIncomeService, IncomeService>();
 
+builder.Services.AddScoped<IMonthClose, MonthClose>(o =>
+{
+    Connection mongoConnection = new Connection();
+    MongoClient mongoClient = mongoConnection.GetClient();
+    IMongoDatabase mongoDatabase = mongoConnection.GetDatabase(mongoClient);
+
+    return new MonthClose(
+        new ExpencesPersistence(mongoDatabase),
+        new IncomePersistence(mongoDatabase),
+        new AmountsPersistence(mongoDatabase),
+        new ConfigurationPersistence(mongoDatabase),
+        new MonthIndexPersistence(mongoDatabase));
+});
 
 
 var app = builder.Build();

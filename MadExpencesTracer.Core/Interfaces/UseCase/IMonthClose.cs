@@ -4,6 +4,6 @@ namespace MadExpenceTracker.Core.Interfaces.UseCase
 {
     public interface IMonthClose
     {
-        bool CloseMonth(Expences expences, Incomes incomes, Amounts amounts);
+        MonthIndex CloseMonth(Expences expences, Incomes incomes, Amount amount);
     }
 }

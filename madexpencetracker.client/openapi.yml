@@ -154,6 +154,26 @@
             description: Expence not found
           '500':
             description: Internal server error
+    /expences/current:
+      get:
+        tags:
+          - Expences
+        summary: Returns a map of Expences
+        description: Returns a map of Expences
+        operationId: getCurrentExpences
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Expences'
+          '204':
+            description: No Expences registered
+          '404':
+            description: Expence not found
+          '500':
+            description: Internal server error
             
     /income:
       post:
@@ -288,6 +308,26 @@
             schema:
               type: string
               format: guid
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Incomes'
+          '204':
+            description: No Incomes registered
+          '404':
+            description: Income not found
+          '500':
+            description: Internal server error
+    /incomes/current:
+      get:
+        tags:
+          - Incomes
+        summary: Returns Incomes
+        description: Returns a map of Incomes
+        operationId: getCurrentIncomes
         responses:
           '200':
             description: Successful operation
@@ -483,7 +523,7 @@
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/MonthIndexes'
+                  $ref: '#/components/schemas/MonthIndexArray'
           '204':
             description: No Expences registered
           '404':
@@ -514,6 +554,35 @@
             description: Already created
           '500':
             description: Internal server error
+            
+    /monthClose:
+      post:
+        tags:
+          - Operations
+        summary: Closes the month
+        description: Closes the month
+        operationId: closeMonth
+        requestBody:
+          description: Closes the month
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonthResume'
+                
+          required: true
+        responses:
+          '201':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/MonthIndex'
+          '409':
+            description: Already created
+          '500':
+            description: Internal server error
+        
+        
             
   components:
     schemas:
@@ -664,4 +733,19 @@
         type: array
         items:
          $ref: '#/components/schemas/Incomes'
+      
+      MonthIndexArray:
+        type: array
+        items:
+         $ref: '#/components/schemas/MonthIndexes'
+      
+      MonthResume:
+        type: object
+        properties:
+          expences:
+            $ref: '#/components/schemas/Expences'
+          incomes:
+            $ref: '#/components/schemas/Incomes'
+          amounts:
+            $ref: '#/components/schemas/Amount'
       

@@ -58,5 +58,12 @@ namespace MadExpenceTracker.Server.Controllers
         {
             return StatusCode(200, IncomeMapper.MapToApi(_service.GetAll().First(e => e.Id == id)));
         }
+
+        [HttpGet]
+        [Route("/incomes/current")]
+        public IActionResult GetCurrentIncomes()
+        {
+            return StatusCode(200, IncomeMapper.MapToApi(_service.GetIncomes(true)));
+        }
     }
 }

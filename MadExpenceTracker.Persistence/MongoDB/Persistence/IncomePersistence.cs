@@ -37,8 +37,21 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                var filter = Builders<IncomesMongo>.Filter.ElemMatch(e => e.Incomes, exp => exp.Id == id);
-                IncomesMongo expenceMongo = _incomesCollection.Find(filter).First();
+                IncomesMongo expenceMongo = _incomesCollection.Find(i => i.Id == id).First();
+                return IncomeMapper.MapToModel(expenceMongo);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public Incomes GetByActive(bool isActive)
+        {
+            try
+            {
+                IncomesMongo expenceMongo = _incomesCollection.Find(i => i.IsActive == isActive).First();
                 return IncomeMapper.MapToModel(expenceMongo);
             }
             catch (Exception)
@@ -148,6 +161,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                 .PullFilter(e => e.Incomes, Builders<IncomeMongo>.Filter.Where(nm => nm.Id == id));
             var result = _incomesCollection.UpdateOne(filter, update);
             return result.IsAcknowledged;
-        }       
+        }
+
+        
     }
 }

@@ -6,6 +6,7 @@ namespace MadExpenceTracker.Core.Interfaces.Services
     {
         IEnumerable<Expences> GetAll();
         Expences GetExpences(Guid id);
+        Expences GetExpences(bool isActive);
         Expence GetExpence(Guid id);
         Expences Create(Expence expence);
         bool CreateNewMonth();

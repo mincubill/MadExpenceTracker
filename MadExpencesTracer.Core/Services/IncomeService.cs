@@ -23,6 +23,11 @@ namespace MadExpenceTracker.Core.Services
             return _persistence.Get(id);
         }
 
+        public Incomes GetIncomes(bool isActive)
+        {
+            return _persistence.GetByActive(isActive);
+        }
+
         public Income GetIncome(Guid id)
         {
             return _persistence.Get(id).Income.First(e => e.Id == id);
@@ -30,6 +35,7 @@ namespace MadExpenceTracker.Core.Services
 
         public Incomes Create(Income income)
         {
+            income.Id = income.Id == Guid.Empty ? Guid.NewGuid() : income.Id;
             return _persistence.AddIncome(income);
         }
 

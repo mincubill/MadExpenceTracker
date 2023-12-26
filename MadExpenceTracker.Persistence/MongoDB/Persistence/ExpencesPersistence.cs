@@ -37,8 +37,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                var filter = Builders<ExpencesMongo>.Filter.ElemMatch(e => e.Expences, exp => exp.Id == id);
-                ExpencesMongo expenceMongo = _expencesCollection.Find(filter).First();
+                ExpencesMongo expenceMongo = _expencesCollection.Find(e => e.Id == id).First();
                 return ExpenceMapper.MapToModel(expenceMongo);
             }
             catch (Exception)
@@ -46,7 +45,20 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 
                 throw;
             }
+        }
 
+        public Expences GetByActive(bool isActive)
+        {
+            try
+            {
+                ExpencesMongo expenceMongo = _expencesCollection.Find(e => e.IsActive == isActive).First();
+                return ExpenceMapper.MapToModel(expenceMongo);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public Expences AddExpence(Expence expenceToCreate)
@@ -152,5 +164,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             var result = _expencesCollection.UpdateOne(filter, update);
             return result.IsAcknowledged;
         }
+
+        
     }
 }

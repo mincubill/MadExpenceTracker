@@ -27,13 +27,14 @@ namespace MadExpenceTracker.Core.Services
             long totalAditionalExpences = expences.Where(e => e.ExpenceType == ExpenceType.Aditional).Sum(e => e.Amount);
             long totalIncomes = _incomePersistence.Get(incomesId).Income.Sum(i => i.Amount);
             byte savingRate = _configurationPersistence.GetConfiguration().SavingsRate;
+            var wea = (savingRate / 100f);
             return new Amount
             {
                 Id = Guid.NewGuid(),
                 TotalBaseExpences = totalBaseExpences,
                 TotalAditionalExpences = totalAditionalExpences,
                 TotalIncomes = totalIncomes,
-                Savings = totalIncomes * (savingRate/100),
+                Savings = Convert.ToInt64(totalIncomes * (savingRate/100f))
             };
         }
 
