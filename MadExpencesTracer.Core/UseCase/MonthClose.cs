@@ -1,12 +1,6 @@
-﻿using MadExpenceTracker.Core.Interfaces.Services;
-using MadExpenceTracker.Core.Interfaces.UseCase;
+﻿using MadExpenceTracker.Core.Interfaces.UseCase;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MadExpenceTracker.Core.UseCase
 {
@@ -84,19 +78,6 @@ namespace MadExpenceTracker.Core.UseCase
 
         private Amount CreateAmount(Amount amount) 
         {
-            //IEnumerable<Expence> expences = _expencePersistence.Get(expencesId).Expence;
-            //long totalBaseExpences = expences.Where(e => e.ExpenceType == ExpenceType.Base).Sum(e => e.Amount);
-            //long totalAditionalExpences = expences.Where(e => e.ExpenceType == ExpenceType.Aditional).Sum(e => e.Amount);
-            //long totalIncomes = _incomePersistence.Get(incomesId).Income.Sum(i => i.Amount);
-            //byte savingRate = _configuration.GetConfiguration().SavingsRate;
-            //Amount calculatedAmounts = new Amount
-            //{
-            //    Id = Guid.NewGuid(),
-            //    TotalBaseExpences = totalBaseExpences,
-            //    TotalAditionalExpences = totalAditionalExpences,
-            //    TotalIncomes = totalIncomes,
-            //    Savings = Convert.ToInt64(totalIncomes * (savingRate / 100f))
-            //};
             amount.Id = amount.Id == Guid.Empty ? Guid.NewGuid() : amount.Id;
             _amountsPersistence.AddAmount(amount);
             return amount;
