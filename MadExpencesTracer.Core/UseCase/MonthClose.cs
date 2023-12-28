@@ -1,68 +1,86 @@
-﻿using MadExpenceTracker.Core.Interfaces.Services;
-using MadExpenceTracker.Core.Interfaces.UseCase;
+﻿using MadExpenceTracker.Core.Interfaces.UseCase;
 using MadExpenceTracker.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MadExpenceTracker.Core.Persistence;
 
 namespace MadExpenceTracker.Core.UseCase
 {
     public class MonthClose : IMonthClose
     {
-        private readonly IExpencesService _expencesService;
-        private readonly IIncomeService _incomeService;
-        private readonly IAmountsService _amountsService;
-        private readonly IConfigurationService _configurationService;
-        private readonly IMonthIndexingService _monthIndexingService;
+        private readonly IExpencePersistence _expencePersistence;
+        private readonly IIncomePersistence _incomePersistence;
+        private readonly IAmountsPersistence _amountsPersistence;
+        private readonly IConfigurationPersistence _configuration;
+        private readonly IMonthIndexPersistence _indexPersistence;
+        private readonly string CURRENT_MONTH = $"{DateTime.Now.Year}/{DateTime.Now.Month}";
 
-        public MonthClose(IExpencesService expencesService, 
-            IIncomeService incomeService, 
-            IAmountsService amountsService,
-            IConfigurationService configurationService,
-            IMonthIndexingService monthIndexingService)
+        public MonthClose(
+            IExpencePersistence expencePersistence,
+            IIncomePersistence incomePersistence,
+            IAmountsPersistence amountsPersistence,
+            IConfigurationPersistence configuration,
+            IMonthIndexPersistence indexPersistence)
         {
-            _expencesService = expencesService;
-            _incomeService = incomeService;
-            _amountsService = amountsService;
-            _configurationService = configurationService;
-            _monthIndexingService = monthIndexingService;
+            _expencePersistence = expencePersistence;
+            _incomePersistence = incomePersistence;
+            _amountsPersistence = amountsPersistence;
+            _configuration = configuration;
+            _indexPersistence = indexPersistence;
         }
 
-        public bool CloseMonth(Expences expences, Incomes incomes, Amounts amounts)
+        public MonthIndex CloseMonth(Expences expences, Incomes incomes, Amount amount)
         {
-           
-            throw new NotImplementedException();
+            if(CreateNewExpencesCollection() &&
+                CreateNewIncomesCollection() &&
+                CloseExpencesMonth() &&
+                CloseIncomesMonth())
+            {
+                amount = CreateAmount(amount);
+                return CreateIndexEntry(expences, incomes, amount);
+            }
+            throw new Exception("failed to close the month");
         }
 
-        private MonthIndex CreateIndexEntry(Expences expences, Incomes incomes, Amounts amounts)
+        private MonthIndex CreateIndexEntry(Expences expences, Incomes incomes, Amount amount)
         {
-            byte savingsRate = _configurationService.GetConfiguration().SavingsRate;
-            return new MonthIndex()
+            byte savingsRate = _configuration.GetConfiguration().SavingsRate;
+            MonthIndex monthIndex = new MonthIndex()
             {
                 Id = Guid.NewGuid(),
                 ExpencesId = expences.Id,
                 IncomesId = incomes.Id,
-                AmountsId = amounts.Id,
+                AmountsId = amount.Id,
                 Month = $"{DateTime.Now.Year}/{DateTime.Now.Month}",
                 SavingsRate = savingsRate
             };
+            _indexPersistence.AddMonthIndex(monthIndex);
+            return monthIndex;
         }
 
         private bool CreateNewExpencesCollection()
         {
-            return false;
+            return _expencePersistence.CreateNewExpencesDocument(CURRENT_MONTH); ;
         }
 
         private bool CreateNewIncomesCollection()
         {
-            return false;
+            return _incomePersistence.CreateNewIncomeDocument(CURRENT_MONTH);
         }
 
-        private bool CreateNewAmountsCollection()
+        private bool CloseExpencesMonth()
         {
-            return false;
+            return _expencePersistence.UpdateExpencesIsActive(false, CURRENT_MONTH);
+        }
+
+        private bool CloseIncomesMonth()
+        {
+            return _incomePersistence.UpdateExpencesIsActive(false, CURRENT_MONTH);
+        }
+
+        private Amount CreateAmount(Amount amount) 
+        {
+            amount.Id = amount.Id == Guid.Empty ? Guid.NewGuid() : amount.Id;
+            _amountsPersistence.AddAmount(amount);
+            return amount;
         }
     }
 }

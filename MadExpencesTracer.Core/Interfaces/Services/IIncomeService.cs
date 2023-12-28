@@ -6,6 +6,7 @@ namespace MadExpenceTracker.Core.Interfaces.Services
     {
         IEnumerable<Incomes> GetAll();
         Incomes GetIncomes(Guid id);
+        Incomes GetIncomes(bool isActive);
         Income GetIncome(Guid id);
         Incomes Create(Income income);
         bool CreateNewMonth();

@@ -6,6 +6,7 @@ namespace MadExpenceTracker.Core.Persistence
     {
         IEnumerable<Incomes> GetAll();
         Incomes Get(Guid id);
+        Incomes GetByActive(bool isActive);
         Incomes AddIncome(Income income);
         bool CreateNewIncomeDocument(string runningMonth);
         bool Update(Income income);

@@ -33,7 +33,7 @@ namespace MadExpenceTracker.Core.Services
                 TotalBaseExpences = totalBaseExpences,
                 TotalAditionalExpences = totalAditionalExpences,
                 TotalIncomes = totalIncomes,
-                Savings = totalIncomes * (savingRate/100),
+                Savings = Convert.ToInt64(totalIncomes * (savingRate/100f))
             };
         }
 
