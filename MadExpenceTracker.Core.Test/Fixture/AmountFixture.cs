@@ -13,7 +13,7 @@ namespace MadExpenceTracker.Core.Test.Fixture
         {
             return new Amount
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("df592bf9-ee3a-4a12-bd83-2c5817c150ed"),
                 Savings = 200000,
                 TotalAditionalExpences = 20,
                 TotalBaseExpences = 100,
@@ -25,16 +25,17 @@ namespace MadExpenceTracker.Core.Test.Fixture
         {
             return new Amounts
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("9c64e4d9-c9af-4714-8650-c98e6ebecfa7"),
                 RunningMonth = "2023/12",
                 Amount = new List<Amount>
                 {
                     new Amount
                     {
+                        Id = Guid.Parse("df592bf9-ee3a-4a12-bd83-2c5817c150ed"),
                         Savings = 200000,
-                    TotalAditionalExpences = 20,
-                    TotalBaseExpences = 100,
-                    TotalIncomes = 1000000
+                        TotalAditionalExpences = 20,
+                        TotalBaseExpences = 100,
+                        TotalIncomes = 1000000
                     }
                 }
             };

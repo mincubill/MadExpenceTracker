@@ -23,4 +23,6 @@
     <ProjectReference Include="..\MadExpenceTracker.Persistence\MadExpenceTracker.Persistence.csproj" />
   </ItemGroup>
 
+
+  
 </Project>

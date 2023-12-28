@@ -33,7 +33,20 @@ namespace MadExpenceTracker.Core.Test.Fixture
                         ExpenceType = ExpenceType.Aditional,
                         Name = "test2"
                     },
-                } 
+                }
+            };
+        }
+
+        public static Expence GetExpence()
+        {
+
+            return new Expence
+            {
+                Id = Guid.Parse("329aa332-c2ce-4f96-af38-140c6f056b99"),
+                Amount = 200,
+                Date = DateTime.Now.AddDays(-2),
+                ExpenceType = ExpenceType.Aditional,
+                Name = "test2"
             };
         }
     }

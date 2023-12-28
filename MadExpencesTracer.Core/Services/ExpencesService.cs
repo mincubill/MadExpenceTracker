@@ -65,7 +65,5 @@ namespace MadExpenceTracker.Core.Services
         {
             return _persistence.UpdateExpencesIsActive(false, month);
         }
-
-        
     }
 }
