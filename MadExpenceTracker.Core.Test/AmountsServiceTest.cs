@@ -71,7 +71,7 @@ namespace MadExpenceTracker.Core.Test
             var amount = AmountFixture.GetAmounts().Amount.First();
             var amounts = AmountFixture.GetAmounts();
 
-            _amountPersistence.Setup(a => a.GetAmount(amount.Id)).Returns(amounts);
+            _amountPersistence.Setup(a => a.GetAmounts(amount.Id)).Returns(amounts);
 
             Amount res = _amountsService.GetAmount(amount.Id);
             Assert.That(res, Is.Not.Null);

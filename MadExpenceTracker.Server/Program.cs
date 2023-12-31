@@ -5,8 +5,10 @@ using MadExpenceTracker.Core.Services;
 using MadExpenceTracker.Core.UseCase;
 using MadExpenceTracker.Persistence.MongoDB.MongoConfiguration;
 using MadExpenceTracker.Persistence.MongoDB.Persistence;
-using Microsoft.Extensions.DependencyInjection;
+using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver;
+
+IMongoDBProvider mongoProvider = new MongoDBProvider("mongodb://localhost:27017", "MadExpencesTracker");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,77 +20,39 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddSingleton<IExpencePersistence, ExpencesPersistence>(o =>
-{
-    Connection mongoConnection = new Connection();
-    MongoClient mongoClient = mongoConnection.GetClient();
-    IMongoDatabase mongoDatabase = mongoConnection.GetDatabase(mongoClient);
-    return new ExpencesPersistence(mongoDatabase);
-});
+builder.Services.AddSingleton<IExpencePersistence, ExpencesPersistence>(_ => new ExpencesPersistence(mongoProvider));
 
-builder.Services.AddSingleton<IIncomePersistence, IncomePersistence>(o =>
-{
-    Connection mongoConnection = new Connection();
-    MongoClient mongoClient = mongoConnection.GetClient();
-    IMongoDatabase mongoDatabase = mongoConnection.GetDatabase(mongoClient);
-    return new IncomePersistence(mongoDatabase);
-});
+builder.Services.AddSingleton<IIncomePersistence, IncomePersistence>(_ => new IncomePersistence(mongoProvider));
 
-builder.Services.AddSingleton<IAmountsPersistence, AmountsPersistence>(o =>
-{
-    Connection mongoConnection = new Connection();
-    MongoClient mongoClient = mongoConnection.GetClient();
-    IMongoDatabase mongoDatabase = mongoConnection.GetDatabase(mongoClient);
-    return new AmountsPersistence(mongoDatabase);
-});
+builder.Services.AddSingleton<IAmountsPersistence, AmountsPersistence>(_ => new AmountsPersistence(mongoProvider));
 
-builder.Services.AddSingleton<IConfigurationPersistence, ConfigurationPersistence>(o =>
-{
-    Connection mongoConnection = new Connection();
-    MongoClient mongoClient = mongoConnection.GetClient();
-    IMongoDatabase mongoDatabase = mongoConnection.GetDatabase(mongoClient);
-    return new ConfigurationPersistence(mongoDatabase);
-});
+builder.Services.AddSingleton<IConfigurationPersistence, ConfigurationPersistence>(_ =>
+    new ConfigurationPersistence(mongoProvider));
 
-builder.Services.AddSingleton<IMonthIndexPersistence, MonthIndexPersistence>(o =>
-{
-    Connection mongoConnection = new Connection();
-    MongoClient mongoClient = mongoConnection.GetClient();
-    IMongoDatabase mongoDatabase = mongoConnection.GetDatabase(mongoClient);
-    return new MonthIndexPersistence(mongoDatabase);
-});
+builder.Services.AddSingleton<IMonthIndexPersistence, MonthIndexPersistence>(_ =>
+    new MonthIndexPersistence(mongoProvider));
 
 builder.Services.AddScoped<IExpencesService, ExpencesService>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
-builder.Services.AddScoped<IAmountsService, AmountsService>(o =>
-{
-    Connection mongoConnection = new Connection();
-    MongoClient mongoClient = mongoConnection.GetClient();
-    IMongoDatabase mongoDatabase = mongoConnection.GetDatabase(mongoClient);
-
-    return new AmountsService(new AmountsPersistence(mongoDatabase), 
-        new ExpencesPersistence(mongoDatabase),
-        new IncomePersistence(mongoDatabase),
-        new ConfigurationPersistence(mongoDatabase));
-});
+builder.Services.AddScoped<IAmountsService, AmountsService>(_ =>
+    new AmountsService(new AmountsPersistence(mongoProvider),
+        new ExpencesPersistence(mongoProvider),
+        new IncomePersistence(mongoProvider),
+        new ConfigurationPersistence(mongoProvider)
+    ));
 builder.Services.AddScoped<IConfigurationService, ConfigurationService>();
 builder.Services.AddScoped<IMonthIndexingService, MonthIndexingService>();
 builder.Services.AddScoped<IExpencesService, ExpencesService>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
 
-builder.Services.AddScoped<IMonthClose, MonthClose>(o =>
-{
-    Connection mongoConnection = new Connection();
-    MongoClient mongoClient = mongoConnection.GetClient();
-    IMongoDatabase mongoDatabase = mongoConnection.GetDatabase(mongoClient);
-
-    return new MonthClose(
-        new ExpencesPersistence(mongoDatabase),
-        new IncomePersistence(mongoDatabase),
-        new AmountsPersistence(mongoDatabase),
-        new ConfigurationPersistence(mongoDatabase),
-        new MonthIndexPersistence(mongoDatabase));
-});
+builder.Services.AddScoped<IMonthClose, MonthClose>(_ =>
+    new MonthClose(
+        new ExpencesPersistence(mongoProvider),
+        new IncomePersistence(mongoProvider),
+        new AmountsPersistence(mongoProvider),
+        new ConfigurationPersistence(mongoProvider),
+        new MonthIndexPersistence(mongoProvider)
+    ));
 
 
 var app = builder.Build();

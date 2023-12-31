@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Model
 {
-    internal class AmountsMongo
+    public class AmountsMongo
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

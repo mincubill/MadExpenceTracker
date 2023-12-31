@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Model
 {
-    internal class MonthIndexMongo
+    public class MonthIndexMongo
     {
         public Guid Id { get; set; }
         public string Month { get; set; }

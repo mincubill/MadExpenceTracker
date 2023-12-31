@@ -6,6 +6,6 @@ namespace MadExpenceTracker.Core.Persistence
     {
         IEnumerable<Amounts> GetAmounts();
         Amounts AddAmount(Amount amount);
-        Amounts GetAmount(Guid id);
+        Amounts GetAmounts(Guid id);
     }
 }

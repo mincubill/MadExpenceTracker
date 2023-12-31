@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Model
 {
-    internal class ExpencesMongo
+    public class ExpencesMongo
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

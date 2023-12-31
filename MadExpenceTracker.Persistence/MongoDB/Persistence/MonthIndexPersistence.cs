@@ -2,20 +2,19 @@
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Persistence.MongoDB.Mapper;
 using MadExpenceTracker.Persistence.MongoDB.Model;
+using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 {
     public class MonthIndexPersistence : IMonthIndexPersistence
     {
-        private readonly IMongoDatabase _mongoDatabase;
-        private string _collectionName = "monthIndex";
-        private IMongoCollection<MonthIndexesMongo> _monthIndexCollection;
+        private const string CollectionName = "monthIndex";
+        private readonly IMongoCollection<MonthIndexesMongo> _monthIndexCollection;
 
-        public MonthIndexPersistence(IMongoDatabase mongoDatabase)
+        public MonthIndexPersistence(IMongoDBProvider provider)
         {
-            _mongoDatabase = mongoDatabase;
-            _monthIndexCollection = _mongoDatabase.GetCollection<MonthIndexesMongo>(_collectionName);
+            _monthIndexCollection = provider.GetCollection<MonthIndexesMongo>(CollectionName);
         }
 
         public IEnumerable<MonthIndexes> GetMonthsIndexes()

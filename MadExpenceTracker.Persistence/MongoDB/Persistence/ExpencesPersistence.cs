@@ -5,21 +5,20 @@ using MadExpenceTracker.Persistence.MongoDB.Model;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Data;
+using MadExpenceTracker.Persistence.MongoDB.Provider;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 {
     public class ExpencesPersistence : IExpencePersistence
     {
-        private readonly IMongoDatabase _mongoDatabase;
-        private string _collectionName = "expence";
-        private IMongoCollection<ExpencesMongo> _expencesCollection;
-
-        public ExpencesPersistence(IMongoDatabase mongoDatabase)
+        private const string CollectionName = "expence";
+        private readonly IMongoCollection<ExpencesMongo> _expencesCollection;
+        
+        public ExpencesPersistence(IMongoDBProvider provider)
         {
-            _mongoDatabase = mongoDatabase;
-            _expencesCollection = _mongoDatabase.GetCollection<ExpencesMongo>(_collectionName);
+            _expencesCollection = provider.GetCollection<ExpencesMongo>(CollectionName);
         }
-
+        
         public IEnumerable<Expences> GetAll()
         {
             try

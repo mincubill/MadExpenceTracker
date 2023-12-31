@@ -2,29 +2,50 @@
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Persistence.MongoDB.Mapper;
 using MadExpenceTracker.Persistence.MongoDB.Model;
+using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 {
     public class AmountsPersistence : IAmountsPersistence
     {
+        private const string CollectionName = "amounts";
+        private readonly IMongoCollection<AmountsMongo> _amountsCollection;
 
-        private readonly IMongoDatabase _mongoDatabase;
-        private string _collectionName = "amounts";
-        private IMongoCollection<AmountsMongo> _amountsCollection;
-
-        public AmountsPersistence(IMongoDatabase mongoDatabase)
+        public AmountsPersistence(IMongoDBProvider provider)
         {
-            _mongoDatabase = mongoDatabase;
-            _amountsCollection = _mongoDatabase.GetCollection<AmountsMongo>(_collectionName);
+            _amountsCollection = provider.GetCollection<AmountsMongo>(CollectionName);
         }
 
         public IEnumerable<Amounts> GetAmounts()
         {
             try
             {
-                IEnumerable<AmountsMongo> amountsOnDb = _amountsCollection.Find(_ => true).ToEnumerable();
+                IEnumerable<AmountsMongo> amountsOnDb = _amountsCollection
+                    .FindSync(Builders<AmountsMongo>.Filter.Empty).ToEnumerable();
                 return AmountMapper.MapToModel(amountsOnDb);
+            }
+            catch (TimeoutException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Amounts GetAmounts(Guid id)
+        {
+            try
+            {
+                var filter = Builders<AmountsMongo>.Filter.ElemMatch(e => e.Amount, exp => exp.Id == id);
+                AmountsMongo amountsMongo = _amountsCollection.FindSync(filter).First();
+                return AmountMapper.MapToModel(amountsMongo);
+            }
+            catch (TimeoutException)
+            {
+                throw;
             }
             catch (Exception)
             {
@@ -36,13 +57,18 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                var amountsOnDb = _amountsCollection.Find(_ => true).ToList();
+                var filterEmpty = Builders<AmountsMongo>.Filter.Empty;
+                List<AmountsMongo> amountsOnDb = _amountsCollection.FindSync(filterEmpty).ToList();
                 string runningMonth = $"{DateTime.Now.Year}/{DateTime.Now.Month}";
                 if (amountsOnDb.Count <= 0)
                 {
-                    AmountsMongo newExpencesMongo = new AmountsMongo() {Id = Guid.NewGuid(), Amount = [AmountMapper.MapToMongo(amountToCreate)] };
+                    AmountsMongo newExpencesMongo = new AmountsMongo()
+                    {
+                        Id = Guid.NewGuid(),
+                        Amount = [AmountMapper.MapToMongo(amountToCreate)]
+                    };
                     _amountsCollection.InsertOne(newExpencesMongo);
-                    amountsOnDb = _amountsCollection.Find(_ => true).ToList();
+                    amountsOnDb = _amountsCollection.FindSync(filterEmpty).ToList();
                     return AmountMapper.MapToModel(amountsOnDb.First());
                 }
                 else
@@ -53,26 +79,16 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                     return result.IsAcknowledged ? AmountMapper.MapToModel(amountsOnDb.First()) : null;
                 }
             }
+            catch (TimeoutException)
+            {
+                throw;
+            }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
-        public Amounts GetAmount(Guid id)
-        {
-            try
-            {
-                var filter = Builders<AmountsMongo>.Filter.ElemMatch(e => e.Amount, exp => exp.Id == id);
-                AmountsMongo expenceMongo = _amountsCollection.Find(filter).First();
-                return AmountMapper.MapToModel(expenceMongo);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
+       
     }
 }

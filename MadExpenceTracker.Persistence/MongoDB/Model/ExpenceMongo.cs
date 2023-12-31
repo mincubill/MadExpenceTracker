@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Model
 {
-    internal class ExpenceMongo
+    public class ExpenceMongo
     {
         public Guid Id { get; set; }
         public required string Name { get; set; }

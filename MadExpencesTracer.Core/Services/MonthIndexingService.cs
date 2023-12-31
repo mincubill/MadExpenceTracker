@@ -20,12 +20,12 @@ namespace MadExpenceTracker.Core.Services
 
         public MonthIndex GetMonthsIndex(Guid id)
         {
-            throw new NotImplementedException();
+            return _persistence.GetMonthIndex(id);
         }
 
         public MonthIndexes AddMonthIndex(MonthIndex index)
         {
-            throw new NotImplementedException();
+            return _persistence.AddMonthIndex(index);
         }
     }
 }

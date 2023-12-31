@@ -3,14 +3,7 @@ using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Core.Services;
 using MadExpenceTracker.Core.Test.Fixture;
-using MadExpenceTracker.Persistence.MongoDB.MongoConfiguration;
-using MongoDB.Driver;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MadExpenceTracker.Core.Test
 {

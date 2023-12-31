@@ -5,21 +5,20 @@ using MasIncomeTracker.Persistence.MongoDB.Mapper;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Data;
+using MadExpenceTracker.Persistence.MongoDB.Provider;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 {
     public class IncomePersistence : IIncomePersistence
     {
-        private readonly IMongoDatabase _mongoDatabase;
-        private string _collectionName = "income";
-        private IMongoCollection<IncomesMongo> _incomesCollection;
-
-        public IncomePersistence(IMongoDatabase mongoDatabase)
+        private const string CollectionName = "income";
+        private readonly IMongoCollection<IncomesMongo> _incomesCollection;
+        
+        public IncomePersistence(IMongoDBProvider provider)
         {
-            _mongoDatabase = mongoDatabase;
-            _incomesCollection = _mongoDatabase.GetCollection<IncomesMongo>(_collectionName);
+            _incomesCollection = provider.GetCollection<IncomesMongo>(CollectionName);
         }
-
+        
         public IEnumerable<Incomes> GetAll()
         {
             try

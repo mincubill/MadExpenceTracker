@@ -3,23 +3,21 @@ using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Persistence.MongoDB.Model;
 using MongoDB.Driver;
 using MadExpenceTracker.Persistence.MongoDB.Mapper;
+using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver.Linq;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 {
     public class ConfigurationPersistence : IConfigurationPersistence
     {
+        private const string CollectionName = "configuration";
+        private readonly IMongoCollection<ConfigurationMongo> _configurationCollection;
 
-        private readonly IMongoDatabase _mongoDatabase;
-        private string _collectionName = "configuration";
-        private IMongoCollection<ConfigurationMongo> _configurationCollection;
-
-        public ConfigurationPersistence(IMongoDatabase mongoDatabase)
+        public ConfigurationPersistence(IMongoDBProvider provider)
         {
-            _mongoDatabase = mongoDatabase;
-            _configurationCollection = _mongoDatabase.GetCollection<ConfigurationMongo>(_collectionName);
+            _configurationCollection = provider.GetCollection<ConfigurationMongo>(CollectionName);
         }
-
+        
         public Configuration GetConfiguration()
         {
             try

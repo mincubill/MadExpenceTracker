@@ -44,7 +44,7 @@ namespace MadExpenceTracker.Core.Services
 
         public Amount GetAmount(Guid id)
         {
-            return _amountPersistence.GetAmount(id).Amount.First(a => a.Id == id);
+            return _amountPersistence.GetAmounts(id).Amount.First(a => a.Id == id);
         }
 
         public Amounts Create(Amount amount)

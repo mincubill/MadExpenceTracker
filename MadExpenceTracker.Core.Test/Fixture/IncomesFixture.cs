@@ -27,5 +27,16 @@ namespace MadExpenceTracker.Core.Test.Fixture
                 }
             };
         }
+
+        public static Income GetIncome()
+        {
+            return new Income
+            {
+                Id = Guid.Parse("69cf8cbf-6ef1-4e0a-856a-056d95d7977d"),
+                Name = "Sueldo",
+                Date = DateTime.Parse("2023/11/01"),
+                Amount = 1000000,
+            };
+        }
     }
 }
