@@ -1,106 +1,191 @@
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
-using MadExpenceTracker.Persistence.MongoDB.MongoConfiguration;
+using MadExpenceTracker.Persistence.MongoDB.Model;
 using MadExpenceTracker.Persistence.MongoDB.Persistence;
+using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver;
+using Moq;
 using System.Data;
 
 namespace MadExpenceTracker.Persistence.Test
 {
     public class ExpencesMongoTest
     {
-        //private IExpencePersistence _expencePersistence;
+        Mock<IMongoCollection<ExpenceMongo>> _mockMongoCollection;
+        Mock<IAsyncCursor<ExpenceMongo>> _mockCursor;
+        Mock<IMongoDBProvider> _mockDbprovider;
+        IAmountsPersistence _persistence;
 
-        //[SetUp]
-        //public void Setup()
-        //{
-        //    Connection mongoConnection = new Connection();
-        //    MongoClient mongoClient = mongoConnection.GetClient();
-        //    IMongoDatabase mongoDatabase = mongoConnection.GetDatabase(mongoClient);
-        //    _expencePersistence = new ExpencesPersistence(mongoDatabase);
-        //}
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            _mockMongoCollection = new Mock<IMongoCollection<ExpenceMongo>>();
+            _mockCursor = new Mock<IAsyncCursor<ExpenceMongo>>();
+            _mockDbprovider = new Mock<IMongoDBProvider>();
+            _mockDbprovider.Setup(x => x.GetCollection<ExpenceMongo>("expences"))
+                .Returns(_mockMongoCollection.Object);
+        }
 
-        //[Test]
-        //public void CreateExpenceTest()
-        //{
-        //    var expence = new Expence()
-        //    {
-        //        Name = "test3",
-        //        Amount = 20000,
-        //        Date = DateTime.Now,
-        //        ExpenceType = ExpenceType.Base,
-        //        Id = Guid.NewGuid(),
-        //    };
-        //    var result = _expencePersistence.AddExpence(expence);
-        //    Assert.That(result, Is.Not.Null);
-        //}
+        [Test]
+        public void GetAllTest()
+        {
 
-        //[Test]
-        //public void CreateExpenceExceptionTest()
-        //{
-        //    var expence = new Expence()
-        //    {
-        //        Name = "test2",
-        //        Amount = 2000,
-        //        Date = DateTime.Now,
-        //        ExpenceType = ExpenceType.Base,
-        //        Id = Guid.NewGuid(),
-        //    };
-        //    Assert.Throws<DataException>(() =>
-        //    {
-        //        var result = _expencePersistence.AddExpence(expence);
-        //    });
-        //}
+        }
 
-        //[Test]
-        //public void GetAllExpencesTest()
-        //{
-        //    var expences = _expencePersistence.GetAll().ToList();
-        //    Assert.That(expences, Is.Not.Null);
-        //}
+        [Test]
+        public void GetAllTimeoutExceptionTest()
+        {
 
-        //[Test]
-        //public void GetExpenceTest()
-        //{
-        //    Guid id = Guid.Parse("869b7327-89f8-4f3d-810a-42d8577790c8");
-        //    Guid id2 = Guid.Parse("dc912738-4168-49f2-a54c-4d379ee7c765");
-        //    var expences = _expencePersistence.Get(id2).Expence.First(e => e.Id == id2);
-        //    Assert.That(expences, Is.Not.Null);
-        //}
+        }
 
-        //[Test]
-        //public void UpdateExpenceTest()
-        //{
-        //    Guid id = Guid.Parse("7cfdea35-6697-4935-a612-280b8b920b35");
-        //    Guid id2 = Guid.Parse("7cfdea35-6697-4935-a612-280b8b920b35");
-        //    var expences = _expencePersistence.Get(id).Expence.First(e => e.Id == id);
-        //    expences.Name = "updateao x 2";
-        //    expences.Amount = 6969;
-        //    bool result = _expencePersistence.Update(expences);
-        //    Assert.That(result, Is.EqualTo(true));
-        //}
+        [Test]
+        public void GetAllExceptionTest()
+        {
 
-        //[Test]
-        //public void DeleteExpenceTest()
-        //{
-        //    Guid id = Guid.Parse("7cfdea35-6697-4935-a612-280b8b920b35");
-        //    Guid id2 = Guid.Parse("7cfdea35-6697-4935-a612-280b8b920b35");
-        //    bool result = _expencePersistence.Delete(id);
-        //    Assert.That(result, Is.EqualTo(true));
-        //}
+        }
 
-        //[Test]
-        //public void CreateNewDocumentTest()
-        //{
-        //    var result = _expencePersistence.CreateNewExpencesDocument("2023/11");
-        //    Assert.That(result, Is.EqualTo(true));
-        //}
+        [Test]
+        public void GetByIdTest()
+        {
 
-        //[Test]
-        //public void UpdateExpencesIsActiveTest()
-        //{
-        //    var result = _expencePersistence.UpdateExpencesIsActive(false, "2023/11");
-        //    Assert.That(result, Is.EqualTo(true));
-        //}
+        }
+
+        [Test]
+        public void GetByIdTimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void GetByIdExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void GetByActiveTest()
+        {
+
+        }
+
+        [Test]
+        public void GetByActiveTimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void GetByActiveExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void AddExpenceTest()
+        {
+
+        }
+
+        [Test]
+        public void AddExpenceTimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void AddExpenceExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void Test()
+        {
+
+        }
+
+        [Test]
+        public void TimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void ExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void CreateNewExpencesDocumentTest()
+        {
+
+        }
+
+        [Test]
+        public void CreateNewExpencesDocumentTimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void CreateNewExpencesDocumentExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void UpdateTest()
+        {
+
+        }
+
+        [Test]
+        public void UpdateTimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void UpdateExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void UpdateExpencesIsActiveTest()
+        {
+
+        }
+
+        [Test]
+        public void UpdateExpencesIsActiveTimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void UpdateExpencesIsActiveExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void DeleteTest()
+        {
+
+        }
+
+        [Test]
+        public void DeleteTimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void DeleteExceptionTest()
+        {
+
+        }
     }
 }

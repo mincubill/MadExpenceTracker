@@ -3,9 +3,6 @@ using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Core.Test.Fixture;
 using MadExpenceTracker.Core.UseCase;
-using MadExpenceTracker.Persistence.MongoDB.MongoConfiguration;
-using MadExpenceTracker.Persistence.MongoDB.Persistence;
-using MongoDB.Driver;
 using Moq;
 
 namespace MadExpenceTracker.Core.Test

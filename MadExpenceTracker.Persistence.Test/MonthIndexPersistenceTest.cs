@@ -1,45 +1,82 @@
 ﻿using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
-using MadExpenceTracker.Persistence.MongoDB.MongoConfiguration;
+using MadExpenceTracker.Persistence.MongoDB.Model;
 using MadExpenceTracker.Persistence.MongoDB.Persistence;
+using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver;
+using Moq;
 
 namespace MadExpenceTracker.Persistence.Test
 {
     public class MonthIndexPersistenceTest
     {
-        //private IMonthIndexPersistence _monthIndexPersistence;
+        Mock<IMongoCollection<MonthIndexesMongo>> _mockMongoCollection;
+        Mock<IAsyncCursor<MonthIndexesMongo>> _mockCursor;
+        Mock<IMongoDBProvider> _mockDbprovider;
+        IAmountsPersistence _persistence;
 
-        //[SetUp]
-        //public void Setup()
-        //{
-        //    Connection mongoConnection = new Connection();
-        //    MongoClient mongoClient = mongoConnection.GetClient();
-        //    IMongoDatabase mongoDatabase = mongoConnection.GetDatabase(mongoClient);
-        //    _monthIndexPersistence = new MonthIndexPersistence(mongoDatabase);
-        //}
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            _mockMongoCollection = new Mock<IMongoCollection<MonthIndexesMongo>>();
+            _mockCursor = new Mock<IAsyncCursor<MonthIndexesMongo>>();
+            _mockDbprovider = new Mock<IMongoDBProvider>();
+            _mockDbprovider.Setup(x => x.GetCollection<MonthIndexesMongo>("monthIndex"))
+                .Returns(_mockMongoCollection.Object);
+        }
 
-        //[Test]
-        //public void GetIndexMonthTest()
-        //{
-        //    IEnumerable<MonthIndexes> indexes = _monthIndexPersistence.GetMonthsIndexes();
-        //    Assert.That(indexes, Is.Not.Null);
-        //}
+        [Test]
+        public void GetMonthsIndexesTest()
+        {
 
-        //[Test]
-        //public void SetIndexMonth()
-        //{
-        //    MonthIndex index = new MonthIndex() 
-        //    { 
-        //        Id = Guid.NewGuid(),
-        //        AmountsId = Guid.NewGuid(),
-        //        ExpencesId = Guid.NewGuid(),
-        //        IncomesId = Guid.NewGuid(),
-        //        Month = "2023/12",
-        //        SavingsRate = 20
-        //    };
-        //    MonthIndexes indexes = _monthIndexPersistence.AddMonthIndex(index);
-        //    Assert.That(indexes, Is.Not.Null);
-        //}
+        }
+
+        [Test]
+        public void GetMonthsIndexesTimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void GetMonthsIndexesExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void GetMonthIndexByIdTest()
+        {
+
+        }
+
+        [Test]
+        public void GetMonthIndexByIdTimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void GetMonthIndexByIdExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void AddMonthIndexTest()
+        {
+
+        }
+
+        [Test]
+        public void AddMonthIndexTimeoutExceptionTest()
+        {
+
+        }
+
+        [Test]
+        public void AddMonthIndexExceptionTest()
+        {
+
+        }
     }
 }

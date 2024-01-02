@@ -1,20 +1,11 @@
 ﻿using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
-using MadExpenceTracker.Persistence.MongoDB.MongoConfiguration;
 using MadExpenceTracker.Persistence.MongoDB.Persistence;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MadExpenceTracker.Persistence.MongoDB.Model;
 using MadExpenceTracker.Persistence.Test.Fixture;
 using Moq;
-using MongoDB.Driver.Core.Operations;
-using MongoDB.Bson;
 using MadExpenceTracker.Persistence.MongoDB.Provider;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using MongoDB.Driver.Linq;
 
 namespace MadExpenceTracker.Persistence.Test
@@ -32,6 +23,8 @@ namespace MadExpenceTracker.Persistence.Test
             _mockMongoCollection = new Mock<IMongoCollection<AmountsMongo>>();
             _mockCursor = new Mock<IAsyncCursor<AmountsMongo>>();
             _mockDbprovider = new Mock<IMongoDBProvider>();
+            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
+                .Returns(_mockMongoCollection.Object);
         }
 
         [Test]
@@ -41,8 +34,7 @@ namespace MadExpenceTracker.Persistence.Test
 
             _mockCursor.Setup(x => x.Current).Returns(amountsOnDb);
             _mockCursor.SetupSequence(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(true);
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
+            
             _mockMongoCollection.Setup(x => x.FindSync<AmountsMongo>(
                 Builders<AmountsMongo>.Filter.Empty,
                 null,
@@ -64,8 +56,6 @@ namespace MadExpenceTracker.Persistence.Test
 
             _mockCursor.Setup(x => x.Current).Returns(amountsOnDb);
             _mockCursor.SetupSequence(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(true);
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
 
             _mockMongoCollection.Setup(x => x.FindSync<AmountsMongo>(
                 Builders<AmountsMongo>.Filter.Empty,
@@ -85,8 +75,6 @@ namespace MadExpenceTracker.Persistence.Test
 
             _mockCursor.Setup(x => x.Current).Returns(amountsOnDb);
             _mockCursor.SetupSequence(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(true);
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
 
             _mockMongoCollection.Setup(x => x.FindSync<AmountsMongo>(
                 Builders<AmountsMongo>.Filter.Empty,
@@ -154,10 +142,6 @@ namespace MadExpenceTracker.Persistence.Test
 
             _mockMongoCollection.Setup(m => m.InsertOne(amountsMongo, default, It.IsAny<CancellationToken>()));
 
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
-
-
             _persistence = new AmountsPersistence(_mockDbprovider.Object);
 
             var res = _persistence.AddAmount(amountToCreate);
@@ -177,9 +161,6 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalIncomes = 200000,
             };
             List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() }; ;
-
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
 
             Mock<IAsyncCursor<AmountsMongo>> mockWithData = new Mock<IAsyncCursor<AmountsMongo>>();
             mockWithData.Setup(x => x.Current).Returns(amountsOnDbWithData);
@@ -223,9 +204,6 @@ namespace MadExpenceTracker.Persistence.Test
             };
             List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() }; ;
 
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
-
             Mock<IAsyncCursor<AmountsMongo>> mockWithData = new Mock<IAsyncCursor<AmountsMongo>>();
             mockWithData.Setup(x => x.Current).Returns(amountsOnDbWithData);
             mockWithData.SetupSequence(x => x.MoveNext(It.IsAny<CancellationToken>()))
@@ -255,9 +233,6 @@ namespace MadExpenceTracker.Persistence.Test
             };
             List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() }; ;
 
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
-
             Mock<IAsyncCursor<AmountsMongo>> mockWithData = new Mock<IAsyncCursor<AmountsMongo>>();
             mockWithData.Setup(x => x.Current).Returns(amountsOnDbWithData);
             mockWithData.SetupSequence(x => x.MoveNext(It.IsAny<CancellationToken>()))
@@ -286,9 +261,6 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalIncomes = 200000,
             };
             List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() }; ;
-
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
 
             Mock<IAsyncCursor<AmountsMongo>> mockWithData = new Mock<IAsyncCursor<AmountsMongo>>();
             mockWithData.Setup(x => x.Current).Returns(amountsOnDbWithData);
@@ -326,8 +298,7 @@ namespace MadExpenceTracker.Persistence.Test
 
             _mockCursor.Setup(x => x.Current).Returns(amountsOnDb);
             _mockCursor.SetupSequence(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(true);
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
+
             _mockMongoCollection.Setup(x => x.FindSync<AmountsMongo>(
                 It.IsAny<FilterDefinition<AmountsMongo>>(),
                 default,
@@ -349,8 +320,7 @@ namespace MadExpenceTracker.Persistence.Test
 
             _mockCursor.Setup(x => x.Current).Returns(amountsOnDb);
             _mockCursor.SetupSequence(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(true);
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
+            
             _mockMongoCollection.Setup(x => x.FindSync<AmountsMongo>(
                 It.IsAny<FilterDefinition<AmountsMongo>>(),
                 default,
@@ -370,8 +340,8 @@ namespace MadExpenceTracker.Persistence.Test
 
             _mockCursor.Setup(x => x.Current).Returns(amountsOnDb);
             _mockCursor.SetupSequence(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(true);
-            _mockDbprovider.Setup(x => x.GetCollection<AmountsMongo>("amounts"))
-                .Returns(_mockMongoCollection.Object);
+            
+
             _mockMongoCollection.Setup(x => x.FindSync<AmountsMongo>(
                 It.IsAny<FilterDefinition<AmountsMongo>>(),
                 default,

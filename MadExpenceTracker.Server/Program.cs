@@ -3,7 +3,6 @@ using MadExpenceTracker.Core.Interfaces.UseCase;
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Core.Services;
 using MadExpenceTracker.Core.UseCase;
-using MadExpenceTracker.Persistence.MongoDB.MongoConfiguration;
 using MadExpenceTracker.Persistence.MongoDB.Persistence;
 using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver;

@@ -26,6 +26,10 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                 IEnumerable<ExpencesMongo> expencesOnDb = _expencesCollection.Find(_ => true).ToEnumerable();
                 return ExpenceMapper.MapToModel(expencesOnDb);
             }
+            catch (TimeoutException)
+            {
+                throw;
+            }
             catch (Exception)
             {
                 throw;
@@ -38,6 +42,10 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             {
                 ExpencesMongo expenceMongo = _expencesCollection.Find(e => e.Id == id).First();
                 return ExpenceMapper.MapToModel(expenceMongo);
+            }
+            catch (TimeoutException)
+            {
+                throw;
             }
             catch (Exception)
             {
@@ -52,6 +60,10 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             {
                 ExpencesMongo expenceMongo = _expencesCollection.Find(e => e.IsActive == isActive).First();
                 return ExpenceMapper.MapToModel(expenceMongo);
+            }
+            catch (TimeoutException)
+            {
+                throw;
             }
             catch (Exception)
             {
@@ -92,6 +104,10 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                     throw new DataException("Cannot be more than one active month");
                 }
             }
+            catch (TimeoutException)
+            {
+                throw;
+            }
             catch (Exception)
             {
                 throw;
@@ -113,6 +129,10 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                 _expencesCollection.InsertOne(newExpencesMongo);
                 return true;
             }
+            catch (TimeoutException)
+            {
+                throw;
+            }
             catch (Exception)
             {
                 throw;
@@ -132,6 +152,10 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                 var result = _expencesCollection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
+            catch (TimeoutException)
+            {
+                throw;
+            }
             catch (Exception)
             {
 
@@ -149,6 +173,10 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                 var result = _expencesCollection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
+            catch (TimeoutException)
+            {
+                throw;
+            }
             catch (Exception)
             {
                 throw;
@@ -157,13 +185,22 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 
         public bool Delete(Guid id)
         {
-            var filter = Builders<ExpencesMongo>.Filter.ElemMatch(e => e.Expences, exp => exp.Id == id);
-            var update = Builders<ExpencesMongo>.Update
-                .PullFilter(e => e.Expences, Builders<ExpenceMongo>.Filter.Where(nm => nm.Id == id));
-            var result = _expencesCollection.UpdateOne(filter, update);
-            return result.IsAcknowledged;
+            try
+            {
+                var filter = Builders<ExpencesMongo>.Filter.ElemMatch(e => e.Expences, exp => exp.Id == id);
+                var update = Builders<ExpencesMongo>.Update
+                    .PullFilter(e => e.Expences, Builders<ExpenceMongo>.Filter.Where(nm => nm.Id == id));
+                var result = _expencesCollection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch (TimeoutException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
-
-        
     }
 }
