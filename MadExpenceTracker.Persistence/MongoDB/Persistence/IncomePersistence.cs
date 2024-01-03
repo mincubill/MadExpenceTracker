@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Data;
 using MadExpenceTracker.Persistence.MongoDB.Provider;
+using MadExpenceTracker.Persistence.MongoDB.Mapper;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 {
@@ -36,8 +37,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                IncomesMongo expenceMongo = _incomesCollection.Find(i => i.Id == id).First();
-                return IncomeMapper.MapToModel(expenceMongo);
+                IncomesMongo incomeMongo = _incomesCollection.Find(i => i.Id == id).First();
+                return IncomeMapper.MapToModel(incomeMongo);
             }
             catch (Exception)
             {
@@ -162,6 +163,23 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             return result.IsAcknowledged;
         }
 
-        
+        public Income GetIncome(Guid id)
+        {
+            try
+            {
+                var filter = Builders<IncomesMongo>.Filter.ElemMatch(e => e.Incomes, d => d.Id == id);
+                IncomesMongo incomesOnDb = _incomesCollection.Find(filter).First();
+                return IncomeMapper.MapToModel(incomesOnDb.Incomes.First(e => e.Id == id));
+            }
+            catch (TimeoutException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            throw new NotImplementedException();
+        }
     }
 }

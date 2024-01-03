@@ -30,7 +30,7 @@ namespace MadExpenceTracker.Core.Services
 
         public Expence GetExpence(Guid id)
         {
-            return _persistence.Get(id).Expence.First(e => e.Id == id);
+            return _persistence.GetExpence(id);
         }
 
         public Expences Create(Expence expence)

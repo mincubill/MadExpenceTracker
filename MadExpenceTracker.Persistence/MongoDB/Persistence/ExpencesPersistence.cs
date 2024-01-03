@@ -202,5 +202,24 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                 throw;
             }
         }
+
+        public Expence GetExpence(Guid id)
+        {
+            try
+            {
+                var filter = Builders<ExpencesMongo>.Filter.ElemMatch(e => e.Expences, d => d.Id == id);
+                ExpencesMongo expencesOnDb = _expencesCollection.Find(filter).First();
+                return ExpenceMapper.MapToModel(expencesOnDb.Expences.First(e => e.Id == id));
+            }
+            catch (TimeoutException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            throw new NotImplementedException();
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace MadExpenceTracker.Core.Services
 
         public Income GetIncome(Guid id)
         {
-            return _persistence.Get(id).Income.First(e => e.Id == id);
+            return _persistence.GetIncome(id);
         }
 
         public Incomes Create(Income income)

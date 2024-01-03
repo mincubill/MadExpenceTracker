@@ -8,6 +8,7 @@ namespace MadExpenceTracker.Core.Persistence
         Expences Get(Guid id);
         Expences GetByActive(bool isActive);
         Expences AddExpence(Expence expence);
+        Expence GetExpence(Guid id);
         bool CreateNewExpencesDocument(string runningMonth);
         bool Update(Expence expence);
         bool UpdateExpencesIsActive(bool isActive, string runningMonth);

@@ -3,6 +3,7 @@ using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Persistence.MongoDB.Mapper;
 using MadExpenceTracker.Persistence.MongoDB.Model;
 using MadExpenceTracker.Persistence.MongoDB.Provider;
+using MasIncomeTracker.Persistence.MongoDB.Mapper;
 using MongoDB.Driver;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
@@ -21,8 +22,13 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                IEnumerable<MonthIndexesMongo> monthIndexOnDb = _monthIndexCollection.Find(_ => true).ToEnumerable();
+                IEnumerable<MonthIndexesMongo> monthIndexOnDb = _monthIndexCollection
+                    .FindSync(Builders<MonthIndexesMongo>.Filter.Empty).ToEnumerable();
                 return MonthIndexMapper.MapToModel(monthIndexOnDb);
+            }
+            catch (TimeoutException)
+            {
+                throw;
             }
             catch (Exception)
             {
@@ -34,7 +40,13 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                return null;
+                var filter = Builders<MonthIndexesMongo>.Filter.ElemMatch(e => e.MonthIndex, d => d.Id == id);
+                MonthIndexesMongo incomesOnDb = _monthIndexCollection.FindSync(filter).First();
+                return MonthIndexMapper.MapToModel(incomesOnDb.MonthIndex.First(e => e.Id == id));
+            }
+            catch (TimeoutException)
+            {
+                throw;
             }
             catch (Exception)
             {
@@ -47,7 +59,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                var indexesOnDb = _monthIndexCollection.Find(_ => true).ToList();
+                var emptyFilter = Builders<MonthIndexesMongo>.Filter.Empty;
+                var indexesOnDb = _monthIndexCollection.FindSync(emptyFilter).ToList();
                 Guid monthIndexId = Guid.NewGuid();
                 if (indexesOnDb.Capacity <= 0)
                 {
@@ -62,7 +75,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                     return result.IsAcknowledged ? MonthIndexMapper.MapToModel(indexesOnDb.First()) : null;
 
                 }
-                indexesOnDb = _monthIndexCollection.Find(_ => true).ToList();
+                indexesOnDb = _monthIndexCollection.FindSync(emptyFilter).ToList();
                 return MonthIndexMapper.MapToModel(indexesOnDb.First());
             }
             catch (Exception)

@@ -59,9 +59,8 @@ namespace MadExpenceTracker.Core.Test
         public void GetExpenceTest()
         {
             Expence expence = ExpencesFixture.GetExpence();
-            Expences expences = ExpencesFixture.GetExpences();
 
-            _persistence.Setup(e => e.Get(expence.Id)).Returns(expences);
+            _persistence.Setup(e => e.GetExpence(expence.Id)).Returns(expence);
 
             Expence res = _service.GetExpence(expence.Id);
 

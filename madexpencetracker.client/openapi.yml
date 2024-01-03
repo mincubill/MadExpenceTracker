@@ -523,7 +523,7 @@
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/MonthIndexArray'
+                  $ref: '#/components/schemas/MonthIndexes'
           '204':
             description: No Expences registered
           '404':
@@ -733,11 +733,6 @@
         type: array
         items:
          $ref: '#/components/schemas/Incomes'
-      
-      MonthIndexArray:
-        type: array
-        items:
-         $ref: '#/components/schemas/MonthIndexes'
       
       MonthResume:
         type: object

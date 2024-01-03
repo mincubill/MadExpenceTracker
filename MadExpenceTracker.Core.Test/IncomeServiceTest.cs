@@ -58,9 +58,9 @@ namespace MadExpenceTracker.Core.Test
         public void GetIncomeTest()
         {
             Guid id = Guid.Parse("69cf8cbf-6ef1-4e0a-856a-056d95d7977d");
-            Incomes incomes = IncomesFixture.GetIncomes();
+            Income income = IncomesFixture.GetIncome();
 
-            _incomePersistenceMock.Setup(i => i.Get(id)).Returns(incomes);
+            _incomePersistenceMock.Setup(i => i.GetIncome(id)).Returns(income);
 
             Income res = _service.GetIncome(id);
             Assert.That(res, Is.Not.Null);

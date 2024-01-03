@@ -1,12 +1,5 @@
 ﻿using MadExpenceTracker.Persistence.MongoDB.Provider;
-using MadExpenceTracker.Persistence.MongoDB.Persistence;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MadExpenceTracker.Persistence.MongoDB.Model;
 using Moq;
 
 namespace MadExpenceTracker.Persistence.Test
