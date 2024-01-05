@@ -6,9 +6,9 @@ namespace MadExpenceTracker.Core.Services
 {
     public class IncomeService : IIncomeService
     {
-        private readonly IIncomePersistence _persistence;
+        private readonly IIncomesPersistence _persistence;
 
-        public IncomeService(IIncomePersistence persistence)
+        public IncomeService(IIncomesPersistence persistence)
         {
             _persistence = persistence;
         }
@@ -63,7 +63,7 @@ namespace MadExpenceTracker.Core.Services
 
         public bool CloseMonth(string month)
         {
-            return _persistence.UpdateExpencesIsActive(false, month);
+            return _persistence.UpdateIncomesIsActive(false, month);
         }
     }
 }

@@ -2,20 +2,21 @@
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Persistence.MongoDB.Model;
 using MasIncomeTracker.Persistence.MongoDB.Mapper;
+using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Data;
-using MadExpenceTracker.Persistence.MongoDB.Provider;
-using MadExpenceTracker.Persistence.MongoDB.Mapper;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 {
-    public class IncomePersistence : IIncomePersistence
+    public class IncomesPersistence : IIncomesPersistence
     {
         private const string CollectionName = "income";
         private readonly IMongoCollection<IncomesMongo> _incomesCollection;
-        
-        public IncomePersistence(IMongoDBProvider provider)
+        private readonly FilterDefinition<IncomesMongo> _emptyFilter = Builders<IncomesMongo>.Filter.Empty;
+
+
+        public IncomesPersistence(IMongoDBProvider provider)
         {
             _incomesCollection = provider.GetCollection<IncomesMongo>(CollectionName);
         }
@@ -24,7 +25,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                IEnumerable<IncomesMongo> expencesOnDb = _incomesCollection.Find(_ => true).ToEnumerable();
+                IEnumerable<IncomesMongo> expencesOnDb = _incomesCollection.FindSync(_emptyFilter).ToEnumerable();
                 return IncomeMapper.MapToModel(expencesOnDb);
             }
             catch (Exception)
@@ -37,7 +38,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                IncomesMongo incomeMongo = _incomesCollection.Find(i => i.Id == id).First();
+                var filter = Builders<IncomesMongo>.Filter.Eq(e => e.Id, id);
+                IncomesMongo incomeMongo = _incomesCollection.FindSync(filter).First();
                 return IncomeMapper.MapToModel(incomeMongo);
             }
             catch (Exception)
@@ -51,7 +53,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                IncomesMongo expenceMongo = _incomesCollection.Find(i => i.IsActive == isActive).First();
+                var filter = Builders<IncomesMongo>.Filter.Eq(e => e.IsActive, isActive);
+                IncomesMongo expenceMongo = _incomesCollection.FindSync(filter).First();
                 return IncomeMapper.MapToModel(expenceMongo);
             }
             catch (Exception)
@@ -65,7 +68,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                var incomesOnDb = _incomesCollection.Find(i => i.IsActive).ToList();
+                var filterActiveMonth = Builders<IncomesMongo>.Filter.Eq(e => e.IsActive, true);
+                var incomesOnDb = _incomesCollection.FindSync(filterActiveMonth).ToList();
                 string runningMonth = $"{DateTime.Now.Year}/{DateTime.Now.Month}";
                 if (incomesOnDb.Count <= 0)
                 {
@@ -77,7 +81,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                         Incomes = [IncomeMapper.MapToMongo(incomeToCreate)] 
                     };
                     _incomesCollection.InsertOne(newIncomesMongo);
-                    incomesOnDb = _incomesCollection.Find(i => i.IsActive).ToList();
+                    incomesOnDb = _incomesCollection.FindSync(filterActiveMonth).ToList();
                     return IncomeMapper.MapToModel(incomesOnDb.First());
                 }
                 else if (incomesOnDb.Count == 1)
@@ -85,7 +89,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                     var filter = Builders<IncomesMongo>.Filter.Eq(e => e.RunningMonth, runningMonth);
                     var update = Builders<IncomesMongo>.Update.Push(e => e.Incomes, IncomeMapper.MapToMongo(incomeToCreate));
                     var result = _incomesCollection.UpdateOne(filter, update);
-                    incomesOnDb = _incomesCollection.Find(i => i.IsActive).ToList();
+                    incomesOnDb = _incomesCollection.FindSync(i => i.IsActive).ToList();
                     return result.IsAcknowledged ? IncomeMapper.MapToModel(incomesOnDb.First()) : null;
                 }
                 else
@@ -138,7 +142,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             }
         }
 
-        public bool UpdateExpencesIsActive(bool isActive, string runningMonth)
+        public bool UpdateIncomesIsActive(bool isActive, string runningMonth)
         {
             try
             {
@@ -168,7 +172,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             try
             {
                 var filter = Builders<IncomesMongo>.Filter.ElemMatch(e => e.Incomes, d => d.Id == id);
-                IncomesMongo incomesOnDb = _incomesCollection.Find(filter).First();
+                IncomesMongo incomesOnDb = _incomesCollection.FindSync(filter).First();
                 return IncomeMapper.MapToModel(incomesOnDb.Incomes.First(e => e.Id == id));
             }
             catch (TimeoutException)

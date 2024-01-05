@@ -2,7 +2,7 @@
 
 namespace MadExpenceTracker.Core.Persistence
 {
-    public interface IIncomePersistence
+    public interface IIncomesPersistence
     {
         IEnumerable<Incomes> GetAll();
         Incomes Get(Guid id);
@@ -11,7 +11,7 @@ namespace MadExpenceTracker.Core.Persistence
         Income GetIncome(Guid id);
         bool CreateNewIncomeDocument(string runningMonth);
         bool Update(Income income);
-        bool UpdateExpencesIsActive(bool isActive, string runningMonth);
+        bool UpdateIncomesIsActive(bool isActive, string runningMonth);
         bool Delete(Guid id);
     }
 }

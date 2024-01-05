@@ -11,17 +11,18 @@ namespace MadExpenceTracker.Core.Test
     {
         
         private Mock<IExpencePersistence> _expencesPersistence;
-        private Mock<IIncomePersistence> _incomePersistence;
+        private Mock<IIncomesPersistence> _incomePersistence;
         private Mock<IAmountsPersistence> _amountPersistence;
         private Mock<IConfigurationPersistence> _configurationPersistence;
         private Mock<IMonthIndexPersistence> _indexingPersistence;
+        private readonly string CURRENT_MONTH = $"{DateTime.Now.Year}/{DateTime.Now.Month}";
 
         private IMonthClose _monthClose;
         [SetUp]
         public void Setup()
         {
             _expencesPersistence = new Mock<IExpencePersistence>();
-            _incomePersistence = new Mock<IIncomePersistence>();
+            _incomePersistence = new Mock<IIncomesPersistence>();
             _amountPersistence = new Mock<IAmountsPersistence>();
             _configurationPersistence = new Mock<IConfigurationPersistence>();
             _indexingPersistence = new Mock<IMonthIndexPersistence>();
@@ -36,10 +37,10 @@ namespace MadExpenceTracker.Core.Test
         [Test]
         public void MonthCloseTest()
         {
-            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument("2023/12")).Returns(true);
-            _incomePersistence.Setup(i => i.CreateNewIncomeDocument("2023/12")).Returns(true);
-            _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, "2023/12")).Returns(true);
-            _incomePersistence.Setup(i => i.UpdateExpencesIsActive(false, "2023/12")).Returns(true);
+            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(CURRENT_MONTH)).Returns(true);
+            _incomePersistence.Setup(i => i.CreateNewIncomeDocument(CURRENT_MONTH)).Returns(true);
+            _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, CURRENT_MONTH)).Returns(true);
+            _incomePersistence.Setup(i => i.UpdateIncomesIsActive(false, CURRENT_MONTH)).Returns(true);
             _amountPersistence.Setup(a => a.AddAmount(AmountFixture.GetAmount())).Returns(AmountFixture.GetAmounts());
             _configurationPersistence.Setup(c => c.GetConfiguration()).Returns(ConfigurationFixture.GetConfiguration());
 
@@ -53,10 +54,10 @@ namespace MadExpenceTracker.Core.Test
         [Test]
         public void MonthCloseExceptionTest()
         {
-            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument("2023/12")).Returns(false);
-            _incomePersistence.Setup(i => i.CreateNewIncomeDocument("2023/12")).Returns(true);
-            _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, "2023/12")).Returns(true);
-            _incomePersistence.Setup(i => i.UpdateExpencesIsActive(false, "2023/12")).Returns(true);
+            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(CURRENT_MONTH)).Returns(false);
+            _incomePersistence.Setup(i => i.CreateNewIncomeDocument(CURRENT_MONTH)).Returns(true);
+            _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, CURRENT_MONTH)).Returns(true);
+            _incomePersistence.Setup(i => i.UpdateIncomesIsActive(false, CURRENT_MONTH)).Returns(true);
             _amountPersistence.Setup(a => a.AddAmount(AmountFixture.GetAmount())).Returns(AmountFixture.GetAmounts());
             _configurationPersistence.Setup(c => c.GetConfiguration()).Returns(ConfigurationFixture.GetConfiguration());
 

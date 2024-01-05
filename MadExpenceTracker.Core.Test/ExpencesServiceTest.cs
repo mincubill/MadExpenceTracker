@@ -82,6 +82,20 @@ namespace MadExpenceTracker.Core.Test
         }
 
         [Test]
+        public void CreateExpenceWithoutIdTest()
+        {
+            Expence expence = ExpencesFixture.GetExpence();
+            expence.Id = Guid.Empty;
+            Expences expences = ExpencesFixture.GetExpences();
+
+            _persistence.Setup(e => e.AddExpence(expence)).Returns(expences);
+
+            Expences res = _service.Create(expence);
+
+            Assert.That(res, Is.Not.Null);
+        }
+
+        [Test]
         public void CreateNewMonthTest()
         {
             _persistence.Setup(e => e.CreateNewExpencesDocument($"{DateTime.Now.Year}/{DateTime.Now.Month}")).Returns(true);

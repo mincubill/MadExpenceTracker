@@ -2,10 +2,10 @@
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Persistence.MongoDB.Mapper;
 using MadExpenceTracker.Persistence.MongoDB.Model;
+using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Data;
-using MadExpenceTracker.Persistence.MongoDB.Provider;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 {
@@ -13,7 +13,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
     {
         private const string CollectionName = "expence";
         private readonly IMongoCollection<ExpencesMongo> _expencesCollection;
-        
+        private readonly FilterDefinition<ExpencesMongo> _emptyFilter = Builders<ExpencesMongo>.Filter.Empty;
+
         public ExpencesPersistence(IMongoDBProvider provider)
         {
             _expencesCollection = provider.GetCollection<ExpencesMongo>(CollectionName);
@@ -23,7 +24,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                IEnumerable<ExpencesMongo> expencesOnDb = _expencesCollection.Find(_ => true).ToEnumerable();
+                IEnumerable<ExpencesMongo> expencesOnDb = _expencesCollection
+                    .FindSync(_emptyFilter).ToEnumerable();
                 return ExpenceMapper.MapToModel(expencesOnDb);
             }
             catch (TimeoutException)
@@ -40,7 +42,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                ExpencesMongo expenceMongo = _expencesCollection.Find(e => e.Id == id).First();
+                var filter = Builders<ExpencesMongo>.Filter.Eq(e => e.Id, id);
+                ExpencesMongo expenceMongo = _expencesCollection.FindSync(filter).First();
                 return ExpenceMapper.MapToModel(expenceMongo);
             }
             catch (TimeoutException)
@@ -58,7 +61,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                ExpencesMongo expenceMongo = _expencesCollection.Find(e => e.IsActive == isActive).First();
+                var filter = Builders<ExpencesMongo>.Filter.Eq(e => e.IsActive, isActive);
+                ExpencesMongo expenceMongo = _expencesCollection.FindSync(filter).First();
                 return ExpenceMapper.MapToModel(expenceMongo);
             }
             catch (TimeoutException)
@@ -76,7 +80,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                var expencesOnDb = _expencesCollection.Find(e => e.IsActive).ToList();
+                var filterActiveMonth = Builders<ExpencesMongo>.Filter.Eq(e => e.IsActive, true);
+                var expencesOnDb = _expencesCollection.FindSync(filterActiveMonth).ToList();
                 string runningMonth = $"{DateTime.Now.Year}/{DateTime.Now.Month}";
                 if (expencesOnDb.Count <= 0)
                 {
@@ -88,15 +93,15 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                         Expences = [ExpenceMapper.MapToMongo(expenceToCreate)]
                     };
                     _expencesCollection.InsertOne(newExpencesMongo);
-                    expencesOnDb = _expencesCollection.Find(e => e.IsActive).ToList();
+                    expencesOnDb = _expencesCollection.FindSync(filterActiveMonth).ToList();
                     return ExpenceMapper.MapToModel(expencesOnDb.First());
                 }
                 else if (expencesOnDb.Count == 1)
                 {
-                    var filter = Builders<ExpencesMongo>.Filter.Eq(e => e.IsActive, true);
-                    var update = Builders<ExpencesMongo>.Update.Push(e => e.Expences, ExpenceMapper.MapToMongo(expenceToCreate));
-                    var result = _expencesCollection.UpdateOne(filter, update);
-                    expencesOnDb = _expencesCollection.Find(e => e.IsActive).ToList();
+                    var update = Builders<ExpencesMongo>.Update.Push(e => e.Expences, 
+                        ExpenceMapper.MapToMongo(expenceToCreate));
+                    var result = _expencesCollection.UpdateOne(filterActiveMonth, update);
+                    expencesOnDb = _expencesCollection.FindSync(filterActiveMonth).ToList();
                     return result.IsAcknowledged ? ExpenceMapper.MapToModel(expencesOnDb.First()) : null;
                 }
                 else
@@ -208,7 +213,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             try
             {
                 var filter = Builders<ExpencesMongo>.Filter.ElemMatch(e => e.Expences, d => d.Id == id);
-                ExpencesMongo expencesOnDb = _expencesCollection.Find(filter).First();
+                ExpencesMongo expencesOnDb = _expencesCollection.FindSync(filter).First();
                 return ExpenceMapper.MapToModel(expencesOnDb.Expences.First(e => e.Id == id));
             }
             catch (TimeoutException)

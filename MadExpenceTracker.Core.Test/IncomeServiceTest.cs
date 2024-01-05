@@ -9,13 +9,13 @@ namespace MadExpenceTracker.Core.Test
 {
     public class IncomeServiceTest
     {
-        Mock<IIncomePersistence> _incomePersistenceMock;
+        Mock<IIncomesPersistence> _incomePersistenceMock;
         IIncomeService _service;
 
         [SetUp]
         public void Setup()
         {
-            _incomePersistenceMock = new Mock<IIncomePersistence>();
+            _incomePersistenceMock = new Mock<IIncomesPersistence>();
             _service = new IncomeService(_incomePersistenceMock.Object);
         }
 
@@ -79,6 +79,21 @@ namespace MadExpenceTracker.Core.Test
             Assert.That(res, Is.Not.Null);
 
         }
+
+        [Test]
+        public void CreateIncomeWithoutIdTest()
+        {
+            Income income = IncomesFixture.GetIncome();
+            income.Id = Guid.Empty;
+            Incomes incomes = IncomesFixture.GetIncomes();
+
+            _incomePersistenceMock.Setup(i => i.AddIncome(income)).Returns(incomes);
+
+            Incomes res = _service.Create(income);
+            Assert.That(res, Is.Not.Null);
+
+        }
+
         [Test]
         public void CreateNewMonthTest()
         {
@@ -130,7 +145,7 @@ namespace MadExpenceTracker.Core.Test
         {
             bool isActive = false;
             string month = "2023/12";
-            _incomePersistenceMock.Setup(i => i.UpdateExpencesIsActive(isActive, month)).Returns(true);
+            _incomePersistenceMock.Setup(i => i.UpdateIncomesIsActive(isActive, month)).Returns(true);
 
             bool res = _service.CloseMonth(month);
             Assert.That(res, Is.True);

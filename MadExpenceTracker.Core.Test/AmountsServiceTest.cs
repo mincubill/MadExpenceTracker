@@ -11,7 +11,7 @@ namespace MadExpenceTracker.Core.Test
     {
         private Mock<IAmountsPersistence> _amountPersistence;
         private Mock<IExpencePersistence> _expencesPersistence;
-        private Mock<IIncomePersistence> _incomePersistence;
+        private Mock<IIncomesPersistence> _incomePersistence;
         private Mock<IConfigurationPersistence> _configurationPersistence;
 
         private IAmountsService _amountsService;
@@ -21,7 +21,7 @@ namespace MadExpenceTracker.Core.Test
         {
             _amountPersistence = new Mock<IAmountsPersistence>();
             _expencesPersistence = new Mock<IExpencePersistence>();
-            _incomePersistence = new Mock<IIncomePersistence>();
+            _incomePersistence = new Mock<IIncomesPersistence>();
             _configurationPersistence = new Mock<IConfigurationPersistence>();
 
             _amountsService = new AmountsService(
@@ -52,6 +52,18 @@ namespace MadExpenceTracker.Core.Test
             var amounts = new List<Amounts>() { AmountFixture.GetAmounts() }.AsEnumerable();
             
             _amountPersistence.Setup(a => a.GetAmounts()).Returns(amounts);
+
+            Amounts res = _amountsService.GetAmounts();
+
+            Assert.That(res, Is.Not.Null);
+        }
+
+        [Test]
+        public void GetAmountsEmptyTest()
+        {
+            var amounts = new List<Amounts>() { AmountFixture.GetAmounts() }.AsEnumerable();
+
+            _amountPersistence.Setup(a => a.GetAmounts()).Returns([]);
 
             Amounts res = _amountsService.GetAmounts();
 

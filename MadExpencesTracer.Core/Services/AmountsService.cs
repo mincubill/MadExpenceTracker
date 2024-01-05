@@ -9,10 +9,10 @@ namespace MadExpenceTracker.Core.Services
     {
         private readonly IAmountsPersistence _amountPersistence;
         private readonly IExpencePersistence _expencePersistence;
-        private readonly IIncomePersistence _incomePersistence;
+        private readonly IIncomesPersistence _incomePersistence;
         private readonly IConfigurationPersistence _configurationPersistence;
 
-        public AmountsService(IAmountsPersistence amountPersistence, IExpencePersistence expencePersistence, IIncomePersistence incomePersistence, IConfigurationPersistence configurationPersistence)
+        public AmountsService(IAmountsPersistence amountPersistence, IExpencePersistence expencePersistence, IIncomesPersistence incomePersistence, IConfigurationPersistence configurationPersistence)
         {
             _amountPersistence = amountPersistence;
             _expencePersistence = expencePersistence;

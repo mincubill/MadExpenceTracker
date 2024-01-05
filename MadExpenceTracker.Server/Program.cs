@@ -21,7 +21,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IExpencePersistence, ExpencesPersistence>(_ => new ExpencesPersistence(mongoProvider));
 
-builder.Services.AddSingleton<IIncomePersistence, IncomePersistence>(_ => new IncomePersistence(mongoProvider));
+builder.Services.AddSingleton<IIncomesPersistence, IncomesPersistence>(_ => new IncomesPersistence(mongoProvider));
 
 builder.Services.AddSingleton<IAmountsPersistence, AmountsPersistence>(_ => new AmountsPersistence(mongoProvider));
 
@@ -36,7 +36,7 @@ builder.Services.AddScoped<IIncomeService, IncomeService>();
 builder.Services.AddScoped<IAmountsService, AmountsService>(_ =>
     new AmountsService(new AmountsPersistence(mongoProvider),
         new ExpencesPersistence(mongoProvider),
-        new IncomePersistence(mongoProvider),
+        new IncomesPersistence(mongoProvider),
         new ConfigurationPersistence(mongoProvider)
     ));
 builder.Services.AddScoped<IConfigurationService, ConfigurationService>();
@@ -47,7 +47,7 @@ builder.Services.AddScoped<IIncomeService, IncomeService>();
 builder.Services.AddScoped<IMonthClose, MonthClose>(_ =>
     new MonthClose(
         new ExpencesPersistence(mongoProvider),
-        new IncomePersistence(mongoProvider),
+        new IncomesPersistence(mongoProvider),
         new AmountsPersistence(mongoProvider),
         new ConfigurationPersistence(mongoProvider),
         new MonthIndexPersistence(mongoProvider)

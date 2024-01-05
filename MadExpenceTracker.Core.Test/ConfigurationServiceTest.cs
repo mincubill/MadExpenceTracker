@@ -56,5 +56,16 @@ namespace MadExpenceTracker.Core.Test
             Assert.That(res.SavingsRate, Is.EqualTo(10));
 
         }
+
+        [Test]
+        public void UpdateConfigurationExceptionTest()
+        {
+            Configuration config = ConfigurationFixture.GetConfiguration();
+            config.SavingsRate = 10;
+
+            _configurationPersistenceMock.Setup(p => p.UpdateConfiguration(config)).Returns(false);
+
+            Assert.Throws<Exception>(() => _configurationService.UpdateConfiguration(config));
+        }
     }
 }

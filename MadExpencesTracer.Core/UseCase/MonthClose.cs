@@ -7,7 +7,7 @@ namespace MadExpenceTracker.Core.UseCase
     public class MonthClose : IMonthClose
     {
         private readonly IExpencePersistence _expencePersistence;
-        private readonly IIncomePersistence _incomePersistence;
+        private readonly IIncomesPersistence _incomePersistence;
         private readonly IAmountsPersistence _amountsPersistence;
         private readonly IConfigurationPersistence _configuration;
         private readonly IMonthIndexPersistence _indexPersistence;
@@ -15,7 +15,7 @@ namespace MadExpenceTracker.Core.UseCase
 
         public MonthClose(
             IExpencePersistence expencePersistence,
-            IIncomePersistence incomePersistence,
+            IIncomesPersistence incomePersistence,
             IAmountsPersistence amountsPersistence,
             IConfigurationPersistence configuration,
             IMonthIndexPersistence indexPersistence)
@@ -58,7 +58,7 @@ namespace MadExpenceTracker.Core.UseCase
 
         private bool CreateNewExpencesCollection()
         {
-            return _expencePersistence.CreateNewExpencesDocument(CURRENT_MONTH); ;
+            return _expencePersistence.CreateNewExpencesDocument(CURRENT_MONTH);
         }
 
         private bool CreateNewIncomesCollection()
@@ -73,7 +73,7 @@ namespace MadExpenceTracker.Core.UseCase
 
         private bool CloseIncomesMonth()
         {
-            return _incomePersistence.UpdateExpencesIsActive(false, CURRENT_MONTH);
+            return _incomePersistence.UpdateIncomesIsActive(false, CURRENT_MONTH);
         }
 
         private Amount CreateAmount(Amount amount) 
