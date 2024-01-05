@@ -28,5 +28,11 @@
     </ProjectReference>
     <ProjectReference Include="..\MadExpenceTracker.Persistence\MadExpenceTracker.Persistence.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <SonarQubeSetting Include="sonar.coverage.exclusions">
+      <Value>**/Program.cs</Value>
+      <Value>**/Model/*</Value>
+      <Value>**/Mapper/*</Value>
+    </SonarQubeSetting>
+  </ItemGroup>
 </Project>

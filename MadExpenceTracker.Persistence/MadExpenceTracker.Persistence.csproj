@@ -13,5 +13,11 @@
   <ItemGroup>
     <ProjectReference Include="..\MadExpencesTracer.Core\MadExpenceTracker.Core.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <SonarQubeSetting Include="sonar.coverage.exclusions">
+      <Value>**/MadExpenceTracker.Persistence/MongoDB/Model/*</Value>
+      <Value>**/MadExpenceTracker.Persistence/MongoDB/Mapper/*</Value>
+      <Value>**/MadExpenceTracker.Persistence/MongoDB/Provider/*</Value>
+    </SonarQubeSetting>
+  </ItemGroup>
 </Project>

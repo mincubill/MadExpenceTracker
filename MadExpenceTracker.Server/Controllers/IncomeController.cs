@@ -38,18 +38,18 @@ namespace MadExpenceTracker.Server.Controllers
             return Ok(IncomeMapper.MapToApi(_service.GetIncome(id)));
         }
 
+        [HttpGet]
+        [Route("/incomes")]
+        public IActionResult GetIncomes()
+        {
+            return StatusCode(200, IncomeMapper.MapToApi(_service.GetAll()));
+        }
+
         [HttpDelete]
         [Route("/income/{id}")]
         public IActionResult DeleteIncome(Guid id)
         {
             return Ok(_service.Delete(id));
-        }
-
-        [HttpGet]
-        [Route("/incomes")]
-        public IActionResult GetIncome()
-        {
-            return StatusCode(200, IncomeMapper.MapToApi(_service.GetAll()));
         }
 
         [HttpGet]

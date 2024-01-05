@@ -9,5 +9,9 @@
   <ItemGroup>
     <Folder Include="Exceptions\" />
   </ItemGroup>
-
+  <ItemGroup>
+    <SonarQubeSetting Include="sonar.coverage.exclusions">
+      <Value>**/Models/*</Value>
+    </SonarQubeSetting>
+  </ItemGroup>
 </Project>

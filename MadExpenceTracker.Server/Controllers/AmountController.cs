@@ -19,11 +19,16 @@ namespace MadExpenceTracker.Server.Controllers
 
         [HttpGet]
         [Route("/amount/{expenceId}/{incomeId}")]
-#pragma warning disable S4136 // Method overloads should be grouped together
         public IActionResult GetAmount(Guid expenceId, Guid incomeId)
-#pragma warning restore S4136 // Method overloads should be grouped together
         {
             return Ok(AmountMapper.MapToApi(_service.GetAmount(expenceId, incomeId)));
+        }
+
+        [HttpGet]
+        [Route("/amounts/{id}")]
+        public IActionResult GetAmount(Guid id)
+        {
+            return Ok(AmountMapper.MapToApi(_service.GetAmount(id)));
         }
 
         [HttpPost]
@@ -39,11 +44,6 @@ namespace MadExpenceTracker.Server.Controllers
             return Ok(AmountMapper.MapToApi(_service.GetAmounts()));
         }
 
-        [HttpGet]
-        [Route("/amounts/{id}")]
-        public IActionResult GetAmount(Guid id)
-        {
-            return Ok(AmountMapper.MapToApi(_service.GetAmount(id)));
-        }
+        
     }
 }

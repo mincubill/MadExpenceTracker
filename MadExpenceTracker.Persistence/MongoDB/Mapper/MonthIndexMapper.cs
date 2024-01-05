@@ -1,6 +1,5 @@
 ﻿using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Persistence.MongoDB.Model;
-using MadExpenceTracker.Persistence.MongoDB.Model;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Mapper
 {
