@@ -22,9 +22,11 @@ namespace MadExpenceTracker.Server.Controllers
         public IActionResult CloseMonth([FromBody] MonthResumeApi resumeApi) 
         {
             MonthIndexApi index = MonthIndexMapper.MapToApi( 
-                _monthClose.CloseMonth(ExpencesMapper.MapToModel(resumeApi.ExpencesApi),
-                IncomeMapper.MapToModel(resumeApi.IncomesApi),
-                AmountMapper.MapToModel(resumeApi.AmountApi)) 
+                    _monthClose.CloseMonth( 
+                        ExpencesMapper.MapToModel( resumeApi.ExpencesApi ),
+                        IncomeMapper.MapToModel( resumeApi.IncomesApi ),
+                        AmountMapper.MapToModel( resumeApi.AmountApi ) 
+                    ) 
                 );
             return Ok(index);
         }

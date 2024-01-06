@@ -122,7 +122,6 @@ namespace MadExpenceTracker.Core.Test
         [Test]
         public void UpdateFail()
         {
-            string expected = "updateao";
             Expence expence = ExpencesFixture.GetExpence();
             expence.Name = "updateao";
             _persistence.Setup(e => e.Update(expence)).Returns(false);
@@ -146,7 +145,6 @@ namespace MadExpenceTracker.Core.Test
         public void CloseMonthTest()
         {
             bool expected = true;
-            Expence expence = ExpencesFixture.GetExpence();
             _persistence.Setup(e => e.UpdateExpencesIsActive(false, "2023/12")).Returns(true);
 
             bool res = _service.CloseMonth("2023/12");

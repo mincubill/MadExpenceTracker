@@ -59,7 +59,6 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             {
                 var filterEmpty = Builders<AmountsMongo>.Filter.Empty;
                 List<AmountsMongo> amountsOnDb = _amountsCollection.FindSync(filterEmpty).ToList();
-                string runningMonth = $"{DateTime.Now.Year}/{DateTime.Now.Month}";
                 if (amountsOnDb.Count <= 0)
                 {
                     AmountsMongo newExpencesMongo = new AmountsMongo()
@@ -69,14 +68,14 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                     };
                     _amountsCollection.InsertOne(newExpencesMongo);
                     amountsOnDb = _amountsCollection.FindSync(filterEmpty).ToList();
-                    return AmountMapper.MapToModel(amountsOnDb.First());
+                    return AmountMapper.MapToModel(amountsOnDb[0]);
                 }
                 else
                 {
-                    var filter = Builders<AmountsMongo>.Filter.Eq(e => e.Id, amountsOnDb.First().Id);
+                    var filter = Builders<AmountsMongo>.Filter.Eq(e => e.Id, amountsOnDb[0].Id);
                     var update = Builders<AmountsMongo>.Update.Push(e => e.Amount, AmountMapper.MapToMongo(amountToCreate));
                     var result = _amountsCollection.UpdateOne(filter, update);
-                    return result.IsAcknowledged ? AmountMapper.MapToModel(amountsOnDb.First()) : null;
+                    return result.IsAcknowledged ? AmountMapper.MapToModel(amountsOnDb[0]) : null;
                 }
             }
             catch (TimeoutException)

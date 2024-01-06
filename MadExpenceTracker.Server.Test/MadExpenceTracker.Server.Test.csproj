@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MadExpencesTracer.Core\MadExpenceTracker.Core.csproj" />
+    <ProjectReference Include="..\MadExpenceTracker.Server\MadExpenceTracker.Server.csproj" />
   </ItemGroup>
 
 </Project>

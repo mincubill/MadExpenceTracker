@@ -7,8 +7,8 @@ namespace MadExpenceTracker.Persistence.MongoDB.Model
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string ObjectId { get; set; }
+        public string? ObjectId { get; set; }
         public Guid Id { get; set; }
-        public IEnumerable<AmountMongo> Amount { get; set; }
+        public IEnumerable<AmountMongo>? Amount { get; set; }
     }
 }

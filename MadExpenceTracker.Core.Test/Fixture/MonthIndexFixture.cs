@@ -8,7 +8,7 @@ public static class MonthIndexFixture
     {
         return new MonthIndexes()
         {
-            Id = new Guid(),
+            Id = Guid.NewGuid(),
             MonthIndex = new List<MonthIndex>()
             {
                 new MonthIndex()

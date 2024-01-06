@@ -46,7 +46,7 @@ namespace MadExpenceTracker.Persistence.Test
 
             var result = _persistence.GetAmounts().ToList();
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.First().Id, Is.EqualTo(Guid.Parse("9c64e4d9-c9af-4714-8650-c98e6ebecfa7")));
+            Assert.That(result[0].Id, Is.EqualTo(Guid.Parse("9c64e4d9-c9af-4714-8650-c98e6ebecfa7")));
         }
 
         [Test]
@@ -202,7 +202,7 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
             };
-            List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() }; ;
+            List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() };
 
             Mock<IAsyncCursor<AmountsMongo>> mockWithData = new Mock<IAsyncCursor<AmountsMongo>>();
             mockWithData.Setup(x => x.Current).Returns(amountsOnDbWithData);
@@ -231,7 +231,7 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
             };
-            List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() }; ;
+            List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() };
 
             Mock<IAsyncCursor<AmountsMongo>> mockWithData = new Mock<IAsyncCursor<AmountsMongo>>();
             mockWithData.Setup(x => x.Current).Returns(amountsOnDbWithData);
@@ -260,7 +260,7 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
             };
-            List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() }; ;
+            List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() };
 
             Mock<IAsyncCursor<AmountsMongo>> mockWithData = new Mock<IAsyncCursor<AmountsMongo>>();
             mockWithData.Setup(x => x.Current).Returns(amountsOnDbWithData);
@@ -294,7 +294,6 @@ namespace MadExpenceTracker.Persistence.Test
         [Test]
         public void GetAmountsTimeOutExceptionTest()
         {
-            Guid id = Guid.Parse("9c64e4d9-c9af-4714-8650-c98e6ebecfa7");
             List<AmountsMongo> amountsOnDb = new() { AmountFixture.GetAmountsMongo() };
 
             _mockCursor.Setup(x => x.Current).Returns(amountsOnDb);
@@ -314,7 +313,6 @@ namespace MadExpenceTracker.Persistence.Test
         [Test]
         public void GetAmountsExceptionTest()
         {
-            Guid id = Guid.Parse("9c64e4d9-c9af-4714-8650-c98e6ebecfa7");
             List<AmountsMongo> amountsOnDb = new() { AmountFixture.GetAmountsMongo() };
 
             _mockCursor.Setup(x => x.Current).Returns(amountsOnDb);

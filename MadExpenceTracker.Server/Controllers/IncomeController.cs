@@ -21,7 +21,7 @@ namespace MadExpenceTracker.Server.Controllers
         [Route("/income")]
         public IActionResult CreateIncome([FromBody] IncomeApi incomeApi) 
         {
-            return Ok(IncomeMapper.MapToApi(_service.Create(IncomeMapper.MapToModel(incomeApi))));
+            return StatusCode(201, IncomeMapper.MapToApi(_service.Create(IncomeMapper.MapToModel(incomeApi))));
         }
 
         [HttpPut]

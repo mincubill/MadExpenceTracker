@@ -20,7 +20,8 @@ namespace MadExpenceTracker.Server.Controllers
         [Route("/monthIndex")]
         public IActionResult GetMonthIndex()
         {
-            return Ok(MonthIndexMapper.MapToApi(_service.GetMonthsIndexes()));
+            var res = MonthIndexMapper.MapToApi(_service.GetMonthsIndexes());
+            return Ok(res);
         }
 
         [HttpPost]

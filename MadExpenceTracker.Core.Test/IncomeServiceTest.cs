@@ -97,7 +97,6 @@ namespace MadExpenceTracker.Core.Test
         [Test]
         public void CreateNewMonthTest()
         {
-            bool expected = true;
             _incomePersistenceMock.Setup(i => i.CreateNewIncomeDocument($"{DateTime.Now.Year}/{DateTime.Now.Month}")).Returns(true);
 
             bool res = _service.CreateNewMonth();
