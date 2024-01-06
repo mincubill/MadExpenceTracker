@@ -1,7 +1,9 @@
 import { Table } from "react-bootstrap";
 import PropTypes from 'prop-types';
+import moment from "moment";
 
-export const ExpenseTable = ({data}) => {
+export const IncomeTable = ({data}) => {
+    
     
     return (
         <Table>
@@ -9,7 +11,6 @@ export const ExpenseTable = ({data}) => {
                 <tr>
                     <th>Nombre</th>
                     <th>Fecha</th>
-                    <th>Tipo</th>
                     <th>Valor</th>
                 </tr>
             </thead>
@@ -17,17 +18,15 @@ export const ExpenseTable = ({data}) => {
                 {data.map(d => (
                     <tr key={d.id}>
                         <td>{d.name}</td>
-                        <td>{d.date}</td>
-                        <td>{d.expenceType}</td>
+                        <td>{moment(d.date).format("DD/MM/YYYY")}</td>
                         <td>{d.amount}</td>
                     </tr>
                 ))}
-
             </tbody>
         </Table>
     )
 }
 
-ExpenseTable.propTypes = {
+IncomeTable.propTypes = {
     data: PropTypes.array
 };

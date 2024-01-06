@@ -1,21 +1,22 @@
 import { useState } from "react"
-import { Card, Form, Row, Col, Container, Button } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
+import { Card, Form, Row, Col, Container, Button, Alert } from "react-bootstrap"
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import { v4 as uuidv4 } from 'uuid';
-import { incomes } from "./mocks/incomes";
+import { postIncome } from "../gateway/incomesGateway";
 
 export const IncomeForm = () => {
 
-    const [name, saveName] = useState('')
+    const[name, saveName] = useState('')
     const[datePicked, saveDatePicked] = useState(new Date())
     const[amount, saveAmount] = useState(0)
-    const navigate = useNavigate();
+    const[success, saveSuccess] = useState(undefined)
 
-    const formatDate = (unformatted) => {
-        return moment(unformatted).format("YYYY/MM/DD")
+    const clearForm = () => {
+        saveName('')
+        saveDatePicked(new Date())
+        saveAmount(0)
     }
 
     const saveIncome = (e) => {
@@ -23,17 +24,29 @@ export const IncomeForm = () => {
         const incomeData = {
             id: uuidv4(),
             name,
-            date: formatDate(datePicked),
+            date: moment(datePicked).toJSON(),
             amount
         }  
-        incomes.push(incomeData)
-        //TODO Post logica
-        navigate("/")
+        postIncome(incomeData).then(
+            () => {
+                saveSuccess(true);
+            }
+        ).catch(e => {
+                saveSuccess(false);
+                console.error(e)
+            }
+        )
+        clearForm();
     }
 
     return (
         <Card className="p-3">
             <Container>
+                { success === undefined ? null : 
+                    success ? 
+                        <Alert variant="success">Guardado</Alert> : 
+                        <Alert variant="danger">Ocurrio un error</Alert>
+                }
                 <Form onSubmit={saveIncome}>
                     <Form.Group as={Row} className="mb-3">
                         <Form.Label column sm="2">Nombre: </Form.Label>

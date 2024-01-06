@@ -7,11 +7,13 @@ using MadExpenceTracker.Core.UseCase;
 using MadExpenceTracker.Persistence.MongoDB.Persistence;
 using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MadExpenceTracker.Persistence.MongoDB.Util;
-using MadExpenceTracker.Server.Util;
+
+var env = Environment.GetEnvironmentVariable("app_port");
+Console.WriteLine(env);
 
 IMongoDBProvider mongoProvider = new MongoDBProvider("mongodb://localhost:27017", "MadExpencesTracker");
 IDbInitialization dbInit = new DbInitialization("mongodb://localhost:27017", "MadExpencesTracker");
-new DbInitializationUtil(dbInit).Initialize();
+//new DbInitializationUtil(dbInit).Initialize();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +60,7 @@ builder.Services.AddScoped<IMonthClose, MonthClose>(_ =>
     ));
 
 
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -70,6 +73,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+);
 
 app.UseAuthorization();
 

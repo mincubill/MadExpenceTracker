@@ -14,10 +14,10 @@ export const AmountsTable = ({data}) => {
             </thead>
             <tbody>
                 <tr key={data.id}>
-                    <td>{data.baseExpences}</td>
-                    <td>{data.aditionalExpences}</td>
+                    <td>{data.totalBaseExpences}</td>
+                    <td>{data.totalAditionalExpences}</td>
                     <td>{data.savings}</td>
-                    <td>{data.income}</td>
+                    <td>{data.totalIncomes}</td>
                 </tr>
             </tbody>
         </Table>

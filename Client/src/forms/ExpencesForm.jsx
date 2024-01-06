@@ -1,22 +1,24 @@
 import { useState } from "react"
-import { Card, Form, Row, Col, Container, Button } from "react-bootstrap"
+import { Card, Form, Row, Col, Container, Button, Alert } from "react-bootstrap"
 import DatePicker from 'react-datepicker'
 import moment from "moment";
 import { v4 as uuidv4 } from 'uuid';
 import "react-datepicker/dist/react-datepicker.css";
-import { expences } from "./mocks/expences";
-import { useNavigate } from 'react-router-dom';
+import { postExpence } from '../gateway/expenceGateway'
 
 export const ExpencesForm = () => {
 
     const[name, saveName] = useState('')
     const[datePicked, saveDatePicked] = useState(new Date())
-    const[expenceType, saveExpenceType] = useState()
+    const[expenceType, saveExpenceType] = useState(0)
     const[amount, saveAmount] = useState(0)
-    const navigate = useNavigate();
+    const[success, saveSuccess] = useState(undefined)
 
-    const formatDate = (unformatted) => {
-        return moment(unformatted).format("YYYY/MM/DD")
+    const clearForm = () => {
+        saveName('')
+        saveDatePicked(new Date())
+        saveExpenceType(0)
+        saveAmount(0)
     }
 
     const saveExpence = (e) => {
@@ -24,18 +26,30 @@ export const ExpencesForm = () => {
         const expenceData = {
             id: uuidv4(),
             name,
-            date: formatDate(datePicked),
-            expenceType,
+            date: moment(datePicked).toJSON(),
+            expenceType: parseInt(expenceType),
             amount
-        }  
-        expences.push(expenceData)
-        //TODO Post logica
-        navigate("/")
+        } 
+        postExpence(expenceData).then(
+            () => {
+                saveSuccess(true);
+            }
+        ).catch(e => {
+                saveSuccess(false);
+                console.error(e)
+            }
+        )
+        clearForm()
     }
 
     return (
         <Card className="p-3">
             <Container>
+                { success === undefined ? null : 
+                    success ? 
+                        <Alert variant="success">Guardado</Alert> : 
+                        <Alert variant="danger">Ocurrio un error</Alert>
+                }
                 <Form onSubmit={saveExpence}>
                     <Form.Group as={Row} className="mb-3">
                         <Form.Label column sm="2">Nombre: </Form.Label>
@@ -71,7 +85,7 @@ export const ExpencesForm = () => {
                                 label="base"
                                 name="expenceType"
                                 type="radio"
-                                value="Base"
+                                value={1}
                                 id={`inline-radio-1`}
                                 onChange={e => saveExpenceType(e.target.value)}
                             />
@@ -80,7 +94,7 @@ export const ExpencesForm = () => {
                                 label="adicional"
                                 name="expenceType"
                                 type="radio"
-                                value="Aditional"
+                                value={2}
                                 id={`inline-radio-2`}
                                 onChange={e => saveExpenceType(e.target.value)}
                             />

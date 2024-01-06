@@ -86,7 +86,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                 }
                 else if (incomesOnDb.Count == 1)
                 {
-                    var filter = Builders<IncomesMongo>.Filter.Eq(e => e.RunningMonth, runningMonth);
+                    var filter = Builders<IncomesMongo>.Filter.Eq(e => e.IsActive, true);
                     var update = Builders<IncomesMongo>.Update.Push(e => e.Incomes, IncomeMapper.MapToMongo(incomeToCreate));
                     var result = _incomesCollection.UpdateOne(filter, update);
                     incomesOnDb = _incomesCollection.FindSync(i => i.IsActive).ToList();
