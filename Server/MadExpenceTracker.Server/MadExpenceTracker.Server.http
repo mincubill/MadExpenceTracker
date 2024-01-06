@@ -1,0 +1,6 @@
+@MadExpenceTracker.Server_HostAddress = http://localhost:5093
+
+GET {{MadExpenceTracker.Server_HostAddress}}/expences/
+Accept: application/json
+
+###
