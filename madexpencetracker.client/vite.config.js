@@ -46,8 +46,8 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
-                target: 'https://localhost:5001/',
+            'expencesApi': {
+                target: 'http://localhost:5093/expences',
                 secure: false
             }
         },

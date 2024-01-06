@@ -6,7 +6,7 @@ import { CalculateAmounts } from "../utils/CalculateAmounts";
 import { expences } from "../mocks/expences";
 import { incomes } from "../mocks/incomes";
 import { Button, Col, Row } from "react-bootstrap";
-
+import { getExpencesGateway } from "../gateway/expencesGateway"
 
 export const MainTable = () => {
 
@@ -16,6 +16,7 @@ export const MainTable = () => {
 
     useEffect(() => {
         //TODO Fetch de data
+        getExpencesGateway();
         setExpenceData(expences)
         setIncomeData(incomes)
     }, [])

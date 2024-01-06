@@ -37,14 +37,14 @@ namespace MadExpenceTracker.Core.Services
             };
         }
 
-        public Amounts GetAmounts()
-        {
-            return _amountPersistence.GetAmounts().FirstOrDefault() ?? new Amounts();
-        }
-
         public Amount GetAmount(Guid id)
         {
             return _amountPersistence.GetAmounts(id).Amount.First(a => a.Id == id);
+        }
+
+        public Amounts GetAmounts()
+        {
+            return _amountPersistence.GetAmounts().FirstOrDefault() ?? new Amounts();
         }
 
         public Amounts Create(Amount amount)

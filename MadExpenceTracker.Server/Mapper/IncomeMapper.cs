@@ -83,37 +83,5 @@ namespace MadExpenceTracker.Server.Mapper
             };
         }
 
-        public static IEnumerable<Income> MapToModel(IEnumerable<IncomeApi> input)
-        {
-            foreach (var item in input)
-            {
-                yield return new Income()
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Amount = item.Amount,
-                    Date = item.Date
-                };
-            }
-        }
-
-        public static IEnumerable<Incomes> MapToModel(IEnumerable<IncomesApi> input)
-        {
-            foreach (var income in input)
-            {
-                yield return new Incomes()
-                {
-                    Id = income.Id,
-                    RunningMonth = income.RunningMonth,
-                    Income = income.Income.Select(i => new Income
-                    {
-                        Id = i.Id,
-                        Name = i.Name,
-                        Amount = i.Amount,
-                        Date = i.Date
-                    })
-                };
-            }
-        }
     }
 }

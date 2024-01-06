@@ -37,20 +37,6 @@ namespace MasIncomeTracker.Persistence.MongoDB.Mapper
             };
         }
 
-        public static IEnumerable<Income> MapToModel(IEnumerable<IncomeMongo> input)
-        {
-            foreach (var item in input)
-            {
-                yield return new Income()
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Amount = item.Amount,
-                    Date = item.Date
-                };
-            }
-        }
-
         public static IEnumerable<Incomes> MapToModel(IEnumerable<IncomesMongo> input)
         {
             foreach (var incomes in input)

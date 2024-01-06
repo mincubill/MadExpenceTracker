@@ -40,22 +40,6 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
             };
         }
 
-        public static IEnumerable<MonthIndex> MapToModel(IEnumerable<MonthIndexMongo> input)
-        {
-            foreach (var item in input)
-            {
-                yield return new MonthIndex
-                {
-                    SavingsRate = item.SavingsRate,
-                    IncomesId = item.IncomesId,
-                    ExpencesId = item.ExpencesId,
-                    AmountsId = item.AmountsId,
-                    Month = item.Month,
-                    Id = item.Id
-                };
-            }
-        }
-
         public static IEnumerable<MonthIndexes> MapToModel(IEnumerable<MonthIndexesMongo> input)
         {
             foreach (var amounts in input)

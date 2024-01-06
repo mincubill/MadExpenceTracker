@@ -1,13 +1,17 @@
 using MadExpenceTracker.Core.Interfaces.Services;
 using MadExpenceTracker.Core.Interfaces.UseCase;
+using MadExpenceTracker.Core.Interfaces.Utils;
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Core.Services;
 using MadExpenceTracker.Core.UseCase;
 using MadExpenceTracker.Persistence.MongoDB.Persistence;
 using MadExpenceTracker.Persistence.MongoDB.Provider;
-using MongoDB.Driver;
+using MadExpenceTracker.Persistence.MongoDB.Util;
+using MadExpenceTracker.Server.Util;
 
 IMongoDBProvider mongoProvider = new MongoDBProvider("mongodb://localhost:27017", "MadExpencesTracker");
+IDbInitialization dbInit = new DbInitialization("mongodb://localhost:27017", "MadExpencesTracker");
+new DbInitializationUtil(dbInit).Initialize();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +56,7 @@ builder.Services.AddScoped<IMonthClose, MonthClose>(_ =>
         new ConfigurationPersistence(mongoProvider),
         new MonthIndexPersistence(mongoProvider)
     ));
+
 
 
 var app = builder.Build();

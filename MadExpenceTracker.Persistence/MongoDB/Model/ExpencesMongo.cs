@@ -10,7 +10,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Model
         public string? ObjectId { get; set; }
         public Guid Id { get; set; }
         public string? RunningMonth { get; set; }
-        public IEnumerable<ExpenceMongo>? Expences { get; set; }
+        public IEnumerable<ExpenceMongo>? Expences { get; set; } = new List<ExpenceMongo>();
         public bool IsActive { get; set; }
     }
 }

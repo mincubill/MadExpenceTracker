@@ -26,33 +26,6 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
             };
         }
 
-        public static Amount MapToModel(AmountMongo input)
-        {
-            return new Amount()
-            {
-                Id = input.Id,
-                TotalIncomes = input.TotalIncomes,
-                TotalBaseExpences = input.TotalBaseExpences,
-                TotalAditionalExpences = input.TotalAditionalExpences,
-                Savings = input.Savings
-            };
-        }
-
-        public static IEnumerable<Amount> MapToModel(IEnumerable<AmountMongo> input)
-        {
-            foreach (var item in input)
-            {
-                yield return new Amount
-                {
-                    Id = item.Id,
-                    TotalIncomes = item.TotalIncomes,
-                    TotalBaseExpences = item.TotalBaseExpences,
-                    TotalAditionalExpences = item.TotalAditionalExpences,
-                    Savings = item.Savings
-                };
-            }
-        }
-
         public static IEnumerable<Amounts> MapToModel(IEnumerable<AmountsMongo> input)
         {
             foreach (var amounts in input)

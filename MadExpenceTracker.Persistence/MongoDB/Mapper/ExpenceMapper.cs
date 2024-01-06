@@ -5,7 +5,6 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
 {
     internal static class ExpenceMapper
     {
-
         public static Expences MapToModel(ExpencesMongo input)
         {
             List<Expence> expencesList = new List<Expence>();
@@ -38,21 +37,6 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                 Date = input.Date,
                 ExpenceType = Enum.Parse<ExpenceType>(input.ExpenceType)
             };
-        }
-
-        public static IEnumerable<Expence> MapToModel(IEnumerable<ExpenceMongo> input)
-        {
-            foreach (var item in input)
-            {
-                yield return new Expence()
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Amount = item.Amount,
-                    Date = item.Date,
-                    ExpenceType = Enum.Parse<ExpenceType>(item.ExpenceType)
-                };
-            }
         }
 
         public static IEnumerable<Expences> MapToModel(IEnumerable<ExpencesMongo> input)

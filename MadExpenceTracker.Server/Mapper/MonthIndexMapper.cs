@@ -72,41 +72,5 @@ namespace MadExpenceTracker.Server.Mapper
                 Month = input.Month
             };
         }
-
-        public static IEnumerable<MonthIndex> MapToModel(IEnumerable<MonthIndexApi> input)
-        {
-            foreach (var item in input)
-            {
-                yield return new MonthIndex()
-                {
-                    Id = item.Id,
-                    SavingsRate = item.SavingsRate,
-                    AmountsId = item.AmountsId,
-                    ExpencesId = item.ExpencesId,
-                    IncomesId = item.IncomesId,
-                    Month = item.Month
-                };
-            }
-        }
-
-        public static IEnumerable<MonthIndexes> MapToModel(IEnumerable<MonthIndexesApi> input)
-        {
-            foreach (var indexes in input)
-            {
-                yield return new MonthIndexes()
-                {
-                    Id = indexes.Id,
-                    MonthIndex = indexes.MonthIndex.Select(i => new MonthIndex
-                    {
-                        Id = i.Id,
-                        SavingsRate = i.SavingsRate,
-                        AmountsId = i.AmountsId,
-                        ExpencesId = i.ExpencesId,
-                        IncomesId = i.IncomesId,
-                        Month = i.Month
-                    })
-                };
-            }
-        }
     }
 }

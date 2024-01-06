@@ -16,7 +16,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Model
         public string? ObjectId { get; set; }
         public Guid Id { get; set; }
         public string? RunningMonth { get; set; }
-        public IEnumerable<IncomeMongo>? Incomes { get; set; } = new List<IncomeMongo>();
+        public IEnumerable<IncomeMongo>? Incomes { get; set; }
         public bool IsActive { get; set; }
     }
 }

@@ -9,7 +9,6 @@ namespace MadExpenceTracker.Persistence.MongoDB.Provider
 {
     public class MongoDBProvider : IMongoDBProvider
     {
-        private readonly List<string> _collections = new List<string>() { "expence", "income", "amounts", "configuration", "monthIndex" };
         private readonly IMongoDatabase _database;
 
         public MongoDBProvider(string mongoUrl, string databaseName)
@@ -23,18 +22,6 @@ namespace MadExpenceTracker.Persistence.MongoDB.Provider
         public IMongoCollection<T> GetCollection<T>(string collectionName)
         {
             return _database.GetCollection<T>(collectionName);
-        }
-
-        public void CreateCollectionsIfNotExists()
-        {
-            var collections = _database.ListCollectionNames().ToList();
-            foreach (string collection in _collections)
-            {
-                if (!collections.Contains(collection))
-                {
-                    _database.CreateCollection(collection);
-                }
-            }
         }
     }
 }
