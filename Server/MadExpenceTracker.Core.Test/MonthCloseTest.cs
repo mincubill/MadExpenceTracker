@@ -1,3 +1,4 @@
+using MadExpenceTracker.Core.Exceptions;
 using MadExpenceTracker.Core.Interfaces.UseCase;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
@@ -61,7 +62,7 @@ namespace MadExpenceTracker.Core.Test
             _amountPersistence.Setup(a => a.AddAmount(AmountFixture.GetAmount())).Returns(AmountFixture.GetAmounts());
             _configurationPersistence.Setup(c => c.GetConfiguration()).Returns(ConfigurationFixture.GetConfiguration());
 
-            Assert.Throws<Exception>(() => {
+            Assert.Throws<MonthCloseException>(() => {
                 _monthClose.CloseMonth(
                 ExpencesFixture.GetExpences(),
                 IncomesFixture.GetIncomes(),

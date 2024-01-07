@@ -25,7 +25,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             try
             {
                 IEnumerable<ExpencesMongo> expencesOnDb = _expencesCollection
-                    .FindSync(_emptyFilter).ToEnumerable();
+                    .FindSync(_emptyFilter).ToList();
                 if (!expencesOnDb.Any()) return null;
                 return ExpenceMapper.MapToModel(expencesOnDb);
             }

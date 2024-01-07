@@ -25,7 +25,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             try
             {
                 IEnumerable<IncomesMongo> incomesOnDb = _incomesCollection
-                    .FindSync(_emptyFilter).ToEnumerable();
+                    .FindSync(_emptyFilter).ToList();
                 if (!incomesOnDb.Any()) return null;
                 return IncomeMapper.MapToModel(incomesOnDb);
             }
@@ -41,7 +41,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             {
                 var filter = Builders<IncomesMongo>.Filter.Eq(e => e.Id, id);
                 IncomesMongo incomeMongo = _incomesCollection.FindSync(filter).FirstOrDefault();
-                if (incomeMongo != null) return null;
+                if (incomeMongo == null) return null;
                 return IncomeMapper.MapToModel(incomeMongo);
             }
             catch (Exception)
@@ -57,7 +57,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             {
                 var filter = Builders<IncomesMongo>.Filter.Eq(e => e.IsActive, isActive);
                 IncomesMongo incomesMongo = _incomesCollection.FindSync(filter).FirstOrDefault();
-                if (incomesMongo != null) return null;
+                if (incomesMongo == null) return null;
                 return IncomeMapper.MapToModel(incomesMongo);
             }
             catch (Exception)
@@ -176,7 +176,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             {
                 var filter = Builders<IncomesMongo>.Filter.ElemMatch(e => e.Incomes, d => d.Id == id);
                 IncomesMongo incomesOnDb = _incomesCollection.FindSync(filter).FirstOrDefault();
-                if (incomesOnDb != null) return null;
+                if (incomesOnDb == null) return null;
                 return IncomeMapper.MapToModel(incomesOnDb.Incomes.First(e => e.Id == id));
             }
             catch (TimeoutException)

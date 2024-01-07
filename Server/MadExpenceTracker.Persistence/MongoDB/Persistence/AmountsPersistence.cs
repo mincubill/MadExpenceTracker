@@ -22,7 +22,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             try
             {
                 IEnumerable<AmountsMongo> amountsOnDb = _amountsCollection
-                    .FindSync(Builders<AmountsMongo>.Filter.Empty).ToEnumerable();
+                    .FindSync(Builders<AmountsMongo>.Filter.Empty).ToList();
                 if (!amountsOnDb.Any()) return null;
                 return AmountMapper.MapToModel(amountsOnDb);
             }
