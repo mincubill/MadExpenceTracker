@@ -9,17 +9,21 @@ namespace MadExpenceTracker.Server.Mapper
         public static AmountsApi MapToApi(Amounts input)
         {
             List<AmountApi> amountsList = new List<AmountApi>();
-            foreach (var item in input.Amount)
+            if(input.Amount != null && input.Amount.Any())
             {
-                amountsList.Add(new AmountApi
+                foreach (var item in input.Amount)
                 {
-                    Id = item.Id,
-                    Savings = item.Savings,
-                    TotalAditionalExpences = item.TotalAditionalExpences,
-                    TotalBaseExpences = item.TotalBaseExpences,
-                    TotalIncomes = item.TotalIncomes
-                });
+                    amountsList.Add(new AmountApi
+                    {
+                        Id = item.Id,
+                        Savings = item.Savings,
+                        TotalAditionalExpences = item.TotalAditionalExpences,
+                        TotalBaseExpences = item.TotalBaseExpences,
+                        TotalIncomes = item.TotalIncomes
+                    });
+                }
             }
+            
             return new AmountsApi()
             {
                 Id = input.Id,

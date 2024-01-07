@@ -8,20 +8,23 @@ namespace MasIncomeTracker.Persistence.MongoDB.Mapper
         public static Incomes MapToModel(IncomesMongo input)
         {
             List<Income> IncomesList = new List<Income>();
-            foreach (var item in input.Incomes)
+            if(input.Incomes != null && input.Incomes.Any())
             {
-                IncomesList.Add(new Income
+                foreach (var item in input.Incomes)
                 {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Amount = item.Amount,
-                    Date = item.Date,
-                });
+                    IncomesList.Add(new Income
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Amount = item.Amount,
+                        Date = item.Date,
+                    });
+                }
             }
             return new Incomes()
             {
                 Id = input.Id,
-                RunningMonth = input.RunningMonth,
+                RunningMonth = input.RunningMonth ?? string.Empty,
                 Income = IncomesList
             };
         }
@@ -44,14 +47,14 @@ namespace MasIncomeTracker.Persistence.MongoDB.Mapper
                 yield return new Incomes()
                 {
                     Id = incomes.Id,
-                    RunningMonth = incomes.RunningMonth,
-                    Income = incomes.Incomes.Select(e => new Income
+                    RunningMonth = incomes.RunningMonth ?? string.Empty,
+                    Income = incomes.Incomes != null ? incomes.Incomes.Select(e => new Income
                     {
                         Id = e.Id,
                         Name = e.Name,
                         Amount = e.Amount,
                         Date = e.Date
-                    })
+                    }) : new List<Income>()
                 };
             }
         }

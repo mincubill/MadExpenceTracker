@@ -1,4 +1,5 @@
-﻿using MadExpenceTracker.Core.Interfaces.Services;
+﻿using MadExpenceTracker.Core.Exceptions;
+using MadExpenceTracker.Core.Interfaces.Services;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
 
@@ -31,7 +32,7 @@ namespace MadExpenceTracker.Core.Services
             }
             else
             {
-                throw new Exception("Error updating the configuration");
+                throw new CannotUpdateException("Error updating the configuration");
             }
         }
     }

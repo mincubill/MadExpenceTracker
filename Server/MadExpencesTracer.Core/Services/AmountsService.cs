@@ -1,7 +1,7 @@
-﻿using MadExpenceTracker.Core.Interfaces.Services;
+﻿using MadExpenceTracker.Core.Exceptions;
+using MadExpenceTracker.Core.Interfaces.Services;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
-using System.Net.WebSockets;
 
 namespace MadExpenceTracker.Core.Services
 {
@@ -22,10 +22,11 @@ namespace MadExpenceTracker.Core.Services
 
         public Amount GetAmount(Guid expencesId, Guid incomesId)
         {
-            IEnumerable<Expence> expences = _expencePersistence.Get(expencesId).Expence;
-            long totalBaseExpences = expences.Where(e => e.ExpenceType == ExpenceType.Base).Sum(e => e.Amount);
-            long totalAditionalExpences = expences.Where(e => e.ExpenceType == ExpenceType.Aditional).Sum(e => e.Amount);
-            long totalIncomes = _incomePersistence.Get(incomesId).Income.Sum(i => i.Amount);
+            Expences expences = _expencePersistence.Get(expencesId) ?? throw new NotFoundException("Expences not found");
+            Incomes incomes = _incomePersistence.Get(incomesId) ?? throw new NotFoundException("Incomes not found");
+            long totalBaseExpences = expences.Expence.Where(e => e.ExpenceType == ExpenceType.Base).Sum(e => e.Amount);
+            long totalAditionalExpences = expences.Expence.Where(e => e.ExpenceType == ExpenceType.Aditional).Sum(e => e.Amount);
+            long totalIncomes = incomes.Income.Sum(i => i.Amount);
             byte savingRate = _configurationPersistence.GetConfiguration().SavingsRate;
             return new Amount
             {
@@ -39,12 +40,14 @@ namespace MadExpenceTracker.Core.Services
 
         public Amount GetAmount(Guid id)
         {
-            return _amountPersistence.GetAmounts(id).Amount.First(a => a.Id == id);
+            Amounts foundAmounts = _amountPersistence.GetAmounts(id) ?? throw new NotFoundException("Amount not found");
+            Amount foundAmount = foundAmounts.Amount?.FirstOrDefault(a => a.Id == id) ?? throw new NotFoundException("Amount not found");
+            return foundAmount;
         }
 
         public Amounts GetAmounts()
         {
-            return _amountPersistence.GetAmounts().FirstOrDefault() ?? new Amounts();
+            return _amountPersistence.GetAmounts()?.FirstOrDefault() ?? new Amounts();
         }
 
         public Amounts Create(Amount amount)

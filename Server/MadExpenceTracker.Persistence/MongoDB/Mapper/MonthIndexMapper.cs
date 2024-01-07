@@ -8,18 +8,22 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
         public static MonthIndexes MapToModel(MonthIndexesMongo input)
         {
             List<MonthIndex> indexesList = new List<MonthIndex>();
-            foreach (var item in input.MonthIndex)
+            if(input.MonthIndex != null && input.MonthIndex.Any())
             {
-                indexesList.Add(new MonthIndex
+                foreach (var item in input.MonthIndex)
                 {
-                    SavingsRate = item.SavingsRate,
-                    IncomesId = item.IncomesId,
-                    ExpencesId = item.ExpencesId,
-                    AmountsId = item.AmountsId,
-                    Month = item.Month,
-                    Id = item.Id
-                });
+                    indexesList.Add(new MonthIndex
+                    {
+                        SavingsRate = item.SavingsRate,
+                        IncomesId = item.IncomesId,
+                        ExpencesId = item.ExpencesId,
+                        AmountsId = item.AmountsId,
+                        Month = item.Month,
+                        Id = item.Id
+                    });
+                }
             }
+            
             return new MonthIndexes()
             {
                 Id = input.Id,
@@ -47,7 +51,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                 yield return new MonthIndexes()
                 {
                     Id = amounts.Id,
-                    MonthIndex = amounts.MonthIndex.Select(m => new MonthIndex
+                    MonthIndex = amounts.MonthIndex != null ? amounts.MonthIndex.Select(m => new MonthIndex
                     {
                         SavingsRate = m.SavingsRate,
                         IncomesId = m.IncomesId,
@@ -55,7 +59,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                         AmountsId = m.AmountsId,
                         Month = m.Month,
                         Id = m.Id
-                    })
+                    }) : new List<MonthIndex>()
                 };
             }
         }

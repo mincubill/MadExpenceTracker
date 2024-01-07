@@ -1,4 +1,5 @@
-﻿using MadExpenceTracker.Core.Interfaces.UseCase;
+﻿using MadExpenceTracker.Core.Exceptions;
+using MadExpenceTracker.Core.Interfaces.UseCase;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
 
@@ -37,7 +38,7 @@ namespace MadExpenceTracker.Core.UseCase
                 amount = CreateAmount(amount);
                 return CreateIndexEntry(expences, incomes, amount);
             }
-            throw new Exception("failed to close the month");
+            throw new MonthCloseException("failed to close the month");
         }
 
         private MonthIndex CreateIndexEntry(Expences expences, Incomes incomes, Amount amount)

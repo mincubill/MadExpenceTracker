@@ -5,6 +5,7 @@ using MongoDB.Driver;
 using MadExpenceTracker.Persistence.MongoDB.Mapper;
 using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver.Linq;
+using MadExpenceTracker.Core.Exceptions;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 {
@@ -23,8 +24,9 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             try
             {
                 var filter = Builders<ConfigurationMongo>.Filter.Empty;
-                ConfigurationMongo amountsOnDb = _configurationCollection.FindSync(filter).First();
-                return ConfigurationMapper.MapToModel(amountsOnDb);
+                ConfigurationMongo condigurationOnDb = _configurationCollection.FindSync(filter).FirstOrDefault()
+                    ?? throw new NoConfigurationException("No Configuration detected");
+                return ConfigurationMapper.MapToModel(condigurationOnDb);
             }
             catch (TimeoutException)
             {

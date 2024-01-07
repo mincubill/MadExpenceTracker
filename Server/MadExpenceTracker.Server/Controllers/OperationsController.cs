@@ -1,7 +1,6 @@
 ﻿using MadExpenceTracker.Core.Interfaces.UseCase;
 using MadExpenceTracker.Server.Mapper;
 using MadExpenceTracker.Server.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MadExpenceTracker.Server.Controllers
