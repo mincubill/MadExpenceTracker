@@ -34,3 +34,14 @@ export const postExpence = async (expenceData) => {
             }) 
         });
 }
+
+export const getExpenceById = async (id) => {
+    return fetch(`${baseUrl}/expence/${id}`)
+        .then((response) => { 
+            return response.json().then((data) => {
+                return data;
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+}
