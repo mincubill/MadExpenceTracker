@@ -13,7 +13,9 @@ namespace MadExpenceTracker.Persistence.Test.Fixture
                 Savings = 200000,
                 TotalAditionalExpences = 20,
                 TotalBaseExpences = 100,
-                TotalIncomes = 1000000
+                TotalIncomes = 1000000,
+                SugestedBaseExpences = 100,
+                SugestedAditionalExpences = 100
             };
         }
 
@@ -31,12 +33,14 @@ namespace MadExpenceTracker.Persistence.Test.Fixture
                         Savings = 200000,
                         TotalAditionalExpences = 20,
                         TotalBaseExpences = 100,
-                        TotalIncomes = 1000000
+                        TotalIncomes = 1000000,
+                        SugestedBaseExpences = 100,
+                        SugestedAditionalExpences = 100
                     }
                 }
             };
         }
-        
+
         public static AmountMongo GetAmountMongo()
         {
             return new AmountMongo
@@ -45,7 +49,9 @@ namespace MadExpenceTracker.Persistence.Test.Fixture
                 Savings = 200000,
                 TotalAditionalExpences = 20,
                 TotalBaseExpences = 100,
-                TotalIncomes = 1000000
+                TotalIncomes = 1000000,
+                SugestedBaseExpences = 100,
+                SugestedAditionalExpences = 100
             };
         }
 
@@ -63,7 +69,9 @@ namespace MadExpenceTracker.Persistence.Test.Fixture
                         Savings = 200000,
                         TotalAditionalExpences = 20,
                         TotalBaseExpences = 100,
-                        TotalIncomes = 1000000
+                        TotalIncomes = 1000000,
+                        SugestedBaseExpences = 100,
+                        SugestedAditionalExpences = 100
                     }
                 }
             };

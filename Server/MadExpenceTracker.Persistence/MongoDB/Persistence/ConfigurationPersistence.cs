@@ -52,7 +52,10 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                 else
                 {
                     var filter = Builders<ConfigurationMongo>.Filter.Eq(e => e.SavingsRate, configOnDb.SavingsRate);
-                    var update = Builders<ConfigurationMongo>.Update.Set(e => e.SavingsRate, configurationToSave.SavingsRate);
+                    var update = Builders<ConfigurationMongo>.Update
+                        .Set(e => e.SavingsRate, configurationToSave.SavingsRate)
+                        .Set(e => e.AditionalExpencesRate, configurationToSave.AditionalExpencesRate)
+                        .Set(e => e.BaseExpencesRate, configurationToSave.BaseExpencesRate);
                     var result = _configurationCollection.UpdateOne(filter, update);
                     configOnDb = _configurationCollection.FindSync(filterEmpty).FirstOrDefault();
                     return result.IsAcknowledged ? ConfigurationMapper.MapToModel(configOnDb) : null;

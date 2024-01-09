@@ -9,5 +9,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Model
         [BsonRepresentation(BsonType.ObjectId)]
         public string? ObjectId { get; set; }
         public byte SavingsRate { get; set; }
+        public byte BaseExpencesRate { get; set; }
+        public byte AditionalExpencesRate { get; set; }
     }
 }

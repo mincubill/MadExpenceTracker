@@ -18,7 +18,9 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                         TotalIncomes = item.TotalIncomes,
                         TotalBaseExpences = item.TotalBaseExpences,
                         TotalAditionalExpences = item.TotalAditionalExpences,
-                        Savings = item.Savings
+                        Savings = item.Savings,
+                        SugestedAditionalExpences = item.SugestedAditionalExpences,
+                        SugestedBaseExpences = item.SugestedBaseExpences
                     });
                 }
             }
@@ -43,7 +45,9 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                         TotalIncomes = a.TotalIncomes,
                         TotalBaseExpences = a.TotalBaseExpences,
                         TotalAditionalExpences = a.TotalAditionalExpences,
-                        Savings = a.Savings
+                        Savings = a.Savings,
+                        SugestedBaseExpences = a.SugestedBaseExpences,
+                        SugestedAditionalExpences = a.SugestedAditionalExpences
                     }) : new List<Amount>()
                 };
             }
@@ -57,7 +61,9 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                 TotalIncomes = input.TotalIncomes,
                 TotalBaseExpences = input.TotalBaseExpences,
                 TotalAditionalExpences = input.TotalAditionalExpences,
-                Savings = input.Savings
+                Savings = input.Savings,
+                SugestedAditionalExpences = input.SugestedAditionalExpences,
+                SugestedBaseExpences = input.SugestedBaseExpences
             };
         }
     }

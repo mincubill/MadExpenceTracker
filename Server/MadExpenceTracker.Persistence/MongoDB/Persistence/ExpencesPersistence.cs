@@ -127,15 +127,22 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                ExpencesMongo newExpencesMongo = new ExpencesMongo()
+                var filter = Builders<ExpencesMongo>.Filter.Eq(e => e.IsActive, true);
+                var update = Builders<ExpencesMongo>.Update.Set(e => e.IsActive, false);
+                var result = _expencesCollection.UpdateOne(filter, update);
+                if(result.IsAcknowledged)
                 {
-                    Id = Guid.NewGuid(),
-                    RunningMonth = runningMonth,
-                    IsActive = true,
-                    Expences = new List<ExpenceMongo>().AsEnumerable()
-                };
-                _expencesCollection.InsertOne(newExpencesMongo);
-                return true;
+                    ExpencesMongo newExpencesMongo = new ExpencesMongo()
+                    {
+                        Id = Guid.NewGuid(),
+                        RunningMonth = runningMonth,
+                        IsActive = true,
+                        Expences = new List<ExpenceMongo>().AsEnumerable()
+                    };
+                    _expencesCollection.InsertOne(newExpencesMongo);
+                    return true;
+                }
+                return false;
             }
             catch (TimeoutException)
             {

@@ -7,7 +7,12 @@ namespace MadExpenceTracker.Persistence.Test.Fixture
     {
         public static Configuration GetConfiguration()
         {
-            return new Configuration() { SavingsRate = 20 };
+            return new Configuration()
+            {
+                SavingsRate = 20,
+                BaseExpencesRate = 50,
+                AditionalExpencesRate = 30
+            };
         }
         
         public static ConfigurationMongo GetConfigurationMongo()
@@ -15,7 +20,9 @@ namespace MadExpenceTracker.Persistence.Test.Fixture
             return new ConfigurationMongo()
             {
                 ObjectId = "",
-                SavingsRate = 20
+                SavingsRate = 20,
+                BaseExpencesRate = 50,
+                AditionalExpencesRate = 30
             };
         }
     }

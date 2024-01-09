@@ -28,12 +28,12 @@ namespace MadExpenceTracker.Core.UseCase
             _indexPersistence = indexPersistence;
         }
 
-        public MonthIndex CloseMonth(Expences expences, Incomes incomes, Amount amount)
+        public MonthIndex CloseMonth(string monthToClose, Expences expences, Incomes incomes, Amount amount)
         {
             if(CreateNewExpencesCollection() &&
                 CreateNewIncomesCollection() &&
-                CloseExpencesMonth() &&
-                CloseIncomesMonth())
+                CloseExpencesMonth(monthToClose) &&
+                CloseIncomesMonth(monthToClose))
             {
                 amount = CreateAmount(amount);
                 return CreateIndexEntry(expences, incomes, amount);
@@ -67,14 +67,14 @@ namespace MadExpenceTracker.Core.UseCase
             return _incomePersistence.CreateNewIncomeDocument(CURRENT_MONTH);
         }
 
-        private bool CloseExpencesMonth()
+        private bool CloseExpencesMonth(string monthToClose)
         {
-            return _expencePersistence.UpdateExpencesIsActive(false, CURRENT_MONTH);
+            return _expencePersistence.UpdateExpencesIsActive(false, monthToClose);
         }
 
-        private bool CloseIncomesMonth()
+        private bool CloseIncomesMonth(string monthToClose)
         {
-            return _incomePersistence.UpdateIncomesIsActive(false, CURRENT_MONTH);
+            return _incomePersistence.UpdateIncomesIsActive(false, monthToClose);
         }
 
         private Amount CreateAmount(Amount amount) 

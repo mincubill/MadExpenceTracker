@@ -110,15 +110,22 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                IncomesMongo newIncomesMongo = new IncomesMongo() 
+                var filter = Builders<IncomesMongo>.Filter.Eq(e => e.IsActive, true);
+                var update = Builders<IncomesMongo>.Update.Set(e => e.IsActive, false);
+                var result = _incomesCollection.UpdateOne(filter, update);
+                if(result.IsAcknowledged) 
                 {
-                    Id = Guid.NewGuid(),
-                    RunningMonth = runningMonth, 
-                    IsActive = true,
-                    Incomes = new List<IncomeMongo>().AsEnumerable(),
-                };
-                _incomesCollection.InsertOne(newIncomesMongo);
-                return true;
+                    IncomesMongo newIncomesMongo = new IncomesMongo()
+                    {
+                        Id = Guid.NewGuid(),
+                        RunningMonth = runningMonth,
+                        IsActive = true,
+                        Incomes = new List<IncomeMongo>().AsEnumerable(),
+                    };
+                    _incomesCollection.InsertOne(newIncomesMongo);
+                    return true;
+                }
+                return false;
             }
             catch (Exception)
             {

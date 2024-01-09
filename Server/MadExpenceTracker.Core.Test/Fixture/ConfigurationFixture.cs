@@ -11,7 +11,12 @@ namespace MadExpenceTracker.Core.Test.Fixture
     {
         public static Configuration GetConfiguration()
         {
-            return new Configuration() { SavingsRate = 20 };
+            return new Configuration() 
+            { 
+                SavingsRate = 20,
+                AditionalExpencesRate = 30,
+                BaseExpencesRate = 50
+            };
         }
     }
 }

@@ -4,14 +4,13 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { getExpenceById } from "../../gateway/expenceGateway";
+import { deleteExpence, getExpenceById } from "../../gateway/expenceGateway";
 
-export const ExpenseTable = ({data}) => {
+export const ExpenseTable = ({data, saveOperationResult}) => {
 
     const navigate = useNavigate()
 
-    const viewExpence = (e) => {
-        
+    const viewExpence = (e) => {     
         getExpenceById(e.currentTarget.id).then(d => {
             const data = {
                 id: d.id,
@@ -20,8 +19,31 @@ export const ExpenseTable = ({data}) => {
                 expenceType: d.expenceType,
                 amount: d.amount
             }
-            navigate("/expence", {state: { data, isReadOnly: true } })
-           
+            navigate("/expence", {state: { data, isReadOnly: true, isUpdate: false } })
+        })
+    }
+
+    const updateExpence = (e) => {
+        getExpenceById(e.currentTarget.id).then(d => {
+            const data = {
+                id: d.id,
+                name: d.name,
+                date: d.date,
+                expenceType: d.expenceType,
+                amount: d.amount
+            }
+            navigate("/expence", {state: { data, isReadOnly: false, isUpdate: true } })
+        })
+    }
+
+    const removeExpence = (e) => {
+        deleteExpence(e.currentTarget.id).then(d => {
+            if(d === true) {
+                saveOperationResult("Gasto eliminado")
+            }
+            else {
+                saveOperationResult("Ocurrio un error")
+            }
         })
     }
 
@@ -48,18 +70,25 @@ export const ExpenseTable = ({data}) => {
                                 <Button 
                                     variant="primary" 
                                     size="sm" 
-                                    id={d.id}
-                                    className="bi bi-eye" 
-                                    onClick={
-                                        viewExpence
-                                    }
+                                    id={ d.id }
+                                    onClick={ viewExpence }
                                 >
                                     <EyeFill id={d.id}/>
                                 </Button>{' '}
-                                <Button variant="warning" size="sm">
+                                <Button 
+                                    variant="warning" 
+                                    size="sm"
+                                    id={ d.id }
+                                    onClick={ updateExpence }
+                                >
                                     <Clipboard2Data/>
                                 </Button>{' '}
-                                <Button variant="danger" size="sm">
+                                <Button 
+                                    variant="danger" 
+                                    size="sm"
+                                    id={ d.id }
+                                    onClick={ removeExpence }
+                                >
                                     <Trash2Fill/>
                                 </Button>
                             </span>
@@ -73,5 +102,6 @@ export const ExpenseTable = ({data}) => {
 }
 
 ExpenseTable.propTypes = {
-    data: PropTypes.array
+    data: PropTypes.array,
+    saveOperationResult: PropTypes.func
 };

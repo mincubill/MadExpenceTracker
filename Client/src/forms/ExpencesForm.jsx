@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker'
 import moment from "moment";
 import { v4 as uuidv4 } from 'uuid';
 import "react-datepicker/dist/react-datepicker.css";
-import { postExpence } from '../gateway/expenceGateway'
+import { postExpence, updateExpence } from '../gateway/expenceGateway'
 import { useLocation } from "react-router-dom";
 
 
@@ -14,23 +14,24 @@ export const ExpencesForm = () => {
     const[expenceId, saveExpenceId] = useState('')
     const[name, saveName] = useState('')
     const[datePicked, saveDatePicked] = useState(new Date())
-    const[expenceType, saveExpenceType] = useState(0)
+    const[expenceType, saveExpenceType] = useState(1)
     const[amount, saveAmount] = useState(0)
-    const[success, saveSuccess] = useState(undefined)
+    const[successResult, saveSuccessResult] = useState(undefined)
     const[isReadOnlyField, saveIsReadOnlyField] = useState(false)
+    const[isAnUpdate, saveIsAnUpdate] = useState(false)
 
     const location = useLocation()
 
     useEffect(() => {
         if(!location.state) return;
-        const {data ,isReadOnly} = location.state
+        const {data, isReadOnly, isUpdate} = location.state
         saveIsReadOnlyField(isReadOnly)
+        saveIsAnUpdate(isUpdate)
         saveExpenceId(data.id)
         saveName(data.name)
         saveDatePicked(new Date(data.date))
         saveExpenceType(data.expenceType)
         saveAmount(data.amount)
-        console.log(data)
         
     }, [location.state])
 
@@ -43,38 +44,53 @@ export const ExpencesForm = () => {
 
     const saveExpence = (e) => {
         e.preventDefault()
-        const expenceData = {
-            id: uuidv4(),
-            name,
-            date: moment(datePicked).toJSON(),
-            expenceType: parseInt(expenceType),
-            amount
-        } 
-        postExpence(expenceData).then(
-            () => {
-                saveSuccess(true);
+        if(!isAnUpdate) {
+            const expenceData = {
+                id: uuidv4(),
+                name,
+                date: moment(datePicked).toJSON(),
+                expenceType: parseInt(expenceType),
+                amount
+            } 
+            postExpence(expenceData).then(
+                () => {
+                    saveSuccessResult("gasto guardado");
+                }
+            ).catch(e => {
+                    saveSuccessResult("ocurrio un error");
+                    console.error(e)
+                }
+            )
+            clearForm()
+        } else {
+            const expenceUpdateData = {
+                id: expenceId,
+                name,
+                date: moment(datePicked).toJSON(),
+                expenceType: parseInt(expenceType),
+                amount
             }
-        ).catch(e => {
-                saveSuccess(false);
-                console.error(e)
-            }
-        )
-        clearForm()
-    }
-
-    const updateExpence = (e) => {
-        //TODO logica de udpate
+            updateExpence(expenceUpdateData).then(
+                () => {
+                    saveSuccessResult("gasto actualizado");
+                }
+            ).catch(e => {
+                    saveSuccessResult("ocurrio un error");
+                    console.error(e)
+                }
+            )
+        }
     }
 
    return (
         <Card className="p-3">
             <Container>
-                { success === undefined ? null : 
-                    success ? 
-                        <Alert variant="success">Guardado</Alert> : 
-                        <Alert variant="danger">Ocurrio un error</Alert>
+                { successResult === undefined ? null : 
+                    successResult ? 
+                        <Alert variant="success">{successResult}</Alert> : 
+                        <Alert variant="danger">{successResult}</Alert>
                 }
-                <Form onSubmit={saveExpence}>
+                <Form onSubmit={ saveExpence }>
                     <Form.Group as={Row} className="mb-3">
                         <Form.Label column sm="2">Nombre: </Form.Label>
                         <Col sm="10">
@@ -142,9 +158,13 @@ export const ExpencesForm = () => {
                             required />
                         </Col>
                     </Form.Group>
-                    <Button variant="primary" type="Submit">
-                        Guardar
-                    </Button>
+                    {isReadOnlyField ? 
+                        null : 
+                        <Button variant="primary" type="Submit">
+                            { isAnUpdate ? "Actualizar" : "Guardar" } 
+                        </Button>
+                    }
+                    
                 </Form>
             </Container>
         </Card>
