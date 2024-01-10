@@ -1,4 +1,5 @@
-﻿using MadExpenceTracker.Core.Interfaces.Services;
+﻿using MadExpenceTracker.Core.Exceptions;
+using MadExpenceTracker.Core.Interfaces.Services;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Core.Services;
@@ -125,7 +126,7 @@ namespace MadExpenceTracker.Core.Test
 
             _incomePersistenceMock.Setup(i => i.Update(income)).Returns(false);
 
-            Assert.Throws<Exception>(() => _service.Update(income));
+            Assert.Throws<CannotUpdateException>(() => _service.Update(income));
         }
 
         [Test]

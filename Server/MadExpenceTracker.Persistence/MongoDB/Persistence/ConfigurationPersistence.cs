@@ -5,6 +5,7 @@ using MongoDB.Driver;
 using MadExpenceTracker.Persistence.MongoDB.Mapper;
 using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MongoDB.Driver.Linq;
+using MadExpenceTracker.Core.Exceptions;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Persistence
 {
@@ -23,8 +24,9 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             try
             {
                 var filter = Builders<ConfigurationMongo>.Filter.Empty;
-                ConfigurationMongo amountsOnDb = _configurationCollection.FindSync(filter).First();
-                return ConfigurationMapper.MapToModel(amountsOnDb);
+                ConfigurationMongo condigurationOnDb = _configurationCollection.FindSync(filter).FirstOrDefault()
+                    ?? throw new NoConfigurationException("No Configuration detected");
+                return ConfigurationMapper.MapToModel(condigurationOnDb);
             }
             catch (TimeoutException)
             {
@@ -44,13 +46,21 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                 var configOnDb = _configurationCollection.FindSync(filterEmpty).FirstOrDefault();
                 if (configOnDb == null)
                 {
-                    ConfigurationMongo newConfigurationMongoMongo = new ConfigurationMongo() { SavingsRate = 20 };
+                    ConfigurationMongo newConfigurationMongoMongo = new ConfigurationMongo() 
+                    { 
+                        SavingsRate = configurationToSave.SavingsRate,
+                        BaseExpencesRate = configurationToSave.BaseExpencesRate,
+                        AditionalExpencesRate = configurationToSave.AditionalExpencesRate
+                    };
                     _configurationCollection.InsertOne(newConfigurationMongoMongo);
                 }
                 else
                 {
                     var filter = Builders<ConfigurationMongo>.Filter.Eq(e => e.SavingsRate, configOnDb.SavingsRate);
-                    var update = Builders<ConfigurationMongo>.Update.Set(e => e.SavingsRate, configurationToSave.SavingsRate);
+                    var update = Builders<ConfigurationMongo>.Update
+                        .Set(e => e.SavingsRate, configurationToSave.SavingsRate)
+                        .Set(e => e.AditionalExpencesRate, configurationToSave.AditionalExpencesRate)
+                        .Set(e => e.BaseExpencesRate, configurationToSave.BaseExpencesRate);
                     var result = _configurationCollection.UpdateOne(filter, update);
                     configOnDb = _configurationCollection.FindSync(filterEmpty).FirstOrDefault();
                     return result.IsAcknowledged ? ConfigurationMapper.MapToModel(configOnDb) : null;
@@ -72,9 +82,11 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                var filter = Builders<ConfigurationMongo>.Filter.Eq(e => e.SavingsRate, configurationToSave.SavingsRate);
+                var filter = Builders<ConfigurationMongo>.Filter.Empty;
                 var update = Builders<ConfigurationMongo>.Update
-                .Set(e => e.SavingsRate, configurationToSave.SavingsRate);
+                .Set(e => e.SavingsRate, configurationToSave.SavingsRate)
+                .Set(e => e.AditionalExpencesRate, configurationToSave.AditionalExpencesRate)
+                .Set(e => e.BaseExpencesRate, configurationToSave.BaseExpencesRate);
                 var result = _configurationCollection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }

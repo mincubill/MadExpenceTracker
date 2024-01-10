@@ -30,7 +30,7 @@ namespace MadExpenceTracker.Server.Test
 
             _serviceMock.Setup(s => s.GetAmount(id)).Returns(amount);
 
-            var res = _controller.GetAmount(id) as OkObjectResult;
+            var res = _controller.GetAmountById(id) as OkObjectResult;
             AmountApi? resData = res.Value as AmountApi;
 
             Assert.That(res, Is.Not.Null);
@@ -48,7 +48,7 @@ namespace MadExpenceTracker.Server.Test
 
             _serviceMock.Setup(s => s.GetAmount(expencesId, incomesId)).Returns(amount);
 
-            var res = _controller.GetAmount(expencesId, incomesId) as OkObjectResult;
+            var res = _controller.CalculateAmounts(expencesId, incomesId) as OkObjectResult;
             AmountApi? resData = res.Value as AmountApi;
 
             Assert.That(res, Is.Not.Null);

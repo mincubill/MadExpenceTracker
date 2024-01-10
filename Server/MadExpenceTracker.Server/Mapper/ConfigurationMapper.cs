@@ -10,6 +10,8 @@ namespace MadExpenceTracker.Server.Mapper
             return new ConfigurationApi()
             {
                 SavingsRate = input.SavingsRate,
+                AditionalExpencesRate = input.AditionalExpencesRate,
+                BaseExpencesRate = input.BaseExpencesRate
             };
         }
 
@@ -17,7 +19,9 @@ namespace MadExpenceTracker.Server.Mapper
         {
             return new Configuration()
             {
-                SavingsRate = input.SavingsRate
+                SavingsRate = input.SavingsRate,
+                AditionalExpencesRate = input.AditionalExpencesRate,
+                BaseExpencesRate = input.BaseExpencesRate
             };
         }
     }

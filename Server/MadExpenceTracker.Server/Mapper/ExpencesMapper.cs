@@ -8,16 +8,19 @@ namespace MadExpenceTracker.Server.Mapper
         public static ExpencesApi MapToApi(Expences input)
         {
             List<ExpenceApi> expencesList = new List<ExpenceApi>();
-            foreach (var item in input.Expence)
+            if(input.Expence != null && input.Expence.Any())
             {
-                expencesList.Add(new ExpenceApi
+                foreach (var item in input.Expence)
                 {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Amount = item.Amount,
-                    Date = item.Date,
-                    ExpenceType = (Model.ExpenceType)item.ExpenceType,
-                });
+                    expencesList.Add(new ExpenceApi
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Amount = item.Amount,
+                        Date = item.Date,
+                        ExpenceType = (Model.ExpenceType)item.ExpenceType,
+                    });
+                }
             }
             return new ExpencesApi()
             {
@@ -47,14 +50,14 @@ namespace MadExpenceTracker.Server.Mapper
                 {
                     Id = expences.Id,
                     RunningMonth = expences.RunningMonth,
-                    Expence = expences.Expence.Select(e => new ExpenceApi
+                    Expence = expences.Expence != null ? expences.Expence.Select(e => new ExpenceApi
                     {
                         Id = e.Id,
                         Name = e.Name,
                         Amount = e.Amount,
                         Date = e.Date,
                         ExpenceType = (Model.ExpenceType)e.ExpenceType,
-                    })
+                    }) : new List<ExpenceApi>()
                 };
             }
         }
@@ -77,14 +80,14 @@ namespace MadExpenceTracker.Server.Mapper
             {
                 Id = input.Id,
                 RunningMonth = input.RunningMonth,
-                Expence = input.Expence.Select(e => new Expence
+                Expence = input.Expence != null ? input.Expence.Select(e => new Expence
                 {
                     Id = e.Id,
                     Name = e.Name,
                     Amount = e.Amount,
                     Date = e.Date,
                     ExpenceType = (Core.Model.ExpenceType)e.ExpenceType,
-                })
+                }) : new List<Expence>()
             };
         }
     }

@@ -8,17 +8,23 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
         public static Amounts MapToModel(AmountsMongo input)
         {
             List<Amount> amountsList = new List<Amount>();
-            foreach (var item in input.Amount)
+            if (input.Amount != null && input.Amount.Any())
             {
-                amountsList.Add(new Amount
+                foreach (var item in input.Amount)
                 {
-                    Id = item.Id,
-                    TotalIncomes = item.TotalIncomes,
-                    TotalBaseExpences = item.TotalBaseExpences,
-                    TotalAditionalExpences = item.TotalAditionalExpences,
-                    Savings = item.Savings
-                });
+                    amountsList.Add(new Amount
+                    {
+                        Id = item.Id,
+                        TotalIncomes = item.TotalIncomes,
+                        TotalBaseExpences = item.TotalBaseExpences,
+                        TotalAditionalExpences = item.TotalAditionalExpences,
+                        Savings = item.Savings,
+                        SugestedAditionalExpences = item.SugestedAditionalExpences,
+                        SugestedBaseExpences = item.SugestedBaseExpences
+                    });
+                }
             }
+                
             return new Amounts()
             {
                 Id = input.Id,
@@ -33,14 +39,16 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                 yield return new Amounts()
                 {
                     Id = amounts.Id,
-                    Amount = amounts.Amount.Select(a => new Amount
+                    Amount = amounts.Amount != null ? amounts.Amount.Select(a => new Amount
                     {
                         Id = a.Id,
                         TotalIncomes = a.TotalIncomes,
                         TotalBaseExpences = a.TotalBaseExpences,
                         TotalAditionalExpences = a.TotalAditionalExpences,
-                        Savings = a.Savings
-                    })
+                        Savings = a.Savings,
+                        SugestedBaseExpences = a.SugestedBaseExpences,
+                        SugestedAditionalExpences = a.SugestedAditionalExpences
+                    }) : new List<Amount>()
                 };
             }
         }
@@ -53,7 +61,9 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                 TotalIncomes = input.TotalIncomes,
                 TotalBaseExpences = input.TotalBaseExpences,
                 TotalAditionalExpences = input.TotalAditionalExpences,
-                Savings = input.Savings
+                Savings = input.Savings,
+                SugestedAditionalExpences = input.SugestedAditionalExpences,
+                SugestedBaseExpences = input.SugestedBaseExpences
             };
         }
     }

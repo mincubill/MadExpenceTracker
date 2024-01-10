@@ -1,7 +1,6 @@
 ﻿using MadExpenceTracker.Core.Interfaces.Services;
 using MadExpenceTracker.Server.Mapper;
 using MadExpenceTracker.Server.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MadExpenceTracker.Server.Controllers
@@ -19,14 +18,14 @@ namespace MadExpenceTracker.Server.Controllers
 
         [HttpGet]
         [Route("/amount/{expenceId}/{incomeId}")]
-        public IActionResult GetAmount(Guid expenceId, Guid incomeId)
+        public IActionResult CalculateAmounts(Guid expenceId, Guid incomeId)
         {
             return Ok(AmountMapper.MapToApi(_service.GetAmount(expenceId, incomeId)));
         }
 
         [HttpGet]
-        [Route("/amounts/{id}")]
-        public IActionResult GetAmount(Guid id)
+        [Route("/amount/{id}")]
+        public IActionResult GetAmountById(Guid id)
         {
             return Ok(AmountMapper.MapToApi(_service.GetAmount(id)));
         }
@@ -44,7 +43,5 @@ namespace MadExpenceTracker.Server.Controllers
         {
             return Ok(AmountMapper.MapToApi(_service.GetAmounts()));
         }
-
-        
     }
 }

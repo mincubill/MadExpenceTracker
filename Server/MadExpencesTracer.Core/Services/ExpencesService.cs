@@ -1,4 +1,5 @@
-﻿using MadExpenceTracker.Core.Interfaces.Services;
+﻿using MadExpenceTracker.Core.Exceptions;
+using MadExpenceTracker.Core.Interfaces.Services;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
 
@@ -15,22 +16,22 @@ namespace MadExpenceTracker.Core.Services
 
         public IEnumerable<Expences> GetAll()
         {
-            return _persistence.GetAll();
+            return _persistence.GetAll() ?? new List<Expences>();
         }
 
         public Expences GetExpences(Guid id)
         {
-            return _persistence.Get(id);
+            return _persistence.Get(id) ?? throw new NotFoundException("Expences not found");
         }
 
         public Expences GetExpences(bool isActive)
         {
-            return _persistence.GetByActive(isActive);
+            return _persistence.GetByActive(isActive) ?? throw new NotFoundException("Expences not found");
         }
 
         public Expence GetExpence(Guid id)
         {
-            return _persistence.GetExpence(id);
+            return _persistence.GetExpence(id) ?? throw new NotFoundException("Expences not found");
         }
 
         public Expences Create(Expence expence)
@@ -52,7 +53,7 @@ namespace MadExpenceTracker.Core.Services
             }
             else
             {
-                throw new Exception("Error updating expence");
+                throw new CannotUpdateException("Error updating expence");
             }
         }
 

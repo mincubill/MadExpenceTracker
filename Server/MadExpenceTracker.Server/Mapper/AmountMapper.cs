@@ -9,17 +9,23 @@ namespace MadExpenceTracker.Server.Mapper
         public static AmountsApi MapToApi(Amounts input)
         {
             List<AmountApi> amountsList = new List<AmountApi>();
-            foreach (var item in input.Amount)
+            if(input.Amount != null && input.Amount.Any())
             {
-                amountsList.Add(new AmountApi
+                foreach (var item in input.Amount)
                 {
-                    Id = item.Id,
-                    Savings = item.Savings,
-                    TotalAditionalExpences = item.TotalAditionalExpences,
-                    TotalBaseExpences = item.TotalBaseExpences,
-                    TotalIncomes = item.TotalIncomes
-                });
+                    amountsList.Add(new AmountApi
+                    {
+                        Id = item.Id,
+                        Savings = item.Savings,
+                        TotalAditionalExpences = item.TotalAditionalExpences,
+                        TotalBaseExpences = item.TotalBaseExpences,
+                        TotalIncomes = item.TotalIncomes,
+                        SugestedAditionalExpences = item.SugestedAditionalExpences,
+                        SugestedBaseExpences = item.SugestedBaseExpences
+                    });
+                }
             }
+            
             return new AmountsApi()
             {
                 Id = input.Id,
@@ -36,7 +42,9 @@ namespace MadExpenceTracker.Server.Mapper
                 Savings = input.Savings,
                 TotalAditionalExpences = input.TotalAditionalExpences,
                 TotalBaseExpences = input.TotalBaseExpences,
-                TotalIncomes = input.TotalIncomes
+                TotalIncomes = input.TotalIncomes,
+                SugestedAditionalExpences = input.SugestedAditionalExpences,
+                SugestedBaseExpences = input.SugestedBaseExpences
             };
         }
 
@@ -48,7 +56,9 @@ namespace MadExpenceTracker.Server.Mapper
                 Savings = input.Savings,
                 TotalAditionalExpences = input.TotalAditionalExpences,
                 TotalBaseExpences = input.TotalBaseExpences,
-                TotalIncomes = input.TotalIncomes
+                TotalIncomes = input.TotalIncomes,
+                SugestedAditionalExpences = input.SugestedAditionalExpences,
+                SugestedBaseExpences = input.SugestedBaseExpences
             };
         }
     }

@@ -1,0 +1,718 @@
+  openapi: 3.0.3
+  info:
+    title: MadExpencesTracker
+    version: 1.0.0
+  servers:
+    - url: http://localhost:8080/api
+    - url: https://localhost:8080/api
+  paths:
+    /expence:
+      post:
+        tags:
+          - Expences
+        summary: Add a new Expence
+        description: Add a new Expence
+        operationId: CreateExpence
+        requestBody:
+          description: Creates a new Expence
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expence'
+          required: true
+        responses:
+          '201':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Expence'
+          '500':
+            description: Internal server error
+      put:
+        tags:
+          - Expences
+        summary: Update an existing Expence
+        description: Update an existing Expence
+        operationId: UpdateExpence
+        requestBody:
+          description: Update an existent Expence
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expence'
+          required: true
+        responses:
+          '202':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Expence'
+          '500':
+            description: Internal server error
+    /expence/{Id}:
+      get:
+        tags:
+          - Expences
+        summary: Find expence by ID
+        description: Returns a expence
+        operationId: GetExpence
+        parameters:
+          - name: Id
+            in: path
+            description: ID of expence to return
+            required: true
+            schema:
+              type: string
+              format: guid
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Expence'
+          '404':
+            description: Expence not found
+          '500':
+            description: Internal server error
+      delete:
+        tags:
+          - Expences
+        summary: Deletes an expence
+        description: delete an expence
+        operationId: DeleteExpence
+        parameters:
+          - name: Id
+            in: path
+            description: ID of expence to delete
+            required: true
+            schema:
+              type: string
+              format: guid
+        responses:
+          '200':
+            description: Deleted
+          '500':
+            description: Internal server error
+    /expences:
+      get:
+        tags:
+          - Expences
+        summary: Returns an array of Expences
+        description: Returns an array of all the expences list
+        operationId: GetExpences
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ExpencesArray'
+          '500':
+            description: Internal server error
+    /expences/{Id}:
+      get:
+        tags:
+          - Expences
+        summary: Returns expences by id
+        description: Returns expences by id
+        operationId: GetExpencesById
+        parameters:
+          - name: Id
+            in: path
+            description: ID of expences to return
+            required: true
+            schema:
+              type: string
+              format: guid
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Expences'
+          '404':
+            description: Expences not found
+          '500':
+            description: Internal server error
+    /expences/current:
+      get:
+        tags:
+          - Expences
+        summary: Returns expences of the active month
+        description: Returns expences of the month marked as active
+        operationId: GetCurrentExpences
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Expences'
+          '404':
+            description: Expences not found
+          '500':
+            description: Internal server error
+            
+    /income:
+      post:
+        tags:
+          - Incomes
+        summary: Add a new Income
+        description: Add a new Income
+        operationId: CreateIncome
+        requestBody:
+          description: Create a new Income
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Income'
+          required: true
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Income'
+          '500':
+            description: Internal server error
+      put:
+        tags:
+          - Incomes
+        summary: Update an existing income
+        description: Update an existing income
+        operationId: UpdateIncome
+        requestBody:
+          description: Update an existent income
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Income'
+          required: true
+        responses:
+          '202':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Income'
+          '500':
+            description: Internal server error
+    /income/{Id}:
+      get:
+        tags:
+          - Incomes
+        summary: Find a Income by ID
+        description: Returns a income
+        operationId: GetIncome
+        parameters:
+          - name: Id
+            in: path
+            description: ID of Income to return
+            required: true
+            schema:
+              type: string
+              format: guid
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Income'
+          '404':
+            description: Income not found
+          '500':
+            description: Internal server error
+      delete:
+        tags:
+          - Incomes
+        summary: Deletes an income
+        description: delete an income
+        operationId: DeleteIncome
+        parameters:
+          - name: Id
+            in: path
+            description: ID of Income to delete
+            required: true
+            schema:
+              type: string
+              format: guid
+        responses:
+          '200':
+              description: Deleted
+          '500':
+            description: Internal server error
+    /incomes:
+      get:
+        tags:
+          - Incomes
+        summary: Returns an array of incomes
+        description: Returns an array of all incomes
+        operationId: GetIncomes
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/IncomesArray'
+          '500':
+            description: Internal server error
+    /incomes/{Id}:
+      get:
+        tags:
+          - Incomes
+        summary: Returns incomes by id
+        description: Returns an array of incomes
+        operationId: GetIncomesById
+        parameters:
+          - name: Id
+            in: path
+            description: ID of Incomes to return
+            required: true
+            schema:
+              type: string
+              format: guid
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Incomes'
+          '404':
+            description: Income not found
+          '500':
+            description: Internal server error
+    /incomes/current:
+      get:
+        tags:
+          - Incomes
+        summary: Returns incomes of the active month
+        description: Returns incomes of the month marked as active
+        operationId: GetCurrentIncomes
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Incomes'
+          '404':
+            description: Income not found
+          '500':
+            description: Internal server error
+            
+    /amount/{expenceId}/{incomeId}:
+      get:
+        tags:
+          - Amounts
+        summary: Returns amounts of the specified expences and incomes
+        description: Returns a calculation of the amount of the specified expences and incomes
+        operationId: CalculateAmounts
+        parameters:
+          - name: expenceId
+            in: path
+            description: ID of expences list to calculate
+            required: true
+            schema:
+              type: string
+              format: guid
+          - name: incomeId
+            in: path
+            description: ID of incomes list to calculate
+            required: true
+            schema:
+              type: string
+              format: guid
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Amount'
+          '404':
+            description: Expences or incomes not found
+          '500':
+            description: Internal server error
+    /amount:
+      post:
+        tags:
+          - Amounts
+        summary: Create Amount
+        description: Saves the calculated amounts
+        operationId: SaveAmounts
+        requestBody:
+          description: Created Amount object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Amount'
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Amount'
+          '500':
+            description: Internal server error    
+    /amount/{Id}:
+      get:
+        tags:
+          - Amounts
+        summary: Get an amount by id
+        description: Get an amount by id
+        operationId: GetAmountById
+        parameters:
+          - name: Id
+            in: path
+            description: Id of the amount to return
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Amount'
+          '404':
+            description: Amount not found  
+    /amounts:
+      get:
+        tags:
+          - Amounts
+        summary: Returns all amounts
+        description: Returns all amounts
+        operationId: GetAmounts
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Amounts'
+          '500':
+            description: Internal server error
+    
+    /configuration:
+      get:
+        tags:
+          - Configuration
+        summary: Returns Configuration
+        description: ReturnsConfiguration
+        operationId: GetConfiguration
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Configuration'
+          '409':
+            description: No configuration created
+          '500':
+            description: Internal server error
+      post:
+        tags:
+          - Configuration
+        summary: Save configuration
+        description: Save configuration
+        operationId: SaveConfiguration
+        requestBody:
+          description: Create a new Configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Configuration'
+          required: true
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Configuration'
+          '500':
+            description: Internal server error
+      put:
+        tags:
+          - Configuration
+        summary: Update configuration
+        description: Update configuration
+        operationId: UpdateConfiguration
+        requestBody:
+          description: Update configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Configuration'
+          required: true
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Configuration'
+          '500':
+            description: Internal server error
+            
+    /monthIndex:
+      get:
+        tags:
+          - MonthIndex
+        summary: Returns month index
+        description: Returns month index that contains reference to the id of the expences, incomes and amounts ids
+        operationId: GetMonthIndex
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/MonthIndexes'
+          '500':
+            description: Internal server error
+      post:
+        tags:
+          - MonthIndex
+        summary: Add a new month index
+        description: Add a nmonth index
+        operationId: SaveMonthIndex
+        requestBody:
+          description: Create a new month index
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonthIndexes'
+          required: true
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Configuration'
+          '500':
+            description: Internal server error
+            
+    /monthClose:
+      post:
+        tags:
+          - Operations
+        summary: Closes the month
+        description: Closes the month, when the month is closed the flag on expences and incomes will be updated to false, recalculate the amounts and save them, and finally it returns the index saved
+        operationId: CloseMonth
+        parameters:
+          - name: monthToClose
+            in: query
+            description: ID of expences list to calculate
+            required: true
+            schema:
+              type: string
+              example: 2023/1
+        requestBody:
+          description: Closes the month
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonthResume'
+                
+          required: true
+        responses:
+          '201':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/MonthIndex'
+          '500':
+            description: Internal server error
+        
+        
+            
+  components:
+    schemas:
+      Expence:
+        type: object
+        properties:
+          id:
+            type: string
+            format: guid
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          name:
+            type: string
+            example: almacen
+          date:
+            type: string
+            example: 2023/12/01
+          expenceType:
+            type: string
+            enum: [base, aditional]
+            example: aditional
+          amount:
+            type: number
+            example: 5990
+      
+      Income:
+        type: object
+        properties:
+          id:
+            type: string
+            format: guid
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          name:
+            type: string
+            example: sueldo
+          date:
+            type: string
+            example: 2023/12/01
+          amount:
+            type: number
+            example: 1500000
+        
+      Amount:
+        type: object
+        properties:
+          id:
+            type: string
+            format: guid
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          totalBaseExpences:
+            type: number
+            example: 1554990
+          sugestedBaseExpences:
+            type: number
+            example: 599680
+          totalAditionalExpences:
+            type: number
+            example: 200000
+          sugestedAditionalExpences:
+            type: number
+            example: 200000
+          savings:
+            type: number
+            example: 200000
+          totalIncomes:
+            type: number
+            example: 200000
+      
+      Configuration:
+        type: object
+        properties:
+          savingsRate:
+            type: number
+            example: 20
+          baseExpencesRate:
+            type: number
+            example: 20
+          aditionalExpencesRate:
+            type: number
+            example: 20
+            
+      MonthIndex:
+        type: object
+        properties:
+          id:
+            type: string
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          month:
+            type: string
+            format: guid
+            example: 2023/12
+          expencesId:
+            type: string
+            format: guid
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          incomesId:
+            type: string
+            format: guid
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          amountsId:
+            type: string
+            format: guid
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          savingsRate:
+            type: number
+            example: 20
+          
+      Expences:
+        type: object
+        properties:
+          id:
+            type: string
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          runningMonth:
+            type: string
+            example: 2023/12
+          expences:
+            type: array
+            items:
+             $ref: '#/components/schemas/Expence'
+      
+      Incomes:
+        type: object
+        properties:
+          id:
+            type: string
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          runningMonth:
+            type: string
+            example: 2023/12
+          incomes:
+            type: array
+            items:
+             $ref: '#/components/schemas/Income'
+      
+      Amounts:
+        type: object
+        properties:
+          id:
+            type: string
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          amount:
+            type: array
+            items:
+             $ref: '#/components/schemas/Amount'
+             
+      MonthIndexes:
+        type: object
+        properties:
+          id:
+            type: string
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          monthIndex:
+            type: array
+            items:
+              $ref: '#/components/schemas/MonthIndex'
+        
+      ExpencesArray:
+        type: array
+        items:
+         $ref: '#/components/schemas/Expences'
+         
+      IncomesArray:
+        type: array
+        items:
+         $ref: '#/components/schemas/Incomes'
+      
+      
+      MonthResume:
+        type: object
+        properties:
+          expences:
+            $ref: '#/components/schemas/Expences'
+          incomes:
+            $ref: '#/components/schemas/Incomes'
+          amounts:
+            $ref: '#/components/schemas/Amount'
+      

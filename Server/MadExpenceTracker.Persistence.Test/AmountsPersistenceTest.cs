@@ -97,6 +97,8 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
+                SugestedBaseExpences = 100,
+                SugestedAditionalExpences = 100
             };
             AmountMongo amountMongo = new AmountMongo()
             {
@@ -105,6 +107,8 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
+                SugestedAditionalExpences = 100,
+                SugestedBaseExpences = 100
             };
             AmountsMongo amountsMongo = new AmountsMongo()
             {
@@ -159,6 +163,8 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
+                SugestedAditionalExpences = 100,
+                SugestedBaseExpences = 100
             };
             List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() };
 
@@ -201,6 +207,8 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
+                SugestedAditionalExpences = 100,
+                SugestedBaseExpences = 100
             };
             List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() };
 
@@ -230,6 +238,8 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
+                SugestedAditionalExpences = 100,
+                SugestedBaseExpences = 100
             };
             List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() };
 
@@ -259,6 +269,8 @@ namespace MadExpenceTracker.Persistence.Test
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
+                SugestedAditionalExpences = 100,
+                SugestedBaseExpences = 100
             };
             List<AmountsMongo> amountsOnDbWithData = new List<AmountsMongo> { AmountFixture.GetAmountsMongo() };
 

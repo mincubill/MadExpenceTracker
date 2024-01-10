@@ -8,21 +8,25 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
         public static Expences MapToModel(ExpencesMongo input)
         {
             List<Expence> expencesList = new List<Expence>();
-            foreach (var item in input.Expences)
+            if (input.Expences != null && input.Expences.Any())
             {
-                expencesList.Add(new Expence
+                foreach (var item in input.Expences)
                 {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Amount = item.Amount,
-                    Date = item.Date,
-                    ExpenceType = Enum.Parse<ExpenceType>(item.ExpenceType)
-                });
+                    expencesList.Add(new Expence
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Amount = item.Amount,
+                        Date = item.Date,
+                        ExpenceType = Enum.Parse<ExpenceType>(item.ExpenceType)
+                    });
+                }
             }
+                
             return new Expences()
             {
                 Id = input.Id,
-                RunningMonth = input.RunningMonth,
+                RunningMonth = input.RunningMonth ?? string.Empty,
                 Expence = expencesList
             };
         }
@@ -47,14 +51,14 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                 {
                     Id = expences.Id,
                     RunningMonth = expences.RunningMonth,
-                    Expence = expences.Expences.Select( e => new Expence
+                    Expence = expences.Expences != null ? expences.Expences.Select( e => new Expence
                     {
                         Id = e.Id,
                         Name = e.Name,
                         Amount = e.Amount,
                         Date = e.Date,
                         ExpenceType = Enum.Parse<ExpenceType>(e.ExpenceType)
-                    })
+                    }) : new List<Expence>()
                 };
             }
         }

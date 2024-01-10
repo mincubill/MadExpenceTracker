@@ -20,12 +20,13 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             _expencesCollection = provider.GetCollection<ExpencesMongo>(CollectionName);
         }
         
-        public IEnumerable<Expences> GetAll()
+        public IEnumerable<Expences>? GetAll()
         {
             try
             {
                 IEnumerable<ExpencesMongo> expencesOnDb = _expencesCollection
-                    .FindSync(_emptyFilter).ToEnumerable();
+                    .FindSync(_emptyFilter).ToList();
+                if (!expencesOnDb.Any()) return null;
                 return ExpenceMapper.MapToModel(expencesOnDb);
             }
             catch (TimeoutException)
@@ -38,12 +39,13 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             }
         }
 
-        public Expences Get(Guid id)
+        public Expences? Get(Guid id)
         {
             try
             {
                 var filter = Builders<ExpencesMongo>.Filter.Eq(e => e.Id, id);
-                ExpencesMongo expenceMongo = _expencesCollection.FindSync(filter).First();
+                ExpencesMongo expenceMongo = _expencesCollection.FindSync(filter).FirstOrDefault();
+                if (expenceMongo == null) return null;
                 return ExpenceMapper.MapToModel(expenceMongo);
             }
             catch (TimeoutException)
@@ -57,12 +59,13 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             }
         }
 
-        public Expences GetByActive(bool isActive)
+        public Expences? GetByActive(bool isActive)
         {
             try
             {
                 var filter = Builders<ExpencesMongo>.Filter.Eq(e => e.IsActive, isActive);
-                ExpencesMongo expenceMongo = _expencesCollection.FindSync(filter).First();
+                ExpencesMongo expenceMongo = _expencesCollection.FindSync(filter).FirstOrDefault();
+                if (expenceMongo == null) return null;
                 return ExpenceMapper.MapToModel(expenceMongo);
             }
             catch (TimeoutException)
@@ -124,15 +127,22 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                ExpencesMongo newExpencesMongo = new ExpencesMongo()
+                var filter = Builders<ExpencesMongo>.Filter.Eq(e => e.IsActive, true);
+                var update = Builders<ExpencesMongo>.Update.Set(e => e.IsActive, false);
+                var result = _expencesCollection.UpdateOne(filter, update);
+                if(result.IsAcknowledged)
                 {
-                    Id = Guid.NewGuid(),
-                    RunningMonth = runningMonth,
-                    IsActive = true,
-                    Expences = new List<ExpenceMongo>().AsEnumerable()
-                };
-                _expencesCollection.InsertOne(newExpencesMongo);
-                return true;
+                    ExpencesMongo newExpencesMongo = new ExpencesMongo()
+                    {
+                        Id = Guid.NewGuid(),
+                        RunningMonth = runningMonth,
+                        IsActive = true,
+                        Expences = new List<ExpenceMongo>().AsEnumerable()
+                    };
+                    _expencesCollection.InsertOne(newExpencesMongo);
+                    return true;
+                }
+                return false;
             }
             catch (TimeoutException)
             {
@@ -208,13 +218,15 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             }
         }
 
-        public Expence GetExpence(Guid id)
+        public Expence? GetExpence(Guid id)
         {
             try
             {
                 var filter = Builders<ExpencesMongo>.Filter.ElemMatch(e => e.Expences, d => d.Id == id);
                 ExpencesMongo expencesOnDb = _expencesCollection.FindSync(filter).First();
-                return ExpenceMapper.MapToModel(expencesOnDb.Expences.First(e => e.Id == id));
+                ExpenceMongo? expenceMongo = expencesOnDb.Expences?.FirstOrDefault(e => e.Id == id);
+                if (expenceMongo == null) return null;
+                return ExpenceMapper.MapToModel(expenceMongo);
             }
             catch (TimeoutException)
             {
@@ -224,7 +236,24 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             {
                 throw;
             }
-            throw new NotImplementedException();
+        }
+
+        public bool IsMonthClosed(string month)
+        {
+            try
+            {
+                var filter = Builders<ExpencesMongo>.Filter.Eq(e => e.RunningMonth, month);
+                ExpencesMongo expencesOnDb = _expencesCollection.FindSync(filter).First();
+                return expencesOnDb.IsActive;
+            }
+            catch (TimeoutException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

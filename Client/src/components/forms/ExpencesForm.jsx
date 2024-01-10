@@ -1,18 +1,40 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Container, Button, Alert } from "react-bootstrap"
 import DatePicker from 'react-datepicker'
 import moment from "moment";
 import { v4 as uuidv4 } from 'uuid';
 import "react-datepicker/dist/react-datepicker.css";
-import { postExpence } from '../gateway/expenceGateway'
+import { postExpence, updateExpence } from '../../gateway/expenceGateway'
+import { useLocation } from "react-router-dom";
+
 
 export const ExpencesForm = () => {
 
+    
+    const[expenceId, saveExpenceId] = useState('')
     const[name, saveName] = useState('')
     const[datePicked, saveDatePicked] = useState(new Date())
-    const[expenceType, saveExpenceType] = useState(0)
+    const[expenceType, saveExpenceType] = useState(1)
     const[amount, saveAmount] = useState(0)
-    const[success, saveSuccess] = useState(undefined)
+    const[operationResult, saveOperationResult] = useState(undefined)
+    const[resultMessage, saveResultMessage] = useState(undefined)
+    const[isReadOnlyField, saveIsReadOnlyField] = useState(false)
+    const[isAnUpdate, saveIsAnUpdate] = useState(false)
+
+    const location = useLocation()
+
+    useEffect(() => {
+        if(!location.state) return;
+        const {data, isReadOnly, isUpdate} = location.state
+        saveIsReadOnlyField(isReadOnly)
+        saveIsAnUpdate(isUpdate)
+        saveExpenceId(data.id)
+        saveName(data.name)
+        saveDatePicked(new Date(data.date))
+        saveExpenceType(data.expenceType)
+        saveAmount(data.amount)
+        
+    }, [location.state])
 
     const clearForm = () => {
         saveName('')
@@ -23,34 +45,57 @@ export const ExpencesForm = () => {
 
     const saveExpence = (e) => {
         e.preventDefault()
-        const expenceData = {
-            id: uuidv4(),
-            name,
-            date: moment(datePicked).toJSON(),
-            expenceType: parseInt(expenceType),
-            amount
-        } 
-        postExpence(expenceData).then(
-            () => {
-                saveSuccess(true);
+        if(!isAnUpdate) {
+            const expenceData = {
+                id: uuidv4(),
+                name,
+                date: moment(datePicked).toJSON(),
+                expenceType: parseInt(expenceType),
+                amount
+            } 
+            postExpence(expenceData).then(
+                () => {
+                    saveOperationResult(true);
+                    saveResultMessage("Gasto guardado")
+                }
+            ).catch(e => {
+                    saveOperationResult(false);
+                    saveResultMessage("Ocurrio un error")
+                    console.error(e)
+                }
+            )
+            clearForm()
+        } else {
+            const expenceUpdateData = {
+                id: expenceId,
+                name,
+                date: moment(datePicked).toJSON(),
+                expenceType: parseInt(expenceType),
+                amount
             }
-        ).catch(e => {
-                saveSuccess(false);
-                console.error(e)
-            }
-        )
-        clearForm()
+            updateExpence(expenceUpdateData).then(
+                () => {
+                    saveOperationResult(true);
+                    saveResultMessage("gasto actualizado");
+                }
+            ).catch(e => {
+                saveOperationResult(false);
+                saveResultMessage("ocurrio un error");
+                    console.error(e)
+                }
+            )
+        }
     }
 
-    return (
+   return (
         <Card className="p-3">
             <Container>
-                { success === undefined ? null : 
-                    success ? 
-                        <Alert variant="success">Guardado</Alert> : 
-                        <Alert variant="danger">Ocurrio un error</Alert>
+                { operationResult === undefined ? null : 
+                    operationResult ? 
+                        <Alert variant="success">{resultMessage}</Alert> : 
+                        <Alert variant="danger">{resultMessage}</Alert>
                 }
-                <Form onSubmit={saveExpence}>
+                <Form onSubmit={ saveExpence }>
                     <Form.Group as={Row} className="mb-3">
                         <Form.Label column sm="2">Nombre: </Form.Label>
                         <Col sm="10">
@@ -59,6 +104,7 @@ export const ExpencesForm = () => {
                             placeholder="Supermercado" 
                             value={name}
                             onChange={e => saveName(e.target.value)}
+                            readOnly={isReadOnlyField}
                             required />
                         </Col>
                     </Form.Group>
@@ -73,7 +119,8 @@ export const ExpencesForm = () => {
                                 }}
                                 onChange={(selection) => {
                                     saveDatePicked(selection)
-                                }} 
+                                }}
+                                readOnly={isReadOnlyField}
                             />
                         </Col>
                     </Form.Group>
@@ -87,7 +134,9 @@ export const ExpencesForm = () => {
                                 type="radio"
                                 value={1}
                                 id={`inline-radio-1`}
+                                checked={expenceType == 1}
                                 onChange={e => saveExpenceType(e.target.value)}
+                                readOnly={isReadOnlyField}
                             />
                             <Form.Check
                                 inline  
@@ -96,7 +145,9 @@ export const ExpencesForm = () => {
                                 type="radio"
                                 value={2}
                                 id={`inline-radio-2`}
+                                checked={expenceType == 2}
                                 onChange={e => saveExpenceType(e.target.value)}
+                                readOnly={isReadOnlyField}
                             />
                         </Col>
                     </Form.Group>
@@ -108,12 +159,17 @@ export const ExpencesForm = () => {
                             placeholder="10000"
                             value={amount}
                             onChange={e => saveAmount( parseInt( e.target.value, 10 ) )}
+                            readOnly={isReadOnlyField}
                             required />
                         </Col>
                     </Form.Group>
-                    <Button variant="primary" type="Submit">
-                        Guardar
-                    </Button>
+                    {isReadOnlyField ? 
+                        null : 
+                        <Button variant="primary" type="Submit">
+                            { isAnUpdate ? "Actualizar" : "Guardar" } 
+                        </Button>
+                    }
+                    
                 </Form>
             </Container>
         </Card>

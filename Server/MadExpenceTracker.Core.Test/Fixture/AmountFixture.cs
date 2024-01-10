@@ -17,7 +17,9 @@ namespace MadExpenceTracker.Core.Test.Fixture
                 Savings = 200000,
                 TotalAditionalExpences = 20,
                 TotalBaseExpences = 100,
-                TotalIncomes = 1000000
+                TotalIncomes = 1000000,
+                SugestedBaseExpences = 100,
+                SugestedAditionalExpences = 100
             };
         }
 
@@ -35,7 +37,9 @@ namespace MadExpenceTracker.Core.Test.Fixture
                         Savings = 200000,
                         TotalAditionalExpences = 20,
                         TotalBaseExpences = 100,
-                        TotalIncomes = 1000000
+                        TotalIncomes = 1000000,
+                        SugestedBaseExpences = 100,
+                        SugestedAditionalExpences = 100
                     }
                 }
             };

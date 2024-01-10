@@ -1,4 +1,5 @@
-﻿using MadExpenceTracker.Core.Interfaces.Services;
+﻿using MadExpenceTracker.Core.Exceptions;
+using MadExpenceTracker.Core.Interfaces.Services;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Core.Services;
@@ -126,7 +127,7 @@ namespace MadExpenceTracker.Core.Test
             expence.Name = "updateao";
             _persistence.Setup(e => e.Update(expence)).Returns(false);
 
-            Assert.Throws<Exception>(() => _service.Update(expence));
+            Assert.Throws<CannotUpdateException>(() => _service.Update(expence));
         }
 
         [Test]

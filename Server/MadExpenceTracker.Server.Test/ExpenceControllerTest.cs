@@ -92,10 +92,10 @@ namespace MadExpenceTracker.Server.Test
         [Test]
         public void GetExpencesByIdTest()
         {
-            List<Expences> expences = [ExpencesFixture.GetExpences()];
+            Expences expences = ExpencesFixture.GetExpences();
             Guid id = Guid.Parse("fd76aa75-1628-4fd6-960a-64d62febbd9f");
 
-            _serviceMock.Setup(x => x.GetAll()).Returns(expences);
+            _serviceMock.Setup(x => x.GetExpences(id)).Returns(expences);
 
             var res = _controller.GetExpencesById(id) as ObjectResult;
 

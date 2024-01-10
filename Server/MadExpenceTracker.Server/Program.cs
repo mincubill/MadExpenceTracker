@@ -7,12 +7,15 @@ using MadExpenceTracker.Core.UseCase;
 using MadExpenceTracker.Persistence.MongoDB.Persistence;
 using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MadExpenceTracker.Persistence.MongoDB.Util;
+using MadExpenceTracker.Server.Controllers.Middleware;
 
-var env = Environment.GetEnvironmentVariable("app_port");
-Console.WriteLine(env);
+var dbIp = Environment.GetEnvironmentVariable("DB_IP");
+var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+Console.WriteLine(dbIp);
+Console.WriteLine(dbPort);
 
-IMongoDBProvider mongoProvider = new MongoDBProvider("mongodb://localhost:27017", "MadExpencesTracker");
-IDbInitialization dbInit = new DbInitialization("mongodb://localhost:27017", "MadExpencesTracker");
+IMongoDBProvider mongoProvider = new MongoDBProvider($"mongodb://{dbIp}:{dbPort}", "MadExpencesTracker");
+IDbInitialization dbInit = new DbInitialization($"mongodb://{dbIp}:{dbPort}", "MadExpencesTracker");
 //new DbInitializationUtil(dbInit).Initialize();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -62,6 +65,9 @@ builder.Services.AddScoped<IMonthClose, MonthClose>(_ =>
 
 builder.Services.AddCors();
 
+builder.Services.AddExceptionHandler<ExceptionHandlerMiddleware>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -79,6 +85,8 @@ app.UseCors(builder => builder
     .AllowAnyHeader()
     .AllowAnyMethod()
 );
+
+app.UseExceptionHandler( o => o.UseExceptionHandler());
 
 app.UseAuthorization();
 

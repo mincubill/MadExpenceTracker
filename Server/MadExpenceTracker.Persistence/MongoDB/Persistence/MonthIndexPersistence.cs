@@ -18,12 +18,13 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             _monthIndexCollection = provider.GetCollection<MonthIndexesMongo>(CollectionName);
         }
 
-        public IEnumerable<MonthIndexes> GetMonthsIndexes()
+        public IEnumerable<MonthIndexes>? GetMonthsIndexes()
         {
             try
             {
                 IEnumerable<MonthIndexesMongo> monthIndexOnDb = _monthIndexCollection
                     .FindSync(Builders<MonthIndexesMongo>.Filter.Empty).ToEnumerable();
+                if (!monthIndexOnDb.Any()) return null;
                 return MonthIndexMapper.MapToModel(monthIndexOnDb);
             }
             catch (TimeoutException)
@@ -36,13 +37,14 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             }
         }
 
-        public MonthIndex GetMonthIndex(Guid id)
+        public MonthIndex? GetMonthIndex(Guid id)
         {
             try
             {
                 var filter = Builders<MonthIndexesMongo>.Filter.ElemMatch(e => e.MonthIndex, d => d.Id == id);
-                MonthIndexesMongo incomesOnDb = _monthIndexCollection.FindSync(filter).First();
-                return MonthIndexMapper.MapToModel(incomesOnDb.MonthIndex.First(e => e.Id == id));
+                MonthIndexesMongo indexOnDb = _monthIndexCollection.FindSync(filter).FirstOrDefault();
+                if(indexOnDb == null) return null;
+                return MonthIndexMapper.MapToModel(indexOnDb.MonthIndex.First(e => e.Id == id));
             }
             catch (TimeoutException)
             {

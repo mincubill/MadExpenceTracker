@@ -1,4 +1,5 @@
-﻿using MadExpenceTracker.Core.Interfaces.Services;
+﻿using MadExpenceTracker.Core.Exceptions;
+using MadExpenceTracker.Core.Interfaces.Services;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
 using MadExpenceTracker.Core.Services;
@@ -65,7 +66,7 @@ namespace MadExpenceTracker.Core.Test
 
             _configurationPersistenceMock.Setup(p => p.UpdateConfiguration(config)).Returns(false);
 
-            Assert.Throws<Exception>(() => _configurationService.UpdateConfiguration(config));
+            Assert.Throws<CannotUpdateException>(() => _configurationService.UpdateConfiguration(config));
         }
     }
 }
