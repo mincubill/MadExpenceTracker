@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Container, Button, Alert } from "react-bootstrap"
 import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import { v4 as uuidv4 } from 'uuid';
-import "react-datepicker/dist/react-datepicker.css";
-import { postExpence, updateExpence } from '../gateway/expenceGateway'
 import { useLocation } from "react-router-dom";
+import { updateIncome ,postIncome } from "../../gateway/incomesGateway";
 
+export const IncomeForm = () => {
 
-export const ExpencesForm = () => {
-
-    
-    const[expenceId, saveExpenceId] = useState('')
+    const[incomeId, saveIncomeId] = useState('')
     const[name, saveName] = useState('')
     const[datePicked, saveDatePicked] = useState(new Date())
-    const[expenceType, saveExpenceType] = useState(1)
     const[amount, saveAmount] = useState(0)
-    const[successResult, saveSuccessResult] = useState(undefined)
+    const[operationResult, saveOperationResult] = useState(undefined)
+    const[resultMessage, saveResultMessage] = useState(undefined)
     const[isReadOnlyField, saveIsReadOnlyField] = useState(false)
     const[isAnUpdate, saveIsAnUpdate] = useState(false)
 
@@ -27,80 +25,82 @@ export const ExpencesForm = () => {
         const {data, isReadOnly, isUpdate} = location.state
         saveIsReadOnlyField(isReadOnly)
         saveIsAnUpdate(isUpdate)
-        saveExpenceId(data.id)
+        saveIncomeId(data.id)
         saveName(data.name)
         saveDatePicked(new Date(data.date))
-        saveExpenceType(data.expenceType)
         saveAmount(data.amount)
-        
     }, [location.state])
 
     const clearForm = () => {
         saveName('')
         saveDatePicked(new Date())
-        saveExpenceType(0)
         saveAmount(0)
     }
 
-    const saveExpence = (e) => {
+    const saveIncome = (e) => {
         e.preventDefault()
-        if(!isAnUpdate) {
-            const expenceData = {
+        if(!isAnUpdate){
+            const incomeData = {
                 id: uuidv4(),
                 name,
                 date: moment(datePicked).toJSON(),
-                expenceType: parseInt(expenceType),
                 amount
-            } 
-            postExpence(expenceData).then(
+            }  
+            postIncome(incomeData).then(
                 () => {
-                    saveSuccessResult("gasto guardado");
+                    saveOperationResult(true);
+                    saveResultMessage("Ingreso guardado")
                 }
             ).catch(e => {
-                    saveSuccessResult("ocurrio un error");
+                    saveOperationResult(false);
+                    saveResultMessage("Ocurrio un error")
                     console.error(e)
                 }
             )
-            clearForm()
         } else {
-            const expenceUpdateData = {
-                id: expenceId,
+            const incomeData = {
+                id: incomeId,
                 name,
                 date: moment(datePicked).toJSON(),
-                expenceType: parseInt(expenceType),
                 amount
-            }
-            updateExpence(expenceUpdateData).then(
+            }  
+            updateIncome(incomeData).then(
                 () => {
-                    saveSuccessResult("gasto actualizado");
+                    saveOperationResult(true);
+                    saveResultMessage("Ingreso actualizado")
                 }
             ).catch(e => {
-                    saveSuccessResult("ocurrio un error");
+                    saveOperationResult(false);
+                    saveResultMessage("Ocurrio un error")
                     console.error(e)
                 }
             )
         }
+        
+        clearForm();
     }
 
-   return (
+
+
+    return (
         <Card className="p-3">
             <Container>
-                { successResult === undefined ? null : 
-                    successResult ? 
-                        <Alert variant="success">{successResult}</Alert> : 
-                        <Alert variant="danger">{successResult}</Alert>
+                { operationResult === undefined ? null : 
+                    operationResult ? 
+                        <Alert variant="success">{resultMessage}</Alert> : 
+                        <Alert variant="danger">{resultMessage}</Alert>
                 }
-                <Form onSubmit={ saveExpence }>
+                <Form onSubmit={saveIncome}>
                     <Form.Group as={Row} className="mb-3">
                         <Form.Label column sm="2">Nombre: </Form.Label>
                         <Col sm="10">
                             <Form.Control 
                             type="text" 
-                            placeholder="Supermercado" 
+                            placeholder="Sueldo" 
                             value={name}
                             onChange={e => saveName(e.target.value)}
                             readOnly={isReadOnlyField}
-                            required />
+                            required/>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-3">
@@ -114,34 +114,7 @@ export const ExpencesForm = () => {
                                 }}
                                 onChange={(selection) => {
                                     saveDatePicked(selection)
-                                }}
-                                readOnly={isReadOnlyField}
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} className="mb-3">
-                        <Form.Label column sm="2">Tipo de gasto: </Form.Label>
-                        <Col sm="10">
-                            <Form.Check
-                                inline
-                                label="base"
-                                name="expenceType"
-                                type="radio"
-                                value={1}
-                                id={`inline-radio-1`}
-                                checked={expenceType == 1}
-                                onChange={e => saveExpenceType(e.target.value)}
-                                readOnly={isReadOnlyField}
-                            />
-                            <Form.Check
-                                inline  
-                                label="adicional"
-                                name="expenceType"
-                                type="radio"
-                                value={2}
-                                id={`inline-radio-2`}
-                                checked={expenceType == 2}
-                                onChange={e => saveExpenceType(e.target.value)}
+                                }} 
                                 readOnly={isReadOnlyField}
                             />
                         </Col>
@@ -164,9 +137,9 @@ export const ExpencesForm = () => {
                             { isAnUpdate ? "Actualizar" : "Guardar" } 
                         </Button>
                     }
-                    
                 </Form>
             </Container>
         </Card>
+        
     )
 }

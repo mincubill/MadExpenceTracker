@@ -9,11 +9,13 @@ using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MadExpenceTracker.Persistence.MongoDB.Util;
 using MadExpenceTracker.Server.Controllers.Middleware;
 
-var env = Environment.GetEnvironmentVariable("APP_PORT");
-Console.WriteLine(env);
+var dbIp = Environment.GetEnvironmentVariable("DB_IP");
+var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+Console.WriteLine(dbIp);
+Console.WriteLine(dbPort);
 
-IMongoDBProvider mongoProvider = new MongoDBProvider("mongodb://localhost:27017", "MadExpencesTracker");
-IDbInitialization dbInit = new DbInitialization("mongodb://localhost:27017", "MadExpencesTracker");
+IMongoDBProvider mongoProvider = new MongoDBProvider($"mongodb://{dbIp}:{dbPort}", "MadExpencesTracker");
+IDbInitialization dbInit = new DbInitialization($"mongodb://{dbIp}:{dbPort}", "MadExpencesTracker");
 //new DbInitializationUtil(dbInit).Initialize();
 
 var builder = WebApplication.CreateBuilder(args);

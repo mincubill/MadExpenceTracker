@@ -196,5 +196,23 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             }
             throw new NotImplementedException();
         }
+
+        public bool IsMonthClosed(string month)
+        {
+            try
+            {
+                var filter = Builders<IncomesMongo>.Filter.Eq(e => e.RunningMonth, month);
+                IncomesMongo incomeOnDb = _incomesCollection.FindSync(filter).First();
+                return incomeOnDb.IsActive;
+            }
+            catch (TimeoutException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

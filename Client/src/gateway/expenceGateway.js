@@ -1,14 +1,9 @@
 import { baseUrl } from "../contants/contants";
 
 export const getCurrentExpences = async () => {
-    return fetch(`${baseUrl}/expences/current`)
-        .then((response) => { 
-            return response.json().then((data) => {
-                return data;
-            }).catch((err) => {
-                console.log(err);
-            }) 
-        });
+    let response = await fetch(`${baseUrl}/expences/current`)
+    let data = await response.json()
+    return await data
 }
 
 export const postExpence = async (expenceData) => {

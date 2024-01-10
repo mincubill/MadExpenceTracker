@@ -512,6 +512,14 @@
         summary: Closes the month
         description: Closes the month, when the month is closed the flag on expences and incomes will be updated to false, recalculate the amounts and save them, and finally it returns the index saved
         operationId: CloseMonth
+        parameters:
+          - name: monthToClose
+            in: query
+            description: ID of expences list to calculate
+            required: true
+            schema:
+              type: string
+              example: 2023/1
         requestBody:
           description: Closes the month
           content:
@@ -537,101 +545,116 @@
       Expence:
         type: object
         properties:
-          Id:
+          id:
             type: string
             format: guid
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          Name:
+          name:
             type: string
             example: almacen
-          Date:
+          date:
             type: string
             example: 2023/12/01
-          ExpenceType:
+          expenceType:
             type: string
             enum: [base, aditional]
             example: aditional
-          Amount:
+          amount:
             type: number
             example: 5990
       
       Income:
         type: object
         properties:
-          Id:
+          id:
             type: string
             format: guid
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          Name:
+          name:
             type: string
             example: sueldo
-          Date:
+          date:
             type: string
             example: 2023/12/01
-          Amount:
+          amount:
             type: number
             example: 1500000
         
       Amount:
         type: object
         properties:
-          Id:
+          id:
             type: string
             format: guid
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          BaseExpences:
+          totalBaseExpences:
             type: number
             example: 1554990
-          AditionalExpences:
+          sugestedBaseExpences:
             type: number
             example: 599680
-          Savings:
+          totalAditionalExpences:
+            type: number
+            example: 200000
+          sugestedAditionalExpences:
+            type: number
+            example: 200000
+          savings:
+            type: number
+            example: 200000
+          totalIncomes:
             type: number
             example: 200000
       
       Configuration:
         type: object
         properties:
-          SavingsRate:
+          savingsRate:
+            type: number
+            example: 20
+          baseExpencesRate:
+            type: number
+            example: 20
+          aditionalExpencesRate:
             type: number
             example: 20
             
       MonthIndex:
         type: object
         properties:
-          Id:
+          id:
             type: string
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          Month:
+          month:
             type: string
             format: guid
             example: 2023/12
-          ExpencesId:
+          expencesId:
             type: string
             format: guid
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          IncomesId:
+          incomesId:
             type: string
             format: guid
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          AmountsId:
+          amountsId:
             type: string
             format: guid
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          SavingsRate:
+          savingsRate:
             type: number
             example: 20
           
       Expences:
         type: object
         properties:
-          Id:
+          id:
             type: string
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          RunningMonth:
+          runningMonth:
             type: string
             example: 2023/12
-          Expences:
+          expences:
             type: array
             items:
              $ref: '#/components/schemas/Expence'
@@ -639,13 +662,13 @@
       Incomes:
         type: object
         properties:
-          Id:
+          id:
             type: string
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          RunningMonth:
+          runningMonth:
             type: string
             example: 2023/12
-          Incomes:
+          incomes:
             type: array
             items:
              $ref: '#/components/schemas/Income'
@@ -653,10 +676,10 @@
       Amounts:
         type: object
         properties:
-          Id:
+          id:
             type: string
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          Amount:
+          amount:
             type: array
             items:
              $ref: '#/components/schemas/Amount'
@@ -664,10 +687,10 @@
       MonthIndexes:
         type: object
         properties:
-          Id:
+          id:
             type: string
             example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
-          MonthIndex:
+          monthIndex:
             type: array
             items:
               $ref: '#/components/schemas/MonthIndex'

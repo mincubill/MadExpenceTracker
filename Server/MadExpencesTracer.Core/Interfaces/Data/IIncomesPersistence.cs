@@ -13,5 +13,6 @@ namespace MadExpenceTracker.Core.Persistence
         bool Update(Income income);
         bool UpdateIncomesIsActive(bool isActive, string runningMonth);
         bool Delete(Guid id);
+        bool IsMonthClosed(string month);
     }
 }

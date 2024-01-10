@@ -224,7 +224,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             {
                 var filter = Builders<ExpencesMongo>.Filter.ElemMatch(e => e.Expences, d => d.Id == id);
                 ExpencesMongo expencesOnDb = _expencesCollection.FindSync(filter).First();
-                ExpenceMongo? expenceMongo = expencesOnDb.Expences.FirstOrDefault(e => e.Id == id);
+                ExpenceMongo? expenceMongo = expencesOnDb.Expences?.FirstOrDefault(e => e.Id == id);
                 if (expenceMongo == null) return null;
                 return ExpenceMapper.MapToModel(expenceMongo);
             }
@@ -236,7 +236,24 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             {
                 throw;
             }
-            throw new NotImplementedException();
+        }
+
+        public bool IsMonthClosed(string month)
+        {
+            try
+            {
+                var filter = Builders<ExpencesMongo>.Filter.Eq(e => e.RunningMonth, month);
+                ExpencesMongo expencesOnDb = _expencesCollection.FindSync(filter).First();
+                return expencesOnDb.IsActive;
+            }
+            catch (TimeoutException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

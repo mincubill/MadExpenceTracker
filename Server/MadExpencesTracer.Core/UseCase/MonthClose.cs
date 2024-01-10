@@ -2,6 +2,7 @@
 using MadExpenceTracker.Core.Interfaces.UseCase;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
+using System.Globalization;
 
 namespace MadExpenceTracker.Core.UseCase
 {
@@ -30,10 +31,19 @@ namespace MadExpenceTracker.Core.UseCase
 
         public MonthIndex CloseMonth(string monthToClose, Expences expences, Incomes incomes, Amount amount)
         {
-            if(CreateNewExpencesCollection() &&
+            if(!DateTime.TryParseExact(monthToClose, "yyyy/MM", CultureInfo.InvariantCulture, DateTimeStyles.None,
+                out DateTime date))
+            {
+                throw new ArgumentException("month to close couldn't be parsed");
+            }
+
+            CheckIfExpencesMonthIsClosed(date.ToString("yyyy/M"));
+            CheckIfIncomesMonthIsClosed(date.ToString("yyyy/M"));
+
+            if (CreateNewExpencesCollection() &&
                 CreateNewIncomesCollection() &&
-                CloseExpencesMonth(monthToClose) &&
-                CloseIncomesMonth(monthToClose))
+                CloseExpencesMonth(date.ToString("yyyy/M")) &&
+                CloseIncomesMonth(date.ToString("yyyy/M")))
             {
                 amount = CreateAmount(amount);
                 return CreateIndexEntry(expences, incomes, amount);
@@ -82,6 +92,22 @@ namespace MadExpenceTracker.Core.UseCase
             amount.Id = amount.Id == Guid.Empty ? Guid.NewGuid() : amount.Id;
             _amountsPersistence.AddAmount(amount);
             return amount;
+        }
+
+        private void CheckIfExpencesMonthIsClosed(string monthToClose)
+        {
+            if(!_expencePersistence.IsMonthClosed(monthToClose))
+            {
+                throw new InvalidOperationException("Month of expences is already closed");
+            }
+        }
+
+        private void CheckIfIncomesMonthIsClosed(string monthToClose)
+        {
+            if (!_incomePersistence.IsMonthClosed(monthToClose))
+            {
+                throw new InvalidOperationException("Month of incomes is already closed");
+            }
         }
     }
 }

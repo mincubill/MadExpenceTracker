@@ -46,7 +46,12 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
                 var configOnDb = _configurationCollection.FindSync(filterEmpty).FirstOrDefault();
                 if (configOnDb == null)
                 {
-                    ConfigurationMongo newConfigurationMongoMongo = new ConfigurationMongo() { SavingsRate = 20 };
+                    ConfigurationMongo newConfigurationMongoMongo = new ConfigurationMongo() 
+                    { 
+                        SavingsRate = configurationToSave.SavingsRate,
+                        BaseExpencesRate = configurationToSave.BaseExpencesRate,
+                        AditionalExpencesRate = configurationToSave.AditionalExpencesRate
+                    };
                     _configurationCollection.InsertOne(newConfigurationMongoMongo);
                 }
                 else
@@ -77,9 +82,11 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
         {
             try
             {
-                var filter = Builders<ConfigurationMongo>.Filter.Eq(e => e.SavingsRate, configurationToSave.SavingsRate);
+                var filter = Builders<ConfigurationMongo>.Filter.Empty;
                 var update = Builders<ConfigurationMongo>.Update
-                .Set(e => e.SavingsRate, configurationToSave.SavingsRate);
+                .Set(e => e.SavingsRate, configurationToSave.SavingsRate)
+                .Set(e => e.AditionalExpencesRate, configurationToSave.AditionalExpencesRate)
+                .Set(e => e.BaseExpencesRate, configurationToSave.BaseExpencesRate);
                 var result = _configurationCollection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
