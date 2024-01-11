@@ -7,7 +7,7 @@ import { deleteIncome, getCurrentIncomes, getIncomeById } from "../../../gateway
 import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
 import { useNavigate } from "react-router-dom";
 
-export const IncomeTable = ({setIncomesId, saveOperationResult}) => {
+export const IncomeTable = ({setIncomesId, saveOperationResult, setIncomesMonth, isMonthClosed}) => {
     
     
     const [incomeData, setIncomeData] = useState();  
@@ -15,21 +15,14 @@ export const IncomeTable = ({setIncomesId, saveOperationResult}) => {
 
     useEffect(() => {
         getCurrentIncomes().then(d => {
-            if(d.income.length === 0) return
+            if(d.income.length === 0) {
+                setIncomeData(undefined)
+            }
             setIncomeData(d.income)
             setIncomesId(d.id)
+            setIncomesMonth(d.runningMonth)
         })
-        
-    }, [])
-
-    useEffect(() => {
-        getCurrentIncomes().then(d => {
-            if(d.income.length === 0) return
-            setIncomeData(d.income)
-            setIncomesId(d.id)
-        })
-        setNeedRefresh(false)
-    }, [needRefresh])
+    }, [needRefresh, isMonthClosed])
 
     const navigate = useNavigate()
 
@@ -60,7 +53,7 @@ export const IncomeTable = ({setIncomesId, saveOperationResult}) => {
     const removeIncome = (e) => {
         deleteIncome(e.currentTarget.id).then(d => {
             if(d === true) {
-                setNeedRefresh(true)
+                setNeedRefresh(!needRefresh)
                 saveOperationResult("Ingreso eliminado")
             }
             else {
@@ -80,12 +73,16 @@ export const IncomeTable = ({setIncomesId, saveOperationResult}) => {
                 </tr>
             </thead>
             <tbody>
-                { incomeData === undefined ? null :
+                { incomeData === undefined ? 
+                <tr>
+                    <td colSpan={4}>No hay ingresos registrados</td>
+                </tr> :
                 incomeData.map(d => (
                     <tr key={d.id}>
-                        <td>{d.name}</td>
-                        <td>{moment(d.date).format("DD/MM/YYYY")}</td>
-                        <td>{d.amount}</td>
+                        <td>{d.name ? d.name : null}</td>
+                        <td>{d.date ? moment(d.date).format("DD/MM/YYYY") : null}</td>
+                        <td>{d.amount ? d.amount : null}</td>
+                        { d.name ?
                         <td>
                             <span>
                                 <Button 
@@ -113,7 +110,7 @@ export const IncomeTable = ({setIncomesId, saveOperationResult}) => {
                                     <Trash2Fill/>
                                 </Button>
                             </span>
-                        </td>
+                        </td> : null}
                     </tr>
                 ))}
             </tbody>
@@ -124,4 +121,6 @@ export const IncomeTable = ({setIncomesId, saveOperationResult}) => {
 IncomeTable.propTypes = {
     setIncomesId: PropTypes.func,
     saveOperationResult: PropTypes.func,
+    setIncomesMonth: PropTypes.func,
+    isMonthClosed: PropTypes.bool
 };

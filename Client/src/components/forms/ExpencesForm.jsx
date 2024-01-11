@@ -39,7 +39,7 @@ export const ExpencesForm = () => {
     const clearForm = () => {
         saveName('')
         saveDatePicked(new Date())
-        saveExpenceType(0)
+        saveExpenceType(expenceType)
         saveAmount(0)
     }
 

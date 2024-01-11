@@ -6,7 +6,7 @@ import { getCurrentAmounts } from "../../../gateway/amountsGateway";
 import { getConfiguration } from "../../../gateway/configurationGateway";
 
 
-export const AmountsTable = ({incomesId, expencesId, operationResult}) => {
+export const AmountsTable = ({incomesId, expencesId, operationResult, isMonthClosed}) => {
 
     const [amounts, setAmounts] = useState({});
     const [configuration, setConfiguration] = useState({})
@@ -25,8 +25,7 @@ export const AmountsTable = ({incomesId, expencesId, operationResult}) => {
                 setConfiguration(d)
             })
         }
-        
-    }, [expencesId, incomesId, operationResult])
+    }, [expencesId, incomesId, operationResult, isMonthClosed])
 
     const isExceeded = (sugested, total) => {
         return sugested >= total
@@ -44,26 +43,34 @@ export const AmountsTable = ({incomesId, expencesId, operationResult}) => {
                 </tr>
             </thead>
             <tbody>
-                <tr key={amounts.id}>
-                    <td><b>Totales</b></td>
-                    <td style={ isExceeded(amounts.sugestedBaseExpences, amounts.totalBaseExpences) ? null : alertExceed }>
-                        {amounts.totalBaseExpences}
-                    </td>
-                    <td style={ isExceeded(amounts.sugestedAditionalExpences, amounts.totalAditionalExpences) ? null : alertExceed }>
-                        {amounts.totalAditionalExpences}
-                    </td>
-                    <td>
-                        {amounts.savings}
-                    </td>
-                    <td>
-                        {amounts.totalIncomes}
-                    </td>
-                </tr>
-                <tr key={uuidv4()}>
-                    <td><b>Sugerido</b></td>
-                    <td>{amounts.sugestedBaseExpences}</td>
-                    <td>{amounts.sugestedAditionalExpences}</td>
-                </tr>
+                {amounts === undefined ? 
+                    <tr>
+                        <td colSpan={4}>Se necesitan gastos e ingresos registrados para realizar los calculos</td>
+                    </tr> : 
+                    <tr key={amounts.id}>
+                        <td><b>Totales</b></td>
+                        <td style={ isExceeded(amounts.sugestedBaseExpences, amounts.totalBaseExpences) ? null : alertExceed }>
+                            {amounts.totalBaseExpences}
+                        </td>
+                        <td style={ isExceeded(amounts.sugestedAditionalExpences, amounts.totalAditionalExpences) ? null : alertExceed }>
+                            {amounts.totalAditionalExpences}
+                        </td>
+                        <td>
+                            {amounts.savings}
+                        </td>
+                        <td>
+                            {amounts.totalIncomes}
+                        </td>
+                    </tr>
+                    
+                }
+                {amounts === undefined ? null : 
+                    <tr key={uuidv4()}>
+                        <td><b>Sugerido</b></td>
+                        <td>{amounts.sugestedBaseExpences}</td>
+                        <td>{amounts.sugestedAditionalExpences}</td>
+                    </tr> 
+                }
             </tbody>
         </Table>
     )
@@ -71,6 +78,6 @@ export const AmountsTable = ({incomesId, expencesId, operationResult}) => {
 AmountsTable.propTypes = {
     incomesId: PropTypes.string,
     expencesId: PropTypes.string,
-    operationResult: PropTypes.string
-
+    operationResult: PropTypes.string,
+    isMonthClosed: PropTypes.bool
 };

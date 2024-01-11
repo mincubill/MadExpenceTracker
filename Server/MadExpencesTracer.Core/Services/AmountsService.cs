@@ -2,6 +2,7 @@
 using MadExpenceTracker.Core.Interfaces.Services;
 using MadExpenceTracker.Core.Model;
 using MadExpenceTracker.Core.Persistence;
+using MadExpenceTracker.Core.Util;
 
 namespace MadExpenceTracker.Core.Services
 {
@@ -24,22 +25,8 @@ namespace MadExpenceTracker.Core.Services
         {
             Expences expences = _expencePersistence.Get(expencesId) ?? throw new NotFoundException("Expences not found");
             Incomes incomes = _incomePersistence.Get(incomesId) ?? throw new NotFoundException("Incomes not found");
-            long totalBaseExpences = expences.Expence.Where(e => e.ExpenceType == ExpenceType.Base).Sum(e => e.Amount);
-            long totalAditionalExpences = expences.Expence.Where(e => e.ExpenceType == ExpenceType.Aditional).Sum(e => e.Amount);
-            long totalIncomes = incomes.Income.Sum(i => i.Amount);
-            byte savingRate = _configurationPersistence.GetConfiguration().SavingsRate;
-            byte baseRate = _configurationPersistence.GetConfiguration().BaseExpencesRate;
-            byte aditionalRate = _configurationPersistence.GetConfiguration().AditionalExpencesRate;
-            return new Amount
-            {
-                Id = Guid.NewGuid(),
-                TotalBaseExpences = totalBaseExpences,
-                TotalAditionalExpences = totalAditionalExpences,
-                TotalIncomes = totalIncomes,
-                Savings = Convert.ToInt64(totalIncomes * (savingRate/100f)),
-                SugestedBaseExpences = Convert.ToInt64(totalIncomes * (baseRate / 100f)),
-                SugestedAditionalExpences = Convert.ToInt64(totalIncomes * (aditionalRate / 100f)),
-            };
+            Amount calculatedAmount = Calculations.CalculateAmounts(expences, incomes, _configurationPersistence.GetConfiguration());
+            return calculatedAmount;
         }
 
         public Amount GetAmount(Guid id)

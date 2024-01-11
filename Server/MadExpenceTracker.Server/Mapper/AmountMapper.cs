@@ -29,7 +29,6 @@ namespace MadExpenceTracker.Server.Mapper
             return new AmountsApi()
             {
                 Id = input.Id,
-                RunningMonth = input.RunningMonth,
                 Amount = amountsList
             };
         }

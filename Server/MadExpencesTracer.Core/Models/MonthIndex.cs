@@ -8,5 +8,7 @@
         public Guid IncomesId { get; set; }
         public Guid AmountsId { get; set; }
         public byte SavingsRate { get; set; }
+        public byte BaseExpencesRate { get; set; }
+        public byte AditionalExpencesRate { get; set; }
     }
 }

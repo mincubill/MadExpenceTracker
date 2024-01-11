@@ -8,27 +8,22 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { deleteExpence, getCurrentExpences, getExpenceById } from "../../../gateway/expenceGateway";
 import { useEffect, useState } from "react";
 
-export const ExpenseTable = ({setExpencesId, saveOperationResult}) => {
+export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMonth, isMonthClosedState}) => {
 
     const [expenceData, setExpenceData] = useState()
-    const [needRefresh, setNeedRefresh] = useState()
+    const [needRefresh, setNeedRefresh] = useState(false)
 
     useEffect(() => {
-        getCurrentExpences().then(d => {
-            if(d.expence.length === 0) return
-            setExpenceData(d.expence)
-            setExpencesId(d.id)
-        })
-    }, [])
 
-    useEffect(() => {
         getCurrentExpences().then(d => {
-            if(d.expence.length === 0) return
+            if(d.expence.length === 0) {
+                setExpenceData(undefined)
+            }
             setExpenceData(d.expence)
             setExpencesId(d.id)
+            setExpencesMonth(d.runningMonth)
         })
-        setNeedRefresh(false)
-    }, [needRefresh])
+    }, [isMonthClosedState, needRefresh])
 
     const navigate = useNavigate()
 
@@ -61,7 +56,7 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult}) => {
     const removeExpence = (e) => {
         deleteExpence(e.currentTarget.id).then(d => {
             if(d === true) {
-                setNeedRefresh(true)
+                setNeedRefresh(!needRefresh)
                 saveOperationResult("Gasto eliminado")
             }
             else {
@@ -82,13 +77,19 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult}) => {
                 </tr>
             </thead>
             <tbody>
-                { expenceData === undefined ? null :
-                expenceData.map(d => (
+                
+                { expenceData === undefined ? 
+                <tr>
+                    <td colSpan={5}>No hay gastos registrados</td>
+                </tr> :
+                expenceData.map(d => ( 
                     <tr key={d.id}>
+                        {!d.name ? <td colSpan={5}>Sin gastos registrados</td> : null}
                         <td>{d.name}</td>
                         <td>{moment(d.date).format("DD/MM/YYYY")}</td>
-                        <td>{d.expenceType === 1 ? "Base" : "Adicional"}</td>
-                        <td>{d.amount}</td>
+                        <td>{(d.expenceType === 1 ? "Base" : "Adicional")}</td>
+                        <td>{d.amount }</td>
+                         
                         <td>
                             <span>
                                 <Button 
@@ -128,5 +129,7 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult}) => {
 ExpenseTable.propTypes = {
     data: PropTypes.array,
     setExpencesId: PropTypes.func,
-    saveOperationResult: PropTypes.func
+    saveOperationResult: PropTypes.func,
+    setExpencesMonth: PropTypes.func,
+    isMonthClosedState: PropTypes.bool
 };

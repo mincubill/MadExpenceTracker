@@ -18,14 +18,13 @@ namespace MadExpenceTracker.Server.Controllers
 
         [HttpPost]
         [Route("/monthClose")]
-        public IActionResult CloseMonth([FromQuery] string monthToClose ,[FromBody] MonthResumeApi resumeApi) 
+        public IActionResult CloseMonth([FromBody] MonthResumeApi resumeApi) 
         {
             MonthIndexApi index = MonthIndexMapper.MapToApi( 
                     _monthClose.CloseMonth( 
-                        monthToClose,
-                        ExpencesMapper.MapToModel( resumeApi.ExpencesApi ),
-                        IncomeMapper.MapToModel( resumeApi.IncomesApi ),
-                        AmountMapper.MapToModel( resumeApi.AmountApi ) 
+                        resumeApi.MonthToClose,
+                        resumeApi.ExpencesId,
+                        resumeApi.IncomesId
                     ) 
                 );
             return Ok(index);

@@ -14,7 +14,10 @@ namespace MadExpenceTracker.Server.Mapper
                 AmountsId = input.AmountsId,
                 ExpencesId = input.ExpencesId,
                 IncomesId = input.IncomesId,
-                Month = input.Month
+                Month = input.Month,
+                AditionalExpencesRate = input.AditionalExpencesRate,
+                BaseExpencesRate = input.BaseExpencesRate
+
             };
         }
 
@@ -30,7 +33,9 @@ namespace MadExpenceTracker.Server.Mapper
                     AmountsId = item.AmountsId,
                     ExpencesId = item.ExpencesId,
                     IncomesId = item.IncomesId,
-                    Month = item.Month
+                    Month = item.Month,
+                    AditionalExpencesRate = item.AditionalExpencesRate,
+                    BaseExpencesRate = item.BaseExpencesRate
                 });
             }
             return new MonthIndexesApi()
@@ -53,7 +58,9 @@ namespace MadExpenceTracker.Server.Mapper
                         AmountsId = i.AmountsId,
                         ExpencesId = i.ExpencesId,
                         IncomesId = i.IncomesId,
-                        Month = i.Month
+                        Month = i.Month,
+                        AditionalExpencesRate = i.AditionalExpencesRate,
+                        BaseExpencesRate = i.BaseExpencesRate
                     })
                 };
             }

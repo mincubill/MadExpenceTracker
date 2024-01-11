@@ -512,14 +512,6 @@
         summary: Closes the month
         description: Closes the month, when the month is closed the flag on expences and incomes will be updated to false, recalculate the amounts and save them, and finally it returns the index saved
         operationId: CloseMonth
-        parameters:
-          - name: monthToClose
-            in: query
-            description: ID of expences list to calculate
-            required: true
-            schema:
-              type: string
-              example: 2023/1
         requestBody:
           description: Closes the month
           content:
@@ -529,7 +521,7 @@
                 
           required: true
         responses:
-          '201':
+          '200':
             description: Successful operation
             content:
               application/json:
@@ -644,6 +636,12 @@
           savingsRate:
             type: number
             example: 20
+          baseExpencesRate:
+            type: number
+            example: 20
+          aditionalExpencesRate:
+            type: number
+            example: 20
           
       Expences:
         type: object
@@ -709,10 +707,14 @@
       MonthResume:
         type: object
         properties:
-          expences:
-            $ref: '#/components/schemas/Expences'
-          incomes:
-            $ref: '#/components/schemas/Incomes'
-          amounts:
-            $ref: '#/components/schemas/Amount'
+          monthToClose:
+            type: string
+            example: 2023/11
+          expencesId:
+            type: string
+            example: 40b140dc-ce99-4fb8-8ca1-497196ce67d7
+          incomesId:
+            type: string
+            example: 69b140dc-ce99-4fb8-8ca1-497196casedd7
+          
       
