@@ -4,7 +4,7 @@ namespace MadExpenceTracker.Core.Persistence
 {
     public interface IMonthIndexPersistence
     {
-        IEnumerable<MonthIndexes>? GetMonthsIndexes();
+        MonthIndexes? GetMonthsIndexes();
         MonthIndex? GetMonthIndex(Guid id);
         MonthIndexes AddMonthIndex(MonthIndex index);
     }

@@ -2,63 +2,53 @@
 import { Button, Table } from "react-bootstrap";
 import PropTypes from 'prop-types';
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
-import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { deleteExpence, getCurrentExpences, getExpenceById } from "../../../gateway/expenceGateway";
 import { useEffect, useState } from "react";
+import { deleteIncome, getIncomesById, getIncomeById } from "../../../gateway/incomesGateway";
+import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
+import { useNavigate } from "react-router-dom";
 
-export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMonth, isMonthClosedState}) => {
-
-    const [expenceData, setExpenceData] = useState([])
-    const [needRefresh, setNeedRefresh] = useState(false)
+export const IncomeTableHistorical = ({incomesId, saveOperationResult}) => {
+    
+    
+    const [incomeData, setIncomeData] = useState();  
+    const [needRefresh, setNeedRefresh] = useState()
 
     useEffect(() => {
-
-        getCurrentExpences().then(d => {
-            if(d.expence === undefined || d.expence.length === 0) {
-                setExpenceData(undefined)
-                return
-            }
-            setExpenceData(d.expence)
-            setExpencesId(d.id)
-            setExpencesMonth(d.runningMonth)
-        })
-    }, [isMonthClosedState, needRefresh])
+       getIncomesById(incomesId).then(d => setIncomeData(d.income))
+       
+    }, [incomesId, needRefresh])
 
     const navigate = useNavigate()
 
-    const viewExpence = (e) => {     
-        getExpenceById(e.currentTarget.id).then(d => {
+    const viewIncome = (e) => {
+        getIncomeById(e.currentTarget.id).then(d => {
             const data = {
                 id: d.id,
                 name: d.name,
                 date: d.date,
-                expenceType: d.expenceType,
                 amount: d.amount
             }
-            navigate("/expence", {state: { data, isReadOnly: true, isUpdate: false } })
+            navigate("/income", {state: { data, isReadOnly: true, isUpdate: false } })
         })
     }
 
-    const updateExpence = (e) => {
-        getExpenceById(e.currentTarget.id).then(d => {
+    const updateIncome = (e) => {
+        getIncomeById(e.currentTarget.id).then(d => {
             const data = {
                 id: d.id,
                 name: d.name,
                 date: d.date,
-                expenceType: d.expenceType,
                 amount: d.amount
             }
-            navigate("/expence", {state: { data, isReadOnly: false, isUpdate: true } })
+            navigate("/income", {state: { data, isReadOnly: false, isUpdate: true } })
         })
     }
 
-    const removeExpence = (e) => {
-        deleteExpence(e.currentTarget.id).then(d => {
+    const removeIncome = (e) => {
+        deleteIncome(e.currentTarget.id).then(d => {
             if(d === true) {
                 setNeedRefresh(!needRefresh)
-                saveOperationResult("Gasto eliminado")
+                saveOperationResult("Ingreso eliminado")
             }
             else {
                 saveOperationResult("Ocurrio un error")
@@ -72,32 +62,28 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMon
                 <tr>
                     <th>Nombre</th>
                     <th>Fecha</th>
-                    <th>Tipo</th>
                     <th>Valor</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                
-                { expenceData === undefined ? 
+                { incomeData === undefined ? 
                 <tr>
-                    <td colSpan={5}>No hay gastos registrados</td>
+                    <td colSpan={4}>No hay ingresos registrados</td>
                 </tr> :
-                expenceData.map(d => ( 
+                incomeData.map(d => (
                     <tr key={d.id}>
-                        {!d.name ? <td colSpan={5}>Sin gastos registrados</td> : null}
-                        <td>{d.name}</td>
-                        <td>{moment(d.date).format("DD/MM/YYYY")}</td>
-                        <td>{(d.expenceType === 1 ? "Base" : "Adicional")}</td>
-                        <td>{d.amount }</td>
-                         
+                        <td>{d.name ? d.name : null}</td>
+                        <td>{d.date ? moment(d.date).format("DD/MM/YYYY") : null}</td>
+                        <td>{d.amount ? d.amount : null}</td>
+                        { d.name ?
                         <td>
                             <span>
                                 <Button 
                                     variant="primary" 
                                     size="sm" 
                                     id={ d.id }
-                                    onClick={ viewExpence }
+                                    onClick={ viewIncome }
                                 >
                                     <EyeFill id={d.id}/>
                                 </Button>{' '}
@@ -105,7 +91,7 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMon
                                     variant="warning" 
                                     size="sm"
                                     id={ d.id }
-                                    onClick={ updateExpence }
+                                    onClick={ updateIncome }
                                 >
                                     <Clipboard2Data/>
                                 </Button>{' '}
@@ -113,24 +99,20 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMon
                                     variant="danger" 
                                     size="sm"
                                     id={ d.id }
-                                    onClick={ removeExpence }
+                                    onClick={ removeIncome }
                                 >
                                     <Trash2Fill/>
                                 </Button>
                             </span>
-                        </td>
+                        </td> : null}
                     </tr>
                 ))}
-
             </tbody>
         </Table>
     )
 }
 
-ExpenseTable.propTypes = {
-    data: PropTypes.array,
-    setExpencesId: PropTypes.func,
+IncomeTableHistorical.propTypes = {
+    incomesId: PropTypes.string,
     saveOperationResult: PropTypes.func,
-    setExpencesMonth: PropTypes.func,
-    isMonthClosedState: PropTypes.bool
 };

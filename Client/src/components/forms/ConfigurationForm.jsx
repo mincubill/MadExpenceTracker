@@ -9,20 +9,24 @@ export const ConfigurationForm = () => {
     const [baseExpencesRate, setBaseExpencesRate] = useState(0)
     const [operationResult, setOperationResult] = useState()
     const [resultMessage, setResultMessage] = useState()
-    const [isConfigured, setIsConfigured] = useState(true)
+    const [isConfigured, setIsConfigured] = useState(false)
 
     const location = useLocation()
     
     useEffect(() => {
-        if(!location.state) return;
         const {isConfigured} = location.state
-        setIsConfigured(isConfigured)
-        getConfiguration().then(d => {
-            setBaseExpencesRate(d.baseExpencesRate)
-            setAditionalExpencesRate(d.aditionalExpencesRate)
-            setSavingsRate(d.savingsRate)
-        })
-    }, [location.state])
+            if(isConfigured === false){
+            setIsConfigured(false)
+        }
+        else {
+            setIsConfigured(true)
+            getConfiguration().then(d => {
+                setBaseExpencesRate(d.baseExpencesRate)
+                setAditionalExpencesRate(d.aditionalExpencesRate)
+                setSavingsRate(d.savingsRate)
+            })
+        }
+    }, [isConfigured, location])
 
     const saveConfiguration = (e) => {
         e.preventDefault()

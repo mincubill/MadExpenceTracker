@@ -86,3 +86,14 @@ export const deleteIncome = async (id) => {
             }) 
         });
 }
+
+export const getIncomesById = async (id) => {
+    return fetch(`${baseUrl}/incomes/${id}`)
+        .then((response) => { 
+            return response.json().then((data) => {
+                return data;
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+}

@@ -19,7 +19,9 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                         ExpencesId = item.ExpencesId,
                         AmountsId = item.AmountsId,
                         Month = item.Month,
-                        Id = item.Id
+                        Id = item.Id,
+                        AditionalExpencesRate = item.AditionalExpencesRate,
+                        BaseExpencesRate = item.BaseExpencesRate
                     });
                 }
             }
@@ -40,7 +42,9 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                 ExpencesId = input.ExpencesId,
                 AmountsId = input.AmountsId,
                 Month = input.Month,
-                Id = input.Id
+                Id = input.Id,
+                AditionalExpencesRate = input.AditionalExpencesRate,
+                BaseExpencesRate = input.BaseExpencesRate
             };
         }
 
@@ -58,7 +62,9 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                         ExpencesId = m.ExpencesId,
                         AmountsId = m.AmountsId,
                         Month = m.Month,
-                        Id = m.Id
+                        Id = m.Id,
+                        AditionalExpencesRate = m.AditionalExpencesRate,
+                        BaseExpencesRate = m.BaseExpencesRate
                     }) : new List<MonthIndex>()
                 };
             }
@@ -73,7 +79,9 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                 ExpencesId = input.ExpencesId,
                 AmountsId = input.AmountsId,
                 Month = input.Month,
-                Id = input.Id
+                Id = input.Id,
+                AditionalExpencesRate = input.AditionalExpencesRate,
+                BaseExpencesRate = input.BaseExpencesRate
             };
         }
     }

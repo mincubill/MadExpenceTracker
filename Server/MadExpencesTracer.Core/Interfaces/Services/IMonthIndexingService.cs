@@ -9,7 +9,7 @@ namespace MadExpenceTracker.Core.Interfaces.Services
 {
     public interface IMonthIndexingService
     {
-        IEnumerable<MonthIndexes> GetMonthsIndexes();
+        MonthIndexes GetMonthsIndexes();
         MonthIndex GetMonthsIndex(Guid id);
         MonthIndexes AddMonthIndex(MonthIndex index);
     }

@@ -46,7 +46,6 @@ namespace MadExpenceTracker.Server.Test.Fixture
             return new AmountsApi
             {
                 Id = Guid.Parse("9c64e4d9-c9af-4714-8650-c98e6ebecfa7"),
-                RunningMonth = "2023/12",
                 Amount = new List<AmountApi>
                 {
                     new AmountApi

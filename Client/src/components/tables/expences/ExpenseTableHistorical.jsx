@@ -5,26 +5,23 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { deleteExpence, getCurrentExpences, getExpenceById } from "../../../gateway/expenceGateway";
+import { deleteExpence, getExpencesById, getExpenceById } from "../../../gateway/expenceGateway";
 import { useEffect, useState } from "react";
 
-export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMonth, isMonthClosedState}) => {
+export const ExpenseTableHistorical = ({expencesId, saveOperationResult}) => {
 
-    const [expenceData, setExpenceData] = useState([])
+    const [expenceData, setExpenceData] = useState()
     const [needRefresh, setNeedRefresh] = useState(false)
 
     useEffect(() => {
-
-        getCurrentExpences().then(d => {
-            if(d.expence === undefined || d.expence.length === 0) {
+        getExpencesById(expencesId).then(d => {
+            if(d.expencesId === '') {
                 setExpenceData(undefined)
                 return
             }
             setExpenceData(d.expence)
-            setExpencesId(d.id)
-            setExpencesMonth(d.runningMonth)
         })
-    }, [isMonthClosedState, needRefresh])
+    }, [needRefresh, expencesId])
 
     const navigate = useNavigate()
 
@@ -121,16 +118,12 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMon
                         </td>
                     </tr>
                 ))}
-
             </tbody>
         </Table>
     )
 }
 
-ExpenseTable.propTypes = {
-    data: PropTypes.array,
-    setExpencesId: PropTypes.func,
+ExpenseTableHistorical.propTypes = {
+    expencesId: PropTypes.string,
     saveOperationResult: PropTypes.func,
-    setExpencesMonth: PropTypes.func,
-    isMonthClosedState: PropTypes.bool
 };

@@ -81,3 +81,14 @@ export const deleteExpence = async (id) => {
             }) 
         });
 }
+
+export const getExpencesById = async (id) => {
+    return fetch(`${baseUrl}/expences/${id}`)
+        .then((response) => { 
+            return response.json().then((data) => {
+                return data;
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+}

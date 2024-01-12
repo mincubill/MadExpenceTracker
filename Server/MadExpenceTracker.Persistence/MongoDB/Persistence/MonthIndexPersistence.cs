@@ -18,13 +18,13 @@ namespace MadExpenceTracker.Persistence.MongoDB.Persistence
             _monthIndexCollection = provider.GetCollection<MonthIndexesMongo>(CollectionName);
         }
 
-        public IEnumerable<MonthIndexes>? GetMonthsIndexes()
+        public MonthIndexes? GetMonthsIndexes()
         {
             try
             {
-                IEnumerable<MonthIndexesMongo> monthIndexOnDb = _monthIndexCollection
-                    .FindSync(Builders<MonthIndexesMongo>.Filter.Empty).ToEnumerable();
-                if (!monthIndexOnDb.Any()) return null;
+                MonthIndexesMongo monthIndexOnDb = _monthIndexCollection
+                    .FindSync(Builders<MonthIndexesMongo>.Filter.Empty).FirstOrDefault();
+                if (monthIndexOnDb == null) return null;
                 return MonthIndexMapper.MapToModel(monthIndexOnDb);
             }
             catch (TimeoutException)
