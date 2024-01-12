@@ -14,9 +14,9 @@ namespace MadExpenceTracker.Core.Services
             _persistence = persistence;
         }
 
-        public IEnumerable<MonthIndexes> GetMonthsIndexes()
+        public MonthIndexes GetMonthsIndexes()
         {
-            return _persistence.GetMonthsIndexes() ?? new List<MonthIndexes>();
+            return _persistence.GetMonthsIndexes() ?? throw new NotFoundException("Indexes not found");
         }
 
         public MonthIndex GetMonthsIndex(Guid id)

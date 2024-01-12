@@ -52,6 +52,9 @@ export const NavigationBar = ({setIsMonthClosed}) => {
                         <Link to="/income" className="nav-link">
                             Ingresos
                         </Link>
+                        <Link to="/historical" className="nav-link">
+                            Historial
+                        </Link>
                         <Link to="/configuration" className="nav-link">
                             Configuracion
                         </Link>
