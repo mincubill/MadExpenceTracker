@@ -18,8 +18,10 @@ export const Historical = () => {
     useEffect(() => {
         getMonthIndex().then(d => {
             setMonthIndexes(d.monthIndex)
-            setRecentId(d.monthIndex.id)
-            getHistory(d.monthIndex[0].id)
+            if(d.monthIndex) {
+                setRecentId(d.monthIndex.id)
+                getHistory(d.monthIndex[0].id)
+            }
         })
     }, [recentId])
 
@@ -29,7 +31,6 @@ export const Historical = () => {
     }
 
     const getHistory = (id) => {
-        console.log(monthIndexes.length)
         if(monthIndexes.length === 0) 
         {
             return

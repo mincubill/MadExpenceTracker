@@ -1,5 +1,5 @@
 import {Container, Navbar, Nav, Button, Modal } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { postCloseMonth } from "../gateway/operationsGateway"
 import { Fragment, useState } from "react";
 import PropTypes from 'prop-types';
@@ -38,6 +38,12 @@ export const NavigationBar = ({setIsMonthClosed}) => {
         handleCloseResult()
     }
 
+    const navigate = useNavigate();
+
+    const handleRedirect = () => {
+        navigate("/configuration", {state: {isConfigured:true}})
+    }
+
     return (
         <Fragment>
             <Navbar>
@@ -55,9 +61,9 @@ export const NavigationBar = ({setIsMonthClosed}) => {
                         <Link to="/historical" className="nav-link">
                             Historial
                         </Link>
-                        <Link to="/configuration" className="nav-link">
+                        <Nav.Link className="nav-link" onClick={handleRedirect}>
                             Configuracion
-                        </Link>
+                        </Nav.Link>
                     </Nav>
                     <Button variant="warning" onClick={handleShowConfirmation}>Cerrar mes</Button>
                 </Container>
