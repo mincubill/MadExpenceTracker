@@ -15,14 +15,12 @@ export const AmountsTableHistorical = ({amountsId, savingsRate, baseExpencesRate
     }
 
     useEffect(() => { 
-        console.log(amountsId)
             if(amountsId === '') {
                 setAmounts(undefined)
             }
             else {
                 getAmountById(amountsId).then(d => {
                     setAmounts(d)
-                    console.log(d)
                 })
             }
             

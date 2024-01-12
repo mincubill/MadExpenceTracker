@@ -458,6 +458,16 @@ namespace MadExpenceTracker.Persistence.Test
         [Test]
         public void CreateNewIncomesDocumentTest()
         {
+            var mockUpdateResult = new Mock<UpdateResult>();
+            mockUpdateResult.Setup(_ => _.IsAcknowledged).Returns(true);
+            mockUpdateResult.Setup(_ => _.ModifiedCount).Returns(1);
+
+            _mockMongoCollection.Setup(m => m.UpdateOne(It.IsAny<FilterDefinition<IncomesMongo>>(),
+                It.IsAny<UpdateDefinition<IncomesMongo>>(),
+                It.IsAny<UpdateOptions>(),
+                It.IsAny<CancellationToken>()))
+                .Returns(mockUpdateResult.Object);
+
             _mockMongoCollection.Setup(m => m.InsertOne(
                 It.IsAny<IncomesMongo>(),
                 default,
@@ -488,6 +498,16 @@ namespace MadExpenceTracker.Persistence.Test
         [Test]
         public void CreateNewIncomesDocumentExceptionTest()
         {
+            var mockUpdateResult = new Mock<UpdateResult>();
+            mockUpdateResult.Setup(_ => _.IsAcknowledged).Returns(true);
+            mockUpdateResult.Setup(_ => _.ModifiedCount).Returns(1);
+
+            _mockMongoCollection.Setup(m => m.UpdateOne(It.IsAny<FilterDefinition<IncomesMongo>>(),
+                It.IsAny<UpdateDefinition<IncomesMongo>>(),
+                It.IsAny<UpdateOptions>(),
+                It.IsAny<CancellationToken>()))
+                .Returns(mockUpdateResult.Object);
+
             _mockMongoCollection.Setup(m => m.InsertOne(
                 It.IsAny<IncomesMongo>(),
                 It.IsAny<InsertOneOptions>(),

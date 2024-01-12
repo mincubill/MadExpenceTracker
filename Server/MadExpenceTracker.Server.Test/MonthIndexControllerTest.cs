@@ -30,7 +30,7 @@ namespace MadExpenceTracker.Server.Test
         [Test]
         public void GetMonthIndexTest()
         {
-            List<MonthIndexes> indexes = [ MonthIndexFixture.GetMonthIndexes() ];
+            MonthIndexes indexes = MonthIndexFixture.GetMonthIndexes();
 
             _serviceMock.Setup(x => x.GetMonthsIndexes()).Returns(indexes);
 

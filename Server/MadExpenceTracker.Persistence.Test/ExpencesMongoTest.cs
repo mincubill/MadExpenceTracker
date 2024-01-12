@@ -361,7 +361,6 @@ namespace MadExpenceTracker.Persistence.Test
         [Test]
         public void AddExpenceExceptionIfMoreThanOneActiveMonthTest()
         {
-            List<ExpencesMongo> expencesOnDbNoData = [];
             List<ExpencesMongo> expencesOnDbWithData = [ExpencesFixture.ExpencesMongo()];
             ExpencesMongo expencesMongoToAdd = new ExpencesMongo()
             {
@@ -459,6 +458,15 @@ namespace MadExpenceTracker.Persistence.Test
         [Test]
         public void CreateNewExpencesDocumentTest()
         {
+            var mockUpdateResult = new Mock<UpdateResult>();
+            mockUpdateResult.Setup(_ => _.IsAcknowledged).Returns(true);
+            mockUpdateResult.Setup(_ => _.ModifiedCount).Returns(1);
+
+            _mockMongoCollection.Setup(e => e.UpdateOne(
+                It.IsAny<FilterDefinition<ExpencesMongo>>(),
+                It.IsAny<UpdateDefinition<ExpencesMongo>>(),
+                It.IsAny<UpdateOptions>(),
+                It.IsAny<CancellationToken>())).Returns(mockUpdateResult.Object);
 
             _mockMongoCollection.Setup(m => m.InsertOne(
                 It.IsAny<ExpencesMongo>(),
@@ -491,6 +499,16 @@ namespace MadExpenceTracker.Persistence.Test
         [Test]
         public void CreateNewExpencesDocumentExceptionTest()
         {
+            var mockUpdateResult = new Mock<UpdateResult>();
+            mockUpdateResult.Setup(_ => _.IsAcknowledged).Returns(true);
+            mockUpdateResult.Setup(_ => _.ModifiedCount).Returns(1);
+
+            _mockMongoCollection.Setup(e => e.UpdateOne(
+                It.IsAny<FilterDefinition<ExpencesMongo>>(),
+                It.IsAny<UpdateDefinition<ExpencesMongo>>(),
+                It.IsAny<UpdateOptions>(),
+                It.IsAny<CancellationToken>())).Returns(mockUpdateResult.Object);
+
             _mockMongoCollection.Setup(m => m.InsertOne(
                 It.IsAny<ExpencesMongo>(),
                 It.IsAny<InsertOneOptions>(),

@@ -10,14 +10,15 @@ import { useEffect, useState } from "react";
 
 export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMonth, isMonthClosedState}) => {
 
-    const [expenceData, setExpenceData] = useState()
+    const [expenceData, setExpenceData] = useState([])
     const [needRefresh, setNeedRefresh] = useState(false)
 
     useEffect(() => {
 
         getCurrentExpences().then(d => {
-            if(d.expence.length === 0) {
+            if(d.expence === undefined || d.expence.length === 0) {
                 setExpenceData(undefined)
+                return
             }
             setExpenceData(d.expence)
             setExpencesId(d.id)

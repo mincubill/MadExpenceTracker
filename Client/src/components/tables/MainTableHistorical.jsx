@@ -4,8 +4,6 @@ import { AmountsTableHistorical } from "./amounts/AmountsTableHistorical";
 import { ExpenseTableHistorical } from "./expences/ExpenseTableHistorical";
 import { IncomeTableHistorical } from "./incomes/IncomeTableHistorical";
 import { Alert, Col, Row } from "react-bootstrap";
-import { getConfiguration } from "../../gateway/configurationGateway";
-import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 
@@ -41,11 +39,12 @@ export const MainTableHistorical = ({savingsRate,
                             saveOperationResult={saveOperationResult}
                         />
                     </Col>
-                    {/* <Col xs={4}>
+                    <Col xs={4}>
                         <IncomeTableHistorical
-                            setIncomesId={setIncomesId} 
+                            incomesId={incomesId} 
+                            saveOperationResult={saveOperationResult}
                         />
-                    </Col> */}
+                    </Col>
                 </Row>
             </Fragment>
             

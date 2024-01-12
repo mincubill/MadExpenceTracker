@@ -22,11 +22,11 @@ namespace MadExpenceTracker.Core.Test
         [Test]
         public void GetMonthsIndexesTest()
         {
-            IEnumerable<MonthIndexes> indexes = new List<MonthIndexes>() { MonthIndexFixture.GetMonthIndexes() };
+            MonthIndexes indexes = MonthIndexFixture.GetMonthIndexes();
 
             _monthIndexPersistenceMock.Setup(m => m.GetMonthsIndexes()).Returns(indexes);
 
-            IEnumerable<MonthIndexes> res = _service.GetMonthsIndexes();
+            MonthIndexes res = _service.GetMonthsIndexes();
             
             Assert.That(res, Is.Not.Null);
         }

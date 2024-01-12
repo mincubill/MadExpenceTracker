@@ -14,12 +14,11 @@ export const ExpenseTableHistorical = ({expencesId, saveOperationResult}) => {
     const [needRefresh, setNeedRefresh] = useState(false)
 
     useEffect(() => {
-        console.log(expencesId)
         getExpencesById(expencesId).then(d => {
             if(d.expencesId === '') {
                 setExpenceData(undefined)
+                return
             }
-            console.log(d.expence)
             setExpenceData(d.expence)
         })
     }, [needRefresh, expencesId])

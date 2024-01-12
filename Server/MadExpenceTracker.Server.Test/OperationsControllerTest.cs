@@ -33,15 +33,15 @@ namespace MadExpenceTracker.Server.Test
             MonthIndex monthIndex = MonthIndexFixture.GetMonthIndex();
             MonthResumeApi resume = new MonthResumeApi
             {
-                AmountApi = AmountFixture.GetAmountApi(),
-                ExpencesApi = ExpencesFixture.GetExpencesApi(),
-                IncomesApi = IncomesFixture.GetIncomesApi(),
+                MonthToClose = "2023/11",
+                ExpencesId = monthIndex.ExpencesId,
+                IncomesId = monthIndex.IncomesId,
             };
 
             _serviceMock.Setup(c => c.CloseMonth(
-                It.IsAny<Expences>(),
-                It.IsAny<Incomes>(),
-                It.IsAny<Amount>()
+                It.IsAny<string>(),
+                It.IsAny<Guid>(),
+                It.IsAny<Guid>()
                 )).Returns(monthIndex);
 
             var res = _controller.CloseMonth(resume) as OkObjectResult;

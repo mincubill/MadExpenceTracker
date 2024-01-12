@@ -38,35 +38,98 @@ namespace MadExpenceTracker.Core.Test
         [Test]
         public void MonthCloseTest()
         {
+            Expences expences = ExpencesFixture.GetExpences();
+            Incomes incomes = IncomesFixture.GetIncomes();
+            _expencesPersistence.Setup(e => e.Get(expences.Id)).Returns(expences);
+            _incomePersistence.Setup(i => i.Get(incomes.Id)).Returns(incomes);
+            _expencesPersistence.Setup(e => e.IsMonthClosed(expences.RunningMonth)).Returns(true);
+            _incomePersistence.Setup(e => e.IsMonthClosed(incomes.RunningMonth)).Returns(true);
             _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(CURRENT_MONTH)).Returns(true);
             _incomePersistence.Setup(i => i.CreateNewIncomeDocument(CURRENT_MONTH)).Returns(true);
-            _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, CURRENT_MONTH)).Returns(true);
-            _incomePersistence.Setup(i => i.UpdateIncomesIsActive(false, CURRENT_MONTH)).Returns(true);
+            _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, expences.RunningMonth)).Returns(true);
+            _incomePersistence.Setup(i => i.UpdateIncomesIsActive(false, incomes.RunningMonth)).Returns(true);
             _amountPersistence.Setup(a => a.AddAmount(AmountFixture.GetAmount())).Returns(AmountFixture.GetAmounts());
             _configurationPersistence.Setup(c => c.GetConfiguration()).Returns(ConfigurationFixture.GetConfiguration());
 
             MonthIndex res = _monthClose.CloseMonth(
-                ExpencesFixture.GetExpences(),
-                IncomesFixture.GetIncomes(),
-                AmountFixture.GetAmount());
+                "2023/12",
+                ExpencesFixture.GetExpences().Id,
+                IncomesFixture.GetIncomes().Id);
             Assert.That(res.Id, Is.Not.EqualTo(Guid.Empty));
         }
 
         [Test]
         public void MonthCloseExceptionTest()
         {
-            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(CURRENT_MONTH)).Returns(false);
-            _incomePersistence.Setup(i => i.CreateNewIncomeDocument(CURRENT_MONTH)).Returns(true);
-            _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, CURRENT_MONTH)).Returns(true);
-            _incomePersistence.Setup(i => i.UpdateIncomesIsActive(false, CURRENT_MONTH)).Returns(true);
+            Expences expences = ExpencesFixture.GetExpences();
+            Incomes incomes = IncomesFixture.GetIncomes();
+            _expencesPersistence.Setup(e => e.Get(expences.Id)).Returns(expences);
+            _incomePersistence.Setup(i => i.Get(incomes.Id)).Returns(incomes);
+            _expencesPersistence.Setup(e => e.IsMonthClosed(expences.RunningMonth)).Returns(true);
+            _incomePersistence.Setup(e => e.IsMonthClosed(incomes.RunningMonth)).Returns(true);
+            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(CURRENT_MONTH)).Returns(true);
+            _incomePersistence.Setup(i => i.CreateNewIncomeDocument(CURRENT_MONTH)).Returns(false);
+            _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, expences.RunningMonth)).Returns(true);
+            _incomePersistence.Setup(i => i.UpdateIncomesIsActive(false, incomes.RunningMonth)).Returns(true);
             _amountPersistence.Setup(a => a.AddAmount(AmountFixture.GetAmount())).Returns(AmountFixture.GetAmounts());
             _configurationPersistence.Setup(c => c.GetConfiguration()).Returns(ConfigurationFixture.GetConfiguration());
 
+
             Assert.Throws<MonthCloseException>(() => {
                 _monthClose.CloseMonth(
-                ExpencesFixture.GetExpences(),
-                IncomesFixture.GetIncomes(),
-                AmountFixture.GetAmount());
+                "2023/12",
+                ExpencesFixture.GetExpences().Id,
+                IncomesFixture.GetIncomes().Id);
+            });
+        }
+
+        [Test]
+        public void MonthCloseInvalidOperationExceptionTest()
+        {
+            Expences expences = ExpencesFixture.GetExpences();
+            Incomes incomes = IncomesFixture.GetIncomes();
+            _expencesPersistence.Setup(e => e.Get(expences.Id)).Returns(expences);
+            _incomePersistence.Setup(i => i.Get(incomes.Id)).Returns(incomes);
+            _expencesPersistence.Setup(e => e.IsMonthClosed(expences.RunningMonth)).Returns(false);
+            _incomePersistence.Setup(e => e.IsMonthClosed(incomes.RunningMonth)).Returns(true);
+            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(CURRENT_MONTH)).Returns(true);
+            _incomePersistence.Setup(i => i.CreateNewIncomeDocument(CURRENT_MONTH)).Returns(true);
+            _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, expences.RunningMonth)).Returns(true);
+            _incomePersistence.Setup(i => i.UpdateIncomesIsActive(false, incomes.RunningMonth)).Returns(true);
+            _amountPersistence.Setup(a => a.AddAmount(AmountFixture.GetAmount())).Returns(AmountFixture.GetAmounts());
+            _configurationPersistence.Setup(c => c.GetConfiguration()).Returns(ConfigurationFixture.GetConfiguration());
+
+
+            Assert.Throws<InvalidOperationException>(() => {
+                _monthClose.CloseMonth(
+                "2023/12",
+                ExpencesFixture.GetExpences().Id,
+                IncomesFixture.GetIncomes().Id);
+            });
+        }
+
+        [Test]
+        public void MonthCloseNotFoundExceptionTest()
+        {
+            Expences expences = ExpencesFixture.GetExpences();
+            Incomes incomes = IncomesFixture.GetIncomes();
+            _expencesPersistence.Setup(e => e.Get(expences.Id));
+            _incomePersistence.Setup(i => i.Get(incomes.Id)).Returns(incomes);
+            _expencesPersistence.Setup(e => e.IsMonthClosed(expences.RunningMonth)).Returns(false);
+            _incomePersistence.Setup(e => e.IsMonthClosed(incomes.RunningMonth)).Returns(true);
+            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(CURRENT_MONTH)).Returns(true);
+            _incomePersistence.Setup(i => i.CreateNewIncomeDocument(CURRENT_MONTH)).Returns(true);
+            _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, expences.RunningMonth)).Returns(true);
+            _incomePersistence.Setup(i => i.UpdateIncomesIsActive(false, incomes.RunningMonth)).Returns(true);
+            _amountPersistence.Setup(a => a.AddAmount(AmountFixture.GetAmount())).Returns(AmountFixture.GetAmounts());
+            _configurationPersistence.Setup(c => c.GetConfiguration()).Returns(ConfigurationFixture.GetConfiguration());
+
+
+            Assert.Throws<NotFoundException>(() => {
+                _monthClose.CloseMonth(
+                "2023/12",
+                ExpencesFixture.GetExpences().Id,
+                IncomesFixture.GetIncomes().Id);
             });
         }
     }

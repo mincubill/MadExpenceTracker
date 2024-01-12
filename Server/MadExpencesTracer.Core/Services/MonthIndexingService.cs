@@ -16,7 +16,10 @@ namespace MadExpenceTracker.Core.Services
 
         public MonthIndexes GetMonthsIndexes()
         {
-            return _persistence.GetMonthsIndexes() ?? throw new NotFoundException("Indexes not found");
+            MonthIndexes monthIndexes = _persistence.GetMonthsIndexes() ?? throw new NotFoundException("Indexes not found");
+            List<MonthIndex> monthIndexReversed = monthIndexes.MonthIndex.Reverse().ToList();
+            monthIndexes.MonthIndex = monthIndexReversed;
+            return monthIndexes;
         }
 
         public MonthIndex GetMonthsIndex(Guid id)

@@ -32,7 +32,7 @@ namespace MadExpenceTracker.Core.UseCase
 
         public MonthIndex CloseMonth(string monthToClose, Guid expencesId, Guid incomesId)
         {
-            if(!DateTime.TryParseExact(monthToClose, "yyyy/MM", CultureInfo.InvariantCulture, DateTimeStyles.None,
+            if(!DateTime.TryParseExact(monthToClose, "yyyy/M", CultureInfo.InvariantCulture, DateTimeStyles.None,
                 out DateTime date))
             {
                 throw new ArgumentException("month to close couldn't be parsed");
@@ -103,7 +103,8 @@ namespace MadExpenceTracker.Core.UseCase
 
         private void CheckIfExpencesMonthIsClosed(string monthToClose)
         {
-            if(!_expencePersistence.IsMonthClosed(monthToClose))
+            var wea = _expencePersistence.IsMonthClosed(monthToClose);
+            if (!_expencePersistence.IsMonthClosed(monthToClose))
             {
                 throw new InvalidOperationException("Month of expences is already closed");
             }

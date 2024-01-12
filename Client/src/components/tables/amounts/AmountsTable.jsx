@@ -25,6 +25,9 @@ export const AmountsTable = ({incomesId, expencesId, operationResult, isMonthClo
                 setConfiguration(d)
             })
         }
+        else {
+            setAmounts(undefined)
+        }
     }, [expencesId, incomesId, operationResult, isMonthClosed])
 
     const isExceeded = (sugested, total) => {

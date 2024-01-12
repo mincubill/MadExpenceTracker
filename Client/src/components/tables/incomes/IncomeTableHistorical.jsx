@@ -3,7 +3,7 @@ import { Button, Table } from "react-bootstrap";
 import PropTypes from 'prop-types';
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { deleteIncome, getCurrentIncomes, getIncomeById } from "../../../gateway/incomesGateway";
+import { deleteIncome, getIncomesById, getIncomeById } from "../../../gateway/incomesGateway";
 import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
 import { useNavigate } from "react-router-dom";
 
@@ -14,8 +14,9 @@ export const IncomeTableHistorical = ({incomesId, saveOperationResult}) => {
     const [needRefresh, setNeedRefresh] = useState()
 
     useEffect(() => {
+       getIncomesById(incomesId).then(d => setIncomeData(d.income))
        
-    }, [needRefresh])
+    }, [incomesId, needRefresh])
 
     const navigate = useNavigate()
 
@@ -112,6 +113,6 @@ export const IncomeTableHistorical = ({incomesId, saveOperationResult}) => {
 }
 
 IncomeTableHistorical.propTypes = {
-    incomesId: PropTypes.func,
+    incomesId: PropTypes.string,
     saveOperationResult: PropTypes.func,
 };

@@ -59,7 +59,7 @@ export const MainTable = ({isMonthClosed}) => {
                     />
                 </Row>
                 <Row>
-                    <Col xs={8}>
+                    <Col xs={7}>
                         <ExpenseTable 
                             setExpencesId={setExpencesId} 
                             saveOperationResult={saveOperationResult}
@@ -67,7 +67,7 @@ export const MainTable = ({isMonthClosed}) => {
                             isMonthClosedState={isMonthClosed}
                         />
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={5}>
                         <IncomeTable 
                             setIncomesId={setIncomesId} 
                             saveOperationResult={saveOperationResult}

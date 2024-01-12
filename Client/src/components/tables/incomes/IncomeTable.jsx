@@ -15,7 +15,7 @@ export const IncomeTable = ({setIncomesId, saveOperationResult, setIncomesMonth,
 
     useEffect(() => {
         getCurrentIncomes().then(d => {
-            if(d.income.length === 0) {
+            if(d.expence === undefined || d.expence.length === 0) {
                 setIncomeData(undefined)
             }
             setIncomeData(d.income)

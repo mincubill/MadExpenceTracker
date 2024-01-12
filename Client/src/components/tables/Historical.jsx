@@ -1,10 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react"
 import { Card, Nav } from "react-bootstrap"
 import { getMonthIndex } from "../../gateway/monthIndexGateway"
-import { getExpencesById } from "../../gateway/expenceGateway"
-import { getAmountById, getCurrentAmounts } from "../../gateway/amountsGateway"
-import { getIncomesById } from "../../gateway/incomesGateway"
-import { MainTable } from "./MainTable"
 import { MainTableHistorical } from "./MainTableHistorical"
 
 
@@ -21,30 +18,38 @@ export const Historical = () => {
     useEffect(() => {
         getMonthIndex().then(d => {
             setMonthIndexes(d.monthIndex)
+            setRecentId(d.monthIndex.id)
+            getHistory(d.monthIndex[0].id)
         })
-        
-    }, [])
-
-
+    }, [recentId])
 
     const tabStyle = {
         flexWrap: "nowrap",
         overflowX: "auto"
     }
 
-    const getHistory = (e) => {
+    const getHistory = (id) => {
+        console.log(monthIndexes.length)
+        if(monthIndexes.length === 0) 
+        {
+            return
+        }
         const {expencesId, 
             incomesId, 
             amountsId, 
             savingsRate, 
             baseExpencesRate, 
-            aditionalExpencesRate} = monthIndexes.find(d => d.id === e.currentTarget.id)
+            aditionalExpencesRate} = monthIndexes.find(d => d.id === id)
         setSavingsRateData(savingsRate)
         setBaseExpencesRateData(baseExpencesRate)
         setAditionalExpencesRateData(aditionalExpencesRate)
         setAmountsIdData(amountsId)
         setExpencesIdData(expencesId)
         setIncomesIdData(incomesId)
+    }
+
+    const handleGetHistory = (e) => {
+        getHistory(e.currentTarget.id)
     }
 
     return (
@@ -57,7 +62,7 @@ export const Historical = () => {
                             <Nav.Link
                                 id={d.id} 
                                 eventKey={i === 0 ? "#first": `${d.month}`}
-                                onClick={getHistory}>
+                                onClick={handleGetHistory}>
                                     {d.month}
                                 </Nav.Link>
                         </Nav.Item>
