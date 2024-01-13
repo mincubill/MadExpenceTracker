@@ -6,6 +6,7 @@
 .sonarqube
 coverage.xml
 .idea
+data
 # User-specific files
 *.rsuser
 *.suo

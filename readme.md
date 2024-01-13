@@ -11,21 +11,12 @@ Por ejemplo: Si mis ingresos fueron de $1.000.000 y mis porcentajes son: base: 5
 
 La aplicacion recomendara que los gastos bases no superen los $500.000, gastos adicionales $300.000 y que mis ahorros sean de $200.000 durante ese mes
 
-## Installation
-
-Cliente
-
+## Instalacion
+- Clonar repo
 ```bash
-npm run dev
+docker-compose up -d
 ```
-
-Server
-Ejecutar con VS o VS Code
-
 ## Dependencias
 - NodeJS: 16.17.0
 - NET 8.0
 - MongoDB 
-
-## NOTAS
-Aun sigue en desarrollo, la ejecucion final sera con docker, subiere el docker compose
