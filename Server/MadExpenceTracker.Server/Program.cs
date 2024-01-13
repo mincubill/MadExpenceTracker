@@ -8,15 +8,15 @@ using MadExpenceTracker.Persistence.MongoDB.Persistence;
 using MadExpenceTracker.Persistence.MongoDB.Provider;
 using MadExpenceTracker.Persistence.MongoDB.Util;
 using MadExpenceTracker.Server.Controllers.Middleware;
+using MadExpenceTracker.Server.Util;
 
 var dbIp = Environment.GetEnvironmentVariable("DB_IP");
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
-Console.WriteLine(dbIp);
-Console.WriteLine(dbPort);
 
 IMongoDBProvider mongoProvider = new MongoDBProvider($"mongodb://{dbIp}:{dbPort}", "MadExpencesTracker");
 IDbInitialization dbInit = new DbInitialization($"mongodb://{dbIp}:{dbPort}", "MadExpencesTracker");
-//new DbInitializationUtil(dbInit).Initialize();
+Console.WriteLine("creando db");
+new DbInitializationUtil(dbInit).Initialize();
 
 var builder = WebApplication.CreateBuilder(args);
 

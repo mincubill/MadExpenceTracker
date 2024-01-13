@@ -1,4 +1,5 @@
 ﻿using MadExpenceTracker.Core.Interfaces.Utils;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Util
@@ -13,6 +14,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Util
             MongoUrl url = new MongoUrl($"{mongoUrl}/{databaseName}");
             MongoClientSettings settings = MongoClientSettings.FromUrl(url);
             MongoClient client = new MongoClient(settings);
+            client.GetDatabase(databaseName);
             _database = client.GetDatabase(url.DatabaseName);
         }
         public void InitializeDb()
@@ -28,6 +30,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Util
                 if (!collections.Contains(collection))
                 {
                     _database.CreateCollection(collection);
+                    Console.WriteLine($"Creating collection: {collection}");
                 }
             }
         }
