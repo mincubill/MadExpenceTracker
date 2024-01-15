@@ -35,7 +35,7 @@ export const AmountsTable = ({incomesId, expencesId, operationResult, isMonthClo
     }
 
     return (
-        <Table>
+        <Table responsive>
             <thead>
                 <tr>
                     <th></th>

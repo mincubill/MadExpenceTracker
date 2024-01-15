@@ -7,7 +7,10 @@ import { Alert, Col, Row } from "react-bootstrap";
 import { getConfiguration } from "../../gateway/configurationGateway";
 import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
-
+import { useMediaQuery } from 'react-responsive'
+import { AmountsViewMobile } from "./amounts/AmountsViewMobile";
+import { ExpencesViewMobile } from "./expences/ExpencesViewMobile";
+import { IncomesViewMobile } from "./incomes/IncomesViewMobile";
 
 export const MainTable = ({isMonthClosed}) => {   
     const [expencesId, setExpencesId] = useState('')
@@ -39,44 +42,76 @@ export const MainTable = ({isMonthClosed}) => {
         }
     }, [expencesMonth, incomesMonth])
 
-    
+    const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1224px)'})
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
 
     return(
         <Fragment>
             { configured === false ? null : 
-            <Fragment>
-                {   operationResult === undefined ? null : 
-                    operationResult ? 
-                        <Alert variant="success">{operationResult}</Alert> : 
-                        <Alert variant="danger">{operationResult}</Alert>
-                }
-                <Row>
-                    <AmountsTable 
+                <Fragment>
+                    {   operationResult === undefined ? null : 
+                        operationResult ? 
+                            <Alert variant="success">{operationResult}</Alert> : 
+                            <Alert variant="danger">{operationResult}</Alert>
+                    }
+                    <Row>
+                        {isDesktopOrLaptop ? 
+                        <AmountsTable 
+                            incomesId={incomesId}
+                            expencesId={expencesId} 
+                            operationResult={operationResult}
+                            isMonthClosed={isMonthClosed}
+                        /> : null}
+                        {isTabletOrMobile? 
+                        <AmountsViewMobile
                         incomesId={incomesId}
                         expencesId={expencesId} 
                         operationResult={operationResult}
                         isMonthClosed={isMonthClosed}
-                    />
-                </Row>
-                <Row>
-                    <Col xs={7}>
-                        <ExpenseTable 
+                        /> : null}
+                    </Row>
+                    <br />
+                    {isDesktopOrLaptop ? <Row>
+                        <Col xs={7}>
+                            <ExpenseTable 
+                                setExpencesId={setExpencesId} 
+                                saveOperationResult={saveOperationResult}
+                                setExpencesMonth={setExpencesMonth}
+                                isMonthClosedState={isMonthClosed}
+                            />
+                        </Col>
+                        <Col xs={5}>
+                            <IncomeTable 
+                                setIncomesId={setIncomesId} 
+                                saveOperationResult={saveOperationResult}
+                                setIncomesMonth={setIncomesMonth}
+                                isMonthClosed={isMonthClosed}
+                            />
+                        </Col>
+                    </Row> : null }
+                    <br />
+                    
+                    {isTabletOrMobile ? 
+                    <Row>
+                        <ExpencesViewMobile 
                             setExpencesId={setExpencesId} 
                             saveOperationResult={saveOperationResult}
                             setExpencesMonth={setExpencesMonth}
                             isMonthClosedState={isMonthClosed}
                         />
-                    </Col>
-                    <Col xs={5}>
-                        <IncomeTable 
+                    </Row> : null}
+                    <br />
+                    {isTabletOrMobile ? 
+                    <Row>
+                        <IncomesViewMobile 
                             setIncomesId={setIncomesId} 
                             saveOperationResult={saveOperationResult}
                             setIncomesMonth={setIncomesMonth}
                             isMonthClosed={isMonthClosed}
                         />
-                    </Col>
-                </Row>
-            </Fragment>
+                    </Row> : null}
+                    
+                </Fragment>
             }
         </Fragment>
     )

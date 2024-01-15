@@ -1,20 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Table } from "react-bootstrap";
+import { Button, Card, ListGroup } from "react-bootstrap";
 import PropTypes from 'prop-types';
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { deleteExpence, getCurrentExpences, getExpenceById } from "../../../gateway/expenceGateway";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMonth, isMonthClosedState}) => {
-
+export const ExpencesViewMobile = ({setExpencesId, saveOperationResult, setExpencesMonth, isMonthClosedState}) => {
     const [expenceData, setExpenceData] = useState([])
     const [needRefresh, setNeedRefresh] = useState(false)
 
     useEffect(() => {
-
         getCurrentExpences().then(d => {
             if(d.expence === undefined || d.expence.length === 0) {
                 setExpenceData(undefined)
@@ -66,45 +64,30 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMon
         })
     }
 
-    return (
-        <Table responsive>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Fecha</th>
-                    <th>Tipo</th>
-                    <th>Valor</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                { expenceData === undefined ? 
-                <tr>
-                    <td colSpan={5}>No hay gastos registrados</td>
-                </tr> :
-                expenceData.map(d => ( 
-                    <tr key={d.id}>
-                        {!d.name ? <td colSpan={5}>Sin gastos registrados</td> : null}
-                        <td>{d.name}</td>
-                        <td>{moment(d.date).format("DD/MM/YYYY")}</td>
-                        <td>{(d.expenceType === 1 ? "Base" : "Adicional")}</td>
-                        <td>{d.amount }</td>
-                         
-                        <td>
-                            <span>
+    return(
+        <Fragment>
+            <Card>
+                <Card.Title>Gastos</Card.Title>
+                { expenceData === undefined ? "No hay gastos registrados" :
+                    <ListGroup variant="flush">
+                        {expenceData.map(e => 
+                            <ListGroup.Item key={e.id}>
+                                <b>{e.name}</b>:${e.amount} ({(e.expenceType === 1 ? "Base" : "Adicional")})
+                                <br />
+                                {moment(e.date).format("DD/MM/YYYY")}
+                                <div>
                                 <Button 
                                     variant="primary" 
                                     size="sm" 
-                                    id={ d.id }
+                                    id={ e.id }
                                     onClick={ viewExpence }
                                 >
-                                    <EyeFill id={d.id}/>
+                                    <EyeFill id={e.id}/>
                                 </Button>{' '}
                                 <Button 
                                     variant="warning" 
                                     size="sm"
-                                    id={ d.id }
+                                    id={ e.id }
                                     onClick={ updateExpence }
                                 >
                                     <Clipboard2Data/>
@@ -112,22 +95,22 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMon
                                 <Button 
                                     variant="danger" 
                                     size="sm"
-                                    id={ d.id }
+                                    id={ e.id }
                                     onClick={ removeExpence }
                                 >
                                     <Trash2Fill/>
                                 </Button>
-                            </span>
-                        </td>
-                    </tr>
-                ))}
-
-            </tbody>
-        </Table>
+                            </div>
+                            </ListGroup.Item>
+                        )}
+                    </ListGroup> 
+                }
+            </Card>
+        </Fragment>
     )
 }
 
-ExpenseTable.propTypes = {
+ExpencesViewMobile.propTypes = {
     data: PropTypes.array,
     setExpencesId: PropTypes.func,
     saveOperationResult: PropTypes.func,

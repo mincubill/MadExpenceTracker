@@ -46,25 +46,29 @@ export const NavigationBar = ({setIsMonthClosed}) => {
 
     return (
         <Fragment>
-            <Navbar>
+            <Navbar expand="lg" className="bg-body-tertiary">
                 <Container>
-                    <Nav className="me-auto">
-                        <Link to="/" className="nav-link">
-                            Resumen
-                        </Link>
-                        <Link to="/expence" className="nav-link">
-                                Gasto
-                        </Link>
-                        <Link to="/income" className="nav-link">
-                            Ingresos
-                        </Link>
-                        <Link to="/historical" className="nav-link">
-                            Historial
-                        </Link>
-                        <Nav.Link className="nav-link" onClick={handleRedirect}>
-                            Configuracion
-                        </Nav.Link>
-                    </Nav>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="me-auto">
+                            <Link to="/" className="nav-link">
+                                Resumen
+                            </Link>
+                            <Link to="/expence" className="nav-link">
+                                    Gasto
+                            </Link>
+                            <Link to="/income" className="nav-link">
+                                Ingresos
+                            </Link>
+                            <Link to="/historical" className="nav-link">
+                                Historial
+                            </Link>
+                            <Nav.Link className="nav-link" onClick={handleRedirect}>
+                                Configuracion
+                            </Nav.Link>
+                        </Nav>
+                    </Navbar.Collapse>
+                    
                     <Button variant="warning" onClick={handleShowConfirmation}>Cerrar mes</Button>
                 </Container>
             </Navbar>
