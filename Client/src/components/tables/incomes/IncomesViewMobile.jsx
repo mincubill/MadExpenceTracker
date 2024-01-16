@@ -6,20 +6,28 @@ import { Fragment, useEffect, useState } from "react";
 import { deleteIncome, getCurrentIncomes, getIncomeById } from "../../../gateway/incomesGateway";
 import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
 import { useNavigate } from "react-router-dom";
+import ReactPaginate from 'react-paginate';
 
 export const IncomesViewMobile = ({setIncomesId, saveOperationResult, setIncomesMonth, isMonthClosed}) => {
     
+    const itemsPerPage = 10
     const [incomeData, setIncomeData] = useState();  
     const [needRefresh, setNeedRefresh] = useState()
+    const [currentItems, setCurrentItems] = useState(undefined);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
 
     useEffect(() => {
         getCurrentIncomes().then(d => {
             if(d.expence === undefined || d.expence.length === 0) {
                 setIncomeData(undefined)
             }
-            setIncomeData(d.income)
+            setIncomeData(d.income.reverse())
             setIncomesId(d.id)
             setIncomesMonth(d.runningMonth)
+            setPageCount(Math.ceil(d.income.length / itemsPerPage));
+            const endOffset = itemOffset + itemsPerPage;
+            setCurrentItems(d.income.slice(itemOffset, endOffset));
         })
     }, [needRefresh, isMonthClosed])
 
@@ -61,13 +69,18 @@ export const IncomesViewMobile = ({setIncomesId, saveOperationResult, setIncomes
         })
     }
 
+    const handlePageClick = (e) => {
+        const newOffset = e.selected * itemsPerPage % incomeData.length
+        setItemOffset(newOffset)
+    }
+
     return (
         <Fragment>
             <Card>
                 <Card.Title>Ingresos</Card.Title>
-                {incomeData === undefined ? "No hay ingresos registrados" :
+                {currentItems === undefined ? "No hay ingresos registrados" :
                 <ListGroup variant="flush">
-                    {incomeData.map(e => 
+                    {currentItems.map(e => 
                         <ListGroup.Item key={e.id}>
                             <b>{e.name}</b>:${e.amount} ({(e.expenceType === 1 ? "Base" : "Adicional")})
                                 <br />
@@ -100,7 +113,28 @@ export const IncomesViewMobile = ({setIncomesId, saveOperationResult, setIncomes
                                 </div>
                         </ListGroup.Item>
                     )}
-                </ListGroup>}
+                </ListGroup>
+                }
+                <ReactPaginate
+                    nextLabel=">"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    marginPagesDisplayed={2}
+                    pageCount={pageCount}
+                    previousLabel="<"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    breakLabel="..."
+                    breakClassName="page-item"
+                    breakLinkClassName="page-link"
+                    containerClassName="pagination"
+                    activeClassName="active"
+                    renderOnZeroPageCount={null}
+                />
             </Card>
         </Fragment>
     )
