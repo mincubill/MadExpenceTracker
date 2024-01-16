@@ -7,10 +7,15 @@ import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { deleteExpence, getCurrentExpences, getExpenceById } from "../../../gateway/expenceGateway";
 import { Fragment, useEffect, useState } from "react";
+import ReactPaginate from 'react-paginate';
 
 export const ExpencesViewMobile = ({setExpencesId, saveOperationResult, setExpencesMonth, isMonthClosedState}) => {
+    const itemsPerPage = 10
     const [expenceData, setExpenceData] = useState([])
     const [needRefresh, setNeedRefresh] = useState(false)
+    const [currentItems, setCurrentItems] = useState(undefined);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
 
     useEffect(() => {
         getCurrentExpences().then(d => {
@@ -18,11 +23,14 @@ export const ExpencesViewMobile = ({setExpencesId, saveOperationResult, setExpen
                 setExpenceData(undefined)
                 return
             }
-            setExpenceData(d.expence)
+            setExpenceData(d.expence.reverse())
             setExpencesId(d.id)
             setExpencesMonth(d.runningMonth)
+            setPageCount(Math.ceil(d.expence.length / itemsPerPage));
+            const endOffset = itemOffset + itemsPerPage;
+            setCurrentItems(d.expence.slice(itemOffset, endOffset));
         })
-    }, [isMonthClosedState, needRefresh])
+    }, [isMonthClosedState, needRefresh, itemOffset, itemsPerPage])
 
     const navigate = useNavigate()
 
@@ -64,13 +72,18 @@ export const ExpencesViewMobile = ({setExpencesId, saveOperationResult, setExpen
         })
     }
 
+    const handlePageClick = (e) => {
+        const newOffset = e.selected * itemsPerPage % expenceData.length
+        setItemOffset(newOffset)
+    }
+
     return(
         <Fragment>
             <Card>
                 <Card.Title>Gastos</Card.Title>
-                { expenceData === undefined ? "No hay gastos registrados" :
+                { currentItems === undefined ? "No hay gastos registrados" :
                     <ListGroup variant="flush">
-                        {expenceData.map(e => 
+                        {currentItems.map(e => 
                             <ListGroup.Item key={e.id}>
                                 <b>{e.name}</b>:${e.amount} ({(e.expenceType === 1 ? "Base" : "Adicional")})
                                 <br />
@@ -103,8 +116,28 @@ export const ExpencesViewMobile = ({setExpencesId, saveOperationResult, setExpen
                             </div>
                             </ListGroup.Item>
                         )}
-                    </ListGroup> 
+                    </ListGroup>
                 }
+                <ReactPaginate
+                    nextLabel=">"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    marginPagesDisplayed={2}
+                    pageCount={pageCount}
+                    previousLabel="<"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    breakLabel="..."
+                    breakClassName="page-item"
+                    breakLinkClassName="page-link"
+                    containerClassName="pagination"
+                    activeClassName="active"
+                    renderOnZeroPageCount={null}
+                />
             </Card>
         </Fragment>
     )

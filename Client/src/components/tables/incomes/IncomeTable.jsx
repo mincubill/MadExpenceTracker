@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 export const IncomeTable = ({setIncomesId, saveOperationResult, setIncomesMonth, isMonthClosed}) => {
     
+    
     const [incomeData, setIncomeData] = useState();  
     const [needRefresh, setNeedRefresh] = useState()
 
