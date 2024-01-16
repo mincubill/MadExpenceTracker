@@ -17,37 +17,33 @@ export const MainTableHistorical = ({savingsRate,
     
     return(
         <Fragment>
-            
-            <Fragment>
-                {   operationResult === undefined ? null : 
-                    operationResult ? 
-                        <Alert variant="success">{operationResult}</Alert> : 
-                        <Alert variant="danger">{operationResult}</Alert>
-                }
-                <Row>
-                    <AmountsTableHistorical
-                        amountsId={amountsId}
-                        savingsRate={savingsRate}
-                        baseExpencesRate={baseExpencesRate}
-                        aditionalExpencesRate={aditionalExpencesRate}
+            {   operationResult === undefined ? null : 
+                operationResult ? 
+                    <Alert variant="success">{operationResult}</Alert> : 
+                    <Alert variant="danger">{operationResult}</Alert>
+            }
+            <Row>
+                <AmountsTableHistorical
+                    amountsId={amountsId}
+                    savingsRate={savingsRate}
+                    baseExpencesRate={baseExpencesRate}
+                    aditionalExpencesRate={aditionalExpencesRate}
+                />
+            </Row>
+            <Row>
+                <Col xs={8}>
+                    <ExpenseTableHistorical
+                        expencesId={expencesId} 
+                        saveOperationResult={saveOperationResult}
                     />
-                </Row>
-                <Row>
-                    <Col xs={8}>
-                        <ExpenseTableHistorical
-                            expencesId={expencesId} 
-                            saveOperationResult={saveOperationResult}
-                        />
-                    </Col>
-                    <Col xs={4}>
-                        <IncomeTableHistorical
-                            incomesId={incomesId} 
-                            saveOperationResult={saveOperationResult}
-                        />
-                    </Col>
-                </Row>
-            </Fragment>
-            
+                </Col>
+                <Col xs={4}>
+                    <IncomeTableHistorical
+                        incomesId={incomesId} 
+                        saveOperationResult={saveOperationResult}
+                    />
+                </Col>
+            </Row>
         </Fragment>
     )
 }

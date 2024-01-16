@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Table } from "react-bootstrap";
+import { Button, Card, ListGroup } from "react-bootstrap";
 import PropTypes from 'prop-types';
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { deleteIncome, getCurrentIncomes, getIncomeById } from "../../../gateway/incomesGateway";
 import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
 
-export const IncomeTable = ({setIncomesId, saveOperationResult, setIncomesMonth, isMonthClosed}) => {
+export const IncomesViewMobile = ({setIncomesId, saveOperationResult, setIncomesMonth, isMonthClosed}) => {
     
     const itemsPerPage = 10
     const [incomeData, setIncomeData] = useState();  
@@ -70,46 +70,34 @@ export const IncomeTable = ({setIncomesId, saveOperationResult, setIncomesMonth,
     }
 
     const handlePageClick = (e) => {
-        const newOffset = e.selected * itemsPerPage % incomeData.length;
-        setItemOffset(newOffset);
+        const newOffset = e.selected * itemsPerPage % incomeData.length
+        setItemOffset(newOffset)
     }
 
     return (
-        <>
-            <Table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Fecha</th>
-                        <th>Valor</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { currentItems === undefined ? 
-                    <tr>
-                        <td colSpan={4}>No hay ingresos registrados</td>
-                    </tr> :
-                    currentItems.map(d => (
-                        <tr key={d.id}>
-                            <td>{d.name ? d.name : null}</td>
-                            <td>{d.date ? moment(d.date).format("DD/MM/YYYY") : null}</td>
-                            <td>{d.amount ? d.amount : null}</td>
-                            { d.name ?
-                            <td>
-                                <span>
+        <Fragment>
+            <Card>
+                <Card.Title>Ingresos</Card.Title>
+                {currentItems === undefined ? "No hay ingresos registrados" :
+                <ListGroup variant="flush">
+                    {currentItems.map(e => 
+                        <ListGroup.Item key={e.id}>
+                            <b>{e.name}</b>:${e.amount} ({(e.expenceType === 1 ? "Base" : "Adicional")})
+                                <br />
+                                {moment(e.date).format("DD/MM/YYYY")}
+                                <div>
                                     <Button 
                                         variant="primary" 
                                         size="sm" 
-                                        id={ d.id }
+                                        id={ e.id }
                                         onClick={ viewIncome }
                                     >
-                                        <EyeFill id={d.id}/>
+                                        <EyeFill id={e.id}/>
                                     </Button>{' '}
                                     <Button 
                                         variant="warning" 
                                         size="sm"
-                                        id={ d.id }
+                                        id={ e.id }
                                         onClick={ updateIncome }
                                     >
                                         <Clipboard2Data/>
@@ -117,43 +105,42 @@ export const IncomeTable = ({setIncomesId, saveOperationResult, setIncomesMonth,
                                     <Button 
                                         variant="danger" 
                                         size="sm"
-                                        id={ d.id }
+                                        id={ e.id }
                                         onClick={ removeIncome }
                                     >
                                         <Trash2Fill/>
                                     </Button>
-                                </span>
-                            </td> : null}
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
-            <ReactPaginate
-                nextLabel=">"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
-                marginPagesDisplayed={2}
-                pageCount={pageCount}
-                previousLabel="<"
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                previousClassName="page-item"
-                previousLinkClassName="page-link"
-                nextClassName="page-item"
-                nextLinkClassName="page-link"
-                breakLabel="..."
-                breakClassName="page-item"
-                breakLinkClassName="page-link"
-                containerClassName="pagination"
-                activeClassName="active"
-                renderOnZeroPageCount={null}
-            />
-        </>
-        
+                                </div>
+                        </ListGroup.Item>
+                    )}
+                </ListGroup>
+                }
+                <ReactPaginate
+                    nextLabel=">"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    marginPagesDisplayed={2}
+                    pageCount={pageCount}
+                    previousLabel="<"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    breakLabel="..."
+                    breakClassName="page-item"
+                    breakLinkClassName="page-link"
+                    containerClassName="pagination"
+                    activeClassName="active"
+                    renderOnZeroPageCount={null}
+                />
+            </Card>
+        </Fragment>
     )
 }
 
-IncomeTable.propTypes = {
+IncomesViewMobile.propTypes = {
     setIncomesId: PropTypes.func,
     saveOperationResult: PropTypes.func,
     setIncomesMonth: PropTypes.func,
