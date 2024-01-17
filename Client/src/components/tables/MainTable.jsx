@@ -63,11 +63,11 @@ export const MainTable = ({isMonthClosed}) => {
                             isMonthClosed={isMonthClosed}
                         /> : null}
                         {isTabletOrMobile? 
-                        <AmountsViewMobile
-                        incomesId={incomesId}
-                        expencesId={expencesId} 
-                        operationResult={operationResult}
-                        isMonthClosed={isMonthClosed}
+                            <AmountsViewMobile
+                            incomesId={incomesId}
+                            expencesId={expencesId} 
+                            operationResult={operationResult}
+                            isMonthClosed={isMonthClosed}
                         /> : null}
                     </Row>
                     <br />
@@ -77,7 +77,7 @@ export const MainTable = ({isMonthClosed}) => {
                                 setExpencesId={setExpencesId} 
                                 saveOperationResult={saveOperationResult}
                                 setExpencesMonth={setExpencesMonth}
-                                isMonthClosedState={isMonthClosed}
+                                isMonthClosed={isMonthClosed}
                             />
                         </Col>
                         <Col xs={5}>
