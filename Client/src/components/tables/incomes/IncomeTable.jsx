@@ -29,7 +29,7 @@ export const IncomeTable = ({setIncomesId, saveOperationResult, setIncomesMonth,
             const endOffset = itemOffset + itemsPerPage;
             setCurrentItems(d.income.slice(itemOffset, endOffset));
         })
-    }, [needRefresh, isMonthClosed])
+    }, [needRefresh, isMonthClosed, itemOffset, itemsPerPage])
 
     const navigate = useNavigate()
 
@@ -76,7 +76,7 @@ export const IncomeTable = ({setIncomesId, saveOperationResult, setIncomesMonth,
 
     return (
         <>
-            <Table>
+            <Table striped bordered hover>
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -86,7 +86,7 @@ export const IncomeTable = ({setIncomesId, saveOperationResult, setIncomesMonth,
                     </tr>
                 </thead>
                 <tbody>
-                    { currentItems === undefined ? 
+                    { currentItems === undefined || currentItems.length === 0? 
                     <tr>
                         <td colSpan={4}>No hay ingresos registrados</td>
                     </tr> :

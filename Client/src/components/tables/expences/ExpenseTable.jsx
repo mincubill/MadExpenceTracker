@@ -9,7 +9,7 @@ import { deleteExpence, getCurrentExpences, getExpenceById } from "../../../gate
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
 
-export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMonth, isMonthClosedState}) => {
+export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMonth, isMonthClosed}) => {
 
     const itemsPerPage = 10
     const [expenceData, setExpenceData] = useState([])
@@ -23,7 +23,6 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMon
         getCurrentExpences().then(d => {
             if(d.expence === undefined || d.expence.length === 0) {
                 setExpenceData(undefined)
-                return
             }
             setExpenceData(d.expence.reverse())
             setExpencesId(d.id)
@@ -32,7 +31,7 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMon
             const endOffset = itemOffset + itemsPerPage;
             setCurrentItems(d.expence.slice(itemOffset, endOffset));
         })
-    }, [isMonthClosedState, needRefresh, itemOffset, itemsPerPage])
+    }, [needRefresh, isMonthClosed, itemOffset, itemsPerPage])
 
     const navigate = useNavigate()
 
@@ -93,7 +92,7 @@ export const ExpenseTable = ({setExpencesId, saveOperationResult, setExpencesMon
                 </thead>
                 <tbody>
                     
-                    { currentItems === undefined ? 
+                    { currentItems === undefined || currentItems.length === 0? 
                     <tr>
                         <td colSpan={5}>No hay gastos registrados</td>
                     </tr> :
@@ -168,5 +167,5 @@ ExpenseTable.propTypes = {
     setExpencesId: PropTypes.func,
     saveOperationResult: PropTypes.func,
     setExpencesMonth: PropTypes.func,
-    isMonthClosedState: PropTypes.bool
+    isMonthClosed: PropTypes.bool
 };
