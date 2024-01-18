@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/mincubill/MadExpenceTracker' 
+            }
+        }
+        stage('BE: Clean') {
+            steps {
+                sh "dotnet clean ${workspace}/Server/MadExpenceTracker.sln"
+                //dotnetClean project: '${workspace}/Server/MadExpenceTracker.sln', sdk: 'Net 8'
+            }
+        }
+        stage('BE: Dependencies restore') {
+            steps {
+                sh "dotnet restore ${workspace}/Server/MadExpenceTracker.sln"
+                //dotnetRestore project: '${workspace}/Server/MadExpenceTracker.sln', sdk: 'Net 8'
+            }
+        }
+        stage('BE: Run tests') {
+            steps {
+                sh "dotnet test ${workspace}/Server/MadExpenceTracker.sln"
+                //dotnetTest project: '${workspace}/Server/MadExpenceTracker.sln', sdk: 'Net 8'
+            }
+        }
+        stage('BE: Build + Quality') {
+            steps {
+                script{
+                    //name is the name of the tool configured under manage > tools > SonarScanner for MSBuild
+                    def sonnarScannerTool = tool name:'SonarScanner-MsBuild' 
+                    
+                    //installationName is the name of the SonarQube installations under manage > system > SonarQube installations
+                    withSonarQubeEnv(credentialsId: 'sonar', installationName: 'Sonar-local') {
+                        sh "dotnet ${sonnarScannerTool}/SonarScanner.MSBuild.dll begin /k:MadExpencesTracker /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml"
+                        //dotnetBuild project: '${workspace}/Server/MadExpenceTracker.sln', sdk: 'Net 8', configuration: 'Release'
+                        sh "dotnet build ${workspace}/Server/MadExpenceTracker.sln"
+                        sh "/root/.dotnet/tools/dotnet-coverage collect dotnet test ${workspace}/Server/MadExpenceTracker.sln -f xml -o coverage.xml"
+                        sh "dotnet ${sonnarScannerTool}/SonarScanner.MSBuild.dll end"
+                    }
+                }
+            }
+        }
+        stage('FE: Dependencies restore') {
+            steps {
+                sh "npm install --prefix ${workspace}/Client"
+            }
+        }
+
+        stage('FE: Build') {
+            steps {
+                sh "npm run build --prefix ${workspace}/Client"
+            }
+        }
+
+        stage('Docker-compose') {
+            steps {
+                sh "docker-compose -f ${workspace}/docker-compose.yml up -d"
+            }
+        }
+    }
+}

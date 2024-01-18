@@ -585,12 +585,18 @@
           sugestedBaseExpences:
             type: number
             example: 599680
+          remainingBaseExpences:
+            type: number
+            example: 10000
           totalAditionalExpences:
             type: number
             example: 200000
           sugestedAditionalExpences:
             type: number
             example: 200000
+          remainingAditionalExpences:
+            type: number
+            example: 10000
           savings:
             type: number
             example: 200000

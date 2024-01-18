@@ -46,11 +46,15 @@ export const AmountsViewMobileHistorical = ({amountsId, savingsRate, baseExpence
                         <b>Gastos Base({baseExpencesRate}%)</b>: {amounts.totalBaseExpences}
                         <br/>
                         <b>Sugerido</b>: {amounts.sugestedBaseExpences}
+                        <br />
+                        <b>Restante</b>: {amounts.remainingBaseExpences}
                     </ListGroup.Item>
                     <ListGroup.Item style={ isExceeded(amounts.sugestedAditionalExpences, amounts.totalAditionalExpences) ? null : alertExceed }>
                         <b>Gastos adicionales({aditionalExpencesRate}%)</b>: {amounts.totalBaseExpences}
                         <br/>
                         <b>Sugerido</b>: {amounts.sugestedAditionalExpences}
+                        <br/>
+                        <b>Restante</b>: {amounts.remainingAditionalExpences}
                     </ListGroup.Item>
                 </ListGroup> : "Se necesitan gastos e ingresos registrados para realizar los calculos"}
             </Card>
