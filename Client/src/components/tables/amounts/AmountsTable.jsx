@@ -74,6 +74,13 @@ export const AmountsTable = ({incomesId, expencesId, operationResult, isMonthClo
                         <td>{amounts.sugestedAditionalExpences}</td>
                     </tr> 
                 }
+                {amounts === undefined ? null : 
+                    <tr key={uuidv4()}>
+                        <td><b>Restante</b></td>
+                        <td>{amounts.remainingBaseExpences}</td>
+                        <td>{amounts.remainingAditionalExpences}</td>
+                    </tr> 
+                }
             </tbody>
         </Table>
     )

@@ -56,7 +56,9 @@ namespace MadExpenceTracker.Server.Test.Fixture
                         TotalBaseExpences = 100,
                         TotalIncomes = 1000000,
                         SugestedAditionalExpences= 100,
-                        SugestedBaseExpences = 100
+                        SugestedBaseExpences = 100,
+                        RemainingBaseExpences= 100,
+                        RemainingAditionalExpences = 100
                     }
                 }
             };
@@ -73,7 +75,8 @@ namespace MadExpenceTracker.Server.Test.Fixture
                 TotalBaseExpences = 100,
                 TotalIncomes = 1000000,
                 SugestedAditionalExpences = 100,
-                SugestedBaseExpences = 100
+                SugestedBaseExpences = 100,
+                RemainingAditionalExpences = 100
             };
         }
     }

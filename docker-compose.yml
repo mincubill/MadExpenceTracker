@@ -7,7 +7,7 @@ services:
     ports: 
       - "27017:27017" 
     volumes:
-     - './data:/data/db'
+     - mongo_data:/data/db
 
   mad-expences-tracker-back:
     depends_on: [mad-expences-tracker-db]
@@ -30,8 +30,10 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - "VITE_SERVER_IP=mad-expences-tracker-back"
-      - "VITE_SERVER_PORT=5443"
+      - "SERVER_IP=mad-expences-tracker-back"
+      - "SERVER_PORT=5443"
 
+volumes:
+  mongo_data: /mnt/user/appdata/mongoDb
 
   

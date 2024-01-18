@@ -33,12 +33,27 @@ namespace MadExpenceTracker.Core.Services
         {
             Amounts foundAmounts = _amountPersistence.GetAmounts(id) ?? throw new NotFoundException("Amount not found");
             Amount foundAmount = foundAmounts.Amount?.FirstOrDefault(a => a.Id == id) ?? throw new NotFoundException("Amount not found");
+            foundAmount.RemainingBaseExpences = foundAmount.SugestedBaseExpences - foundAmount.TotalBaseExpences;
+            foundAmount.RemainingAditionalExpences = foundAmount.SugestedAditionalExpences - foundAmount.TotalAditionalExpences;
             return foundAmount;
         }
 
         public Amounts GetAmounts()
         {
-            return _amountPersistence.GetAmounts()?.FirstOrDefault() ?? new Amounts();
+            Amounts amounts = _amountPersistence.GetAmounts()?.FirstOrDefault() ?? new Amounts();
+            amounts.Amount = amounts.Amount?.Select(a => new Amount
+            {
+                Id = a.Id,
+                Savings = a.Savings,
+                SugestedAditionalExpences = a.SugestedAditionalExpences,
+                TotalAditionalExpences = a.TotalAditionalExpences,
+                SugestedBaseExpences = a.SugestedBaseExpences,
+                TotalBaseExpences = a.TotalBaseExpences,
+                TotalIncomes = a.TotalIncomes,
+                RemainingAditionalExpences = a.SugestedAditionalExpences - a.TotalAditionalExpences,
+                RemainingBaseExpences = a.SugestedBaseExpences - a.TotalBaseExpences
+            });
+            return amounts;
         }
 
         public Amounts Create(Amount amount)

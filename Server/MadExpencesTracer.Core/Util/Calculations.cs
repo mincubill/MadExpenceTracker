@@ -19,6 +19,8 @@ namespace MadExpenceTracker.Core.Util
             byte savingRate = configuration.SavingsRate;
             byte baseRate = configuration.BaseExpencesRate;
             byte aditionalRate = configuration.AditionalExpencesRate;
+            long sugestedBase = Convert.ToInt64(totalIncomes * (baseRate / 100f));
+            long sugestedAditional = Convert.ToInt64(totalIncomes * (aditionalRate / 100f));
             return new Amount
             {
                 Id = Guid.NewGuid(),
@@ -26,8 +28,10 @@ namespace MadExpenceTracker.Core.Util
                 TotalAditionalExpences = totalAditionalExpences,
                 TotalIncomes = totalIncomes,
                 Savings = Convert.ToInt64(totalIncomes * (savingRate / 100f)),
-                SugestedBaseExpences = Convert.ToInt64(totalIncomes * (baseRate / 100f)),
-                SugestedAditionalExpences = Convert.ToInt64(totalIncomes * (aditionalRate / 100f)),
+                SugestedBaseExpences = sugestedBase,
+                SugestedAditionalExpences = sugestedAditional,
+                RemainingAditionalExpences = sugestedAditional - totalAditionalExpences,
+                RemainingBaseExpences = sugestedBase - totalBaseExpences,
             };
         }
     }
