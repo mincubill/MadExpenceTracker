@@ -29,11 +29,8 @@ services:
       dockerfile: dockerfile
     ports:
       - "5173:5173"
-    environment:
-      - "SERVER_IP=mad-expences-tracker-back"
-      - "SERVER_PORT=5443"
 
 volumes:
-  mongo_data: /mnt/user/appdata/mongoDb
+  mongo_data:
 
   
