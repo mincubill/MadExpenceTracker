@@ -83,7 +83,7 @@ export const IncomesViewMobile = ({setIncomesId, saveOperationResult, setIncomes
                 <ListGroup variant="flush">
                     {currentItems.map(e => 
                         <ListGroup.Item key={e.id}>
-                            <b>{e.name}</b>:${formatAmount( e.amount )} ({(e.expenceType === 1 ? "Base" : "Adicional")})
+                            <b>{e.name}</b>: {formatAmount( e.amount )} ({(e.expenceType === 1 ? "Base" : "Adicional")})
                                 <br />
                                 {moment(e.date).format("DD/MM/YYYY")}
                                 <div>
