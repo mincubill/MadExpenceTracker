@@ -7,6 +7,7 @@ import { deleteIncome, getIncomesById, getIncomeById } from "../../../gateway/in
 import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
+import { formatAmount } from "../../../utils/numberFormatter";
 
 export const IncomeTableHistorical = ({incomesId, saveOperationResult}) => {
     
@@ -95,7 +96,7 @@ export const IncomeTableHistorical = ({incomesId, saveOperationResult}) => {
                         <tr key={d.id}>
                             <td>{d.name ? d.name : null}</td>
                             <td>{d.date ? moment(d.date).format("DD/MM/YYYY") : null}</td>
-                            <td>{d.amount ? d.amount : null}</td>
+                            <td>{d.amount ? formatAmount( d.amount ) : null}</td>
                             { d.name ?
                             <td>
                                 <span>

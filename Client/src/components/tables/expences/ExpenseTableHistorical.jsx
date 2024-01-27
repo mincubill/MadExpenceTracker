@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { deleteExpence, getExpencesById, getExpenceById } from "../../../gateway/expenceGateway";
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
+import { formatAmount } from "../../../utils/numberFormatter";
 
 export const ExpenseTableHistorical = ({expencesId, saveOperationResult}) => {
 
@@ -101,7 +102,7 @@ export const ExpenseTableHistorical = ({expencesId, saveOperationResult}) => {
                             <td>{d.name}</td>
                             <td>{moment(d.date).format("DD/MM/YYYY")}</td>
                             <td>{(d.expenceType === 1 ? "Base" : "Adicional")}</td>
-                            <td>{d.amount }</td>
+                            <td>{formatAmount( d.amount )}</td>
                             
                             <td>
                                 <span>

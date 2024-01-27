@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import { getAmountById } from "../../../gateway/amountsGateway";
+import { formatAmount } from "../../../utils/numberFormatter";
 
 
 export const AmountsTableHistorical = ({amountsId, savingsRate, baseExpencesRate, aditionalExpencesRate}) => {
@@ -49,16 +50,16 @@ export const AmountsTableHistorical = ({amountsId, savingsRate, baseExpencesRate
                     <tr key={amounts.id}>
                         <td><b>Totales</b></td>
                         <td style={ isExceeded(amounts.sugestedBaseExpences, amounts.totalBaseExpences) ? null : alertExceed }>
-                            {amounts.totalBaseExpences}
+                            {formatAmount(amounts.totalBaseExpences)}
                         </td>
                         <td style={ isExceeded(amounts.sugestedAditionalExpences, amounts.totalAditionalExpences) ? null : alertExceed }>
-                            {amounts.totalAditionalExpences}
+                            {formatAmount(amounts.totalAditionalExpences)}
                         </td>
                         <td>
-                            {amounts.savings}
+                            {formatAmount(amounts.savings)}
                         </td>
                         <td>
-                            {amounts.totalIncomes}
+                            {formatAmount(amounts.totalIncomes)}
                         </td>
                     </tr>
                     
@@ -66,15 +67,15 @@ export const AmountsTableHistorical = ({amountsId, savingsRate, baseExpencesRate
                 {amounts === undefined ? null : 
                     <tr key={uuidv4()}>
                         <td><b>Sugerido</b></td>
-                        <td>{amounts.sugestedBaseExpences}</td>
-                        <td>{amounts.sugestedAditionalExpences}</td>
+                        <td>{formatAmount(amounts.sugestedBaseExpences)}</td>
+                        <td>{formatAmount(amounts.sugestedAditionalExpences)}</td>
                     </tr> 
                 }
                 {amounts === undefined ? null : 
                     <tr key={uuidv4()}>
                         <td><b>Restante</b></td>
-                        <td>{amounts.remainingBaseExpences}</td>
-                        <td>{amounts.remainingAditionalExpences}</td>
+                        <td>{formatAmount(amounts.remainingBaseExpences)}</td>
+                        <td>{formatAmount(amounts.remainingAditionalExpences)}</td>
                     </tr> 
                 }
             </tbody>
