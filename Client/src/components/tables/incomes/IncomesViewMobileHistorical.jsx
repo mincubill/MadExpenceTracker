@@ -7,6 +7,7 @@ import { deleteIncome, getIncomesById, getIncomeById } from "../../../gateway/in
 import { EyeFill, Clipboard2Data, Trash2Fill } from "react-bootstrap-icons"
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
+import { formatAmount } from "../../../utils/numberFormatter";
 
 export const IncomesViewMobileHistorical = ({incomesId, saveOperationResult}) => {
     
@@ -83,7 +84,7 @@ export const IncomesViewMobileHistorical = ({incomesId, saveOperationResult}) =>
                 <ListGroup variant="flush">
                     {currentItems.map(e => 
                         <ListGroup.Item key={e.id}>
-                            <b>{e.name}</b>:${e.amount} ({(e.expenceType === 1 ? "Base" : "Adicional")})
+                            <b>{e.name}</b>:${formatAmount( e.amount )} ({(e.expenceType === 1 ? "Base" : "Adicional")})
                                 <br />
                                 {moment(e.date).format("DD/MM/YYYY")}
                                 <div>

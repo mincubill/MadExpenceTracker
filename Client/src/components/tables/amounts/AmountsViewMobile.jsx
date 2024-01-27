@@ -4,6 +4,7 @@ import { getCurrentAmounts } from "../../../gateway/amountsGateway";
 import { getConfiguration } from "../../../gateway/configurationGateway";
 import PropTypes from 'prop-types';
 import { Card, ListGroup } from "react-bootstrap";
+import { formatAmount } from "../../../utils/numberFormatter";
 
 
 export const AmountsViewMobile = ({incomesId, expencesId, operationResult, isMonthClosed}) => {
@@ -40,24 +41,24 @@ export const AmountsViewMobile = ({incomesId, expencesId, operationResult, isMon
                 {amounts ?
                 <ListGroup variant="flush">
                     <ListGroup.Item>
-                        <b>Ingresos</b>: {amounts.totalIncomes}
+                        <b>Ingresos</b>: {formatAmount(amounts.totalIncomes)}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        <b>Ahorro sugerido({configuration.savingsRate}%)</b>: {amounts.savings}
+                        <b>Ahorro sugerido({configuration.savingsRate}%)</b>: {formatAmount(amounts.savings)}
                     </ListGroup.Item>
                     <ListGroup.Item style={ isExceeded(amounts.sugestedBaseExpences, amounts.totalBaseExpences) ? null : alertExceed }>
-                        <b>Gastos Base({configuration.baseExpencesRate}%)</b>: {amounts.totalBaseExpences}
+                        <b>Gastos Base({configuration.baseExpencesRate}%)</b>: {formatAmount(amounts.totalBaseExpences)}
                         <br/>
-                        <b>Sugerido</b>: {amounts.sugestedBaseExpences}
+                        <b>Sugerido</b>: {formatAmount(amounts.sugestedBaseExpences)}
                         <br />
-                        <b>Restante</b>: {amounts.remainingBaseExpences}
+                        <b>Restante</b>: {formatAmount(amounts.remainingBaseExpences)}
                     </ListGroup.Item>
                     <ListGroup.Item style={ isExceeded(amounts.sugestedAditionalExpences, amounts.totalAditionalExpences) ? null : alertExceed }>
-                        <b>Gastos adicionales({configuration.totalAditionalExpences}%)</b>: {amounts.totalBaseExpences}
+                        <b>Gastos adicionales({configuration.totalAditionalExpences}%)</b>: {formatAmount(amounts.totalBaseExpences)}
                         <br/>
-                        <b>Sugerido</b>: {amounts.sugestedAditionalExpences}
+                        <b>Sugerido</b>: {formatAmount(amounts.sugestedAditionalExpences)}
                         <br/>
-                        <b>Restante</b>: {amounts.remainingAditionalExpences}
+                        <b>Restante</b>: {formatAmount(amounts.remainingAditionalExpences)}
                     </ListGroup.Item>
                 </ListGroup> : "Se necesitan gastos e ingresos registrados para realizar los calculos"}
             </Card>

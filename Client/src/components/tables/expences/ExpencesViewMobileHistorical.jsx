@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { deleteExpence, getExpencesById, getExpenceById } from "../../../gateway/expenceGateway";
 import { Fragment, useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
+import { formatAmount } from "../../../utils/numberFormatter";
 
 export const ExpencesViewMobileHistorical = ({expencesId, saveOperationResult}) => {
     
@@ -84,7 +85,7 @@ export const ExpencesViewMobileHistorical = ({expencesId, saveOperationResult}) 
                     <ListGroup variant="flush">
                         {currentItems.map(e => 
                             <ListGroup.Item key={e.id}>
-                                <b>{e.name}</b>:${e.amount} ({(e.expenceType === 1 ? "Base" : "Adicional")})
+                                <b>{e.name}</b>:${formatAmount(e.amount)} ({(e.expenceType === 1 ? "Base" : "Adicional")})
                                 <br />
                                 {moment(e.date).format("DD/MM/YYYY")}
                                 <div>
