@@ -16,7 +16,7 @@ namespace MadExpenceTracker.Server.Mapper
                     amountsList.Add(new AmountApi
                     {
                         Id = item.Id,
-                        Savings = item.Savings,
+                        Savings = item.SugestedSavings,
                         TotalAditionalExpences = item.TotalAditionalExpences,
                         TotalBaseExpences = item.TotalBaseExpences,
                         TotalIncomes = item.TotalIncomes,
@@ -24,6 +24,8 @@ namespace MadExpenceTracker.Server.Mapper
                         SugestedBaseExpences = item.SugestedBaseExpences,
                         RemainingAditionalExpences = item.RemainingAditionalExpences,
                         RemainingBaseExpences = item.RemainingBaseExpences,
+                        TotalSavings = item.TotalSavings,
+                        
                     });
                 }
             }
@@ -40,7 +42,7 @@ namespace MadExpenceTracker.Server.Mapper
             return new AmountApi()
             {
                 Id = input.Id,
-                Savings = input.Savings,
+                Savings = input.SugestedSavings,
                 TotalAditionalExpences = input.TotalAditionalExpences,
                 TotalBaseExpences = input.TotalBaseExpences,
                 TotalIncomes = input.TotalIncomes,
@@ -48,6 +50,7 @@ namespace MadExpenceTracker.Server.Mapper
                 SugestedBaseExpences = input.SugestedBaseExpences,
                 RemainingAditionalExpences = input.RemainingAditionalExpences,
                 RemainingBaseExpences = input.RemainingBaseExpences,
+                TotalSavings = input.TotalSavings,
             };
         }
 
@@ -56,7 +59,7 @@ namespace MadExpenceTracker.Server.Mapper
             return new Amount()
             {
                 Id = input.Id,
-                Savings = input.Savings,
+                SugestedSavings = input.Savings,
                 TotalAditionalExpences = input.TotalAditionalExpences,
                 TotalBaseExpences = input.TotalBaseExpences,
                 TotalIncomes = input.TotalIncomes,
@@ -64,6 +67,7 @@ namespace MadExpenceTracker.Server.Mapper
                 SugestedBaseExpences = input.SugestedBaseExpences,
                 RemainingAditionalExpences = input.RemainingAditionalExpences,
                 RemainingBaseExpences = input.RemainingBaseExpences,
+                TotalSavings = input.TotalSavings,
             };
         }
     }

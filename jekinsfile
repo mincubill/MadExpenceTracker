@@ -58,6 +58,18 @@ pipeline {
                 script {
                     if(params.deploy) {
                         sh "docker-compose -f ${workspace}/docker-compose.yml down"
+                        def imageName = "MadExpences"
+                        env.imageName = "${imageName}"
+                        def oldImageID = sh( 
+                                            script: "docker images ls -a | grep ${imageName}",
+                                            returnStdout: true
+                                            )
+                        if ( "${oldImageID}" != '' ) {
+                            sh "docker image rm madexpencestracker_mad-expences-tracker-ui"
+                            sh "docker image rm madexpencestracker_mad-expences-tracker-back"
+                            sh "docker rmi -f ${oldImageID}"
+                        }
+                        
                     }
                 }
             }

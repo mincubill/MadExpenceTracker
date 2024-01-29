@@ -149,6 +149,17 @@ export const ExpencesForm = () => {
                                 onChange={e => saveExpenceType(e.target.value)}
                                 readOnly={isReadOnlyField}
                             />
+                            <Form.Check
+                                inline  
+                                label="ahorro"
+                                name="expenceType"
+                                type="radio"
+                                value={3}
+                                id={`inline-radio-3`}
+                                checked={expenceType == 3}
+                                onChange={e => saveExpenceType(e.target.value)}
+                                readOnly={isReadOnlyField}
+                            />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-3">

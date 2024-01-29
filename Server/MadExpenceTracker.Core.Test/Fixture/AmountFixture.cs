@@ -14,10 +14,12 @@ namespace MadExpenceTracker.Core.Test.Fixture
             return new Amount
             {
                 Id = Guid.Parse("df592bf9-ee3a-4a12-bd83-2c5817c150ed"),
-                Savings = 200000,
+                SugestedSavings = 200000,
                 TotalAditionalExpences = 20,
                 TotalBaseExpences = 100,
                 TotalIncomes = 1000000,
+                TotalSavings = 50000,
+                RemainingBaseExpences = 1000,
                 SugestedBaseExpences = 100,
                 SugestedAditionalExpences = 100,
                 RemainingAditionalExpences = 100
@@ -35,9 +37,11 @@ namespace MadExpenceTracker.Core.Test.Fixture
                     new Amount
                     {
                         Id = Guid.Parse("df592bf9-ee3a-4a12-bd83-2c5817c150ed"),
-                        Savings = 200000,
+                        SugestedSavings = 200000,
                         TotalAditionalExpences = 20,
                         TotalBaseExpences = 100,
+                        RemainingBaseExpences= 1000,
+                        TotalSavings = 50000,
                         TotalIncomes = 1000000,
                         SugestedBaseExpences = 100,
                         SugestedAditionalExpences = 100,

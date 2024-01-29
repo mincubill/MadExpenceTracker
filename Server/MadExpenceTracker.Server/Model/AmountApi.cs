@@ -10,6 +10,7 @@
         public long SugestedAditionalExpences { get; set; }
         public long RemainingAditionalExpences { get; set; }
         public long Savings { get; set; }
+        public long TotalSavings { get; set; }
         public long TotalIncomes { get; set; }
 
     }

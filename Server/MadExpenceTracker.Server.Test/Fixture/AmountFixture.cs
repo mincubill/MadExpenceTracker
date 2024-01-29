@@ -10,12 +10,15 @@ namespace MadExpenceTracker.Server.Test.Fixture
             return new Amount
             {
                 Id = Guid.Parse("df592bf9-ee3a-4a12-bd83-2c5817c150ed"),
-                Savings = 200000,
+                SugestedSavings = 200000,
                 TotalAditionalExpences = 20,
                 TotalBaseExpences = 100,
                 TotalIncomes = 1000000,
-                SugestedBaseExpences= 100,
+                SugestedBaseExpences = 100,
                 SugestedAditionalExpences = 100,
+                RemainingAditionalExpences = 100,
+                TotalSavings = 10000,
+                RemainingBaseExpences = 100,
             };
         }
 
@@ -30,12 +33,15 @@ namespace MadExpenceTracker.Server.Test.Fixture
                     new Amount
                     {
                         Id = Guid.Parse("df592bf9-ee3a-4a12-bd83-2c5817c150ed"),
-                        Savings = 200000,
+                        SugestedSavings = 200000,
                         TotalAditionalExpences = 20,
                         TotalBaseExpences = 100,
                         TotalIncomes = 1000000,
-                        SugestedAditionalExpences= 100,
-                        SugestedBaseExpences = 100
+                        SugestedAditionalExpences = 100,
+                        SugestedBaseExpences = 100,
+                        RemainingBaseExpences = 100,
+                        TotalSavings = 1000,
+                        RemainingAditionalExpences = 100,
                     }
                 }
             };
@@ -58,7 +64,8 @@ namespace MadExpenceTracker.Server.Test.Fixture
                         SugestedAditionalExpences= 100,
                         SugestedBaseExpences = 100,
                         RemainingBaseExpences= 100,
-                        RemainingAditionalExpences = 100
+                        RemainingAditionalExpences = 100,
+                        TotalSavings = 1000,
                     }
                 }
             };
@@ -76,7 +83,9 @@ namespace MadExpenceTracker.Server.Test.Fixture
                 TotalIncomes = 1000000,
                 SugestedAditionalExpences = 100,
                 SugestedBaseExpences = 100,
-                RemainingAditionalExpences = 100
+                RemainingAditionalExpences = 100,
+                TotalSavings = 1000,
+                RemainingBaseExpences = 100
             };
         }
     }

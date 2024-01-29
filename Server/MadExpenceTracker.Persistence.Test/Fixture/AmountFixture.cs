@@ -10,7 +10,7 @@ namespace MadExpenceTracker.Persistence.Test.Fixture
             return new Amount
             {
                 Id = Guid.Parse("df592bf9-ee3a-4a12-bd83-2c5817c150ed"),
-                Savings = 200000,
+                SugestedSavings = 200000,
                 TotalAditionalExpences = 20,
                 TotalBaseExpences = 100,
                 TotalIncomes = 1000000,
@@ -30,7 +30,7 @@ namespace MadExpenceTracker.Persistence.Test.Fixture
                     new Amount
                     {
                         Id = Guid.Parse("df592bf9-ee3a-4a12-bd83-2c5817c150ed"),
-                        Savings = 200000,
+                        SugestedSavings = 200000,
                         TotalAditionalExpences = 20,
                         TotalBaseExpences = 100,
                         TotalIncomes = 1000000,

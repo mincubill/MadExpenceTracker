@@ -9,6 +9,7 @@ import { deleteExpence, getExpencesById, getExpenceById } from "../../../gateway
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
 import { formatAmount } from "../../../utils/numberFormatter";
+import { getExpenceType } from "../../../utils/expenceType";
 
 export const ExpenseTableHistorical = ({expencesId, saveOperationResult}) => {
 
@@ -101,7 +102,7 @@ export const ExpenseTableHistorical = ({expencesId, saveOperationResult}) => {
                             {!d.name ? <td colSpan={5}>Sin gastos registrados</td> : null}
                             <td>{d.name}</td>
                             <td>{moment(d.date).format("DD/MM/YYYY")}</td>
-                            <td>{(d.expenceType === 1 ? "Base" : "Adicional")}</td>
+                            <td>{getExpenceType(d.expenceType)}</td>
                             <td>{formatAmount( d.amount )}</td>
                             
                             <td>

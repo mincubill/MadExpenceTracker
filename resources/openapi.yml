@@ -600,6 +600,9 @@
           savings:
             type: number
             example: 200000
+          totalSsavings:
+            type: number
+            example: 200000
           totalIncomes:
             type: number
             example: 200000

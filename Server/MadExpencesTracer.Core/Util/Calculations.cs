@@ -15,6 +15,7 @@ namespace MadExpenceTracker.Core.Util
         {
             long totalBaseExpences = expences.Expence.Where(e => e.ExpenceType == ExpenceType.Base).Sum(e => e.Amount);
             long totalAditionalExpences = expences.Expence.Where(e => e.ExpenceType == ExpenceType.Aditional).Sum(e => e.Amount);
+            long totalSavings = expences.Expence.Where(e => e.ExpenceType == ExpenceType.Saving).Sum(e => e.Amount);
             long totalIncomes = incomes.Income.Sum(i => i.Amount);
             byte savingRate = configuration.SavingsRate;
             byte baseRate = configuration.BaseExpencesRate;
@@ -27,7 +28,8 @@ namespace MadExpenceTracker.Core.Util
                 TotalBaseExpences = totalBaseExpences,
                 TotalAditionalExpences = totalAditionalExpences,
                 TotalIncomes = totalIncomes,
-                Savings = Convert.ToInt64(totalIncomes * (savingRate / 100f)),
+                TotalSavings = totalSavings,
+                SugestedSavings = Convert.ToInt64(totalIncomes * (savingRate / 100f)),
                 SugestedBaseExpences = sugestedBase,
                 SugestedAditionalExpences = sugestedAditional,
                 RemainingAditionalExpences = sugestedAditional - totalAditionalExpences,

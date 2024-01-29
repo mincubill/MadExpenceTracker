@@ -1,5 +1,4 @@
 ﻿using MadExpenceTracker.Core.Interfaces.Utils;
-using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace MadExpenceTracker.Persistence.MongoDB.Util

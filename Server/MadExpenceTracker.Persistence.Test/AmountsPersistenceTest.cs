@@ -93,7 +93,7 @@ namespace MadExpenceTracker.Persistence.Test
             Amount amountToCreate = new Amount()
             {
                 Id = Guid.NewGuid(),
-                Savings = 20,
+                SugestedSavings = 20,
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
@@ -159,7 +159,7 @@ namespace MadExpenceTracker.Persistence.Test
             Amount amountToCreate = new Amount()
             {
                 Id = Guid.NewGuid(),
-                Savings = 20,
+                SugestedSavings = 20,
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
@@ -203,7 +203,7 @@ namespace MadExpenceTracker.Persistence.Test
             Amount amountToCreate = new Amount()
             {
                 Id = Guid.NewGuid(),
-                Savings = 20,
+                SugestedSavings = 20,
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
@@ -234,7 +234,7 @@ namespace MadExpenceTracker.Persistence.Test
             Amount amountToCreate = new Amount()
             {
                 Id = Guid.NewGuid(),
-                Savings = 20,
+                SugestedSavings = 20,
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
@@ -265,7 +265,7 @@ namespace MadExpenceTracker.Persistence.Test
             Amount amountToCreate = new Amount()
             {
                 Id = Guid.NewGuid(),
-                Savings = 20,
+                SugestedSavings = 20,
                 TotalAditionalExpences = 200000,
                 TotalBaseExpences = 200000,
                 TotalIncomes = 200000,
