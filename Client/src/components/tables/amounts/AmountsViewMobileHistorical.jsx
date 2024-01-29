@@ -45,7 +45,7 @@ export const AmountsViewMobileHistorical = ({amountsId, savingsRate, baseExpence
                     <ListGroup.Item>
                         <b>Ingresos</b>: {formatAmount(amounts.totalIncomes)}
                     </ListGroup.Item>
-                    <ListGroup.Item style={ isExceeded(amounts.sugestedBaseExpences, amounts.totalBaseExpences) ? null : alertSavingSuccess }>
+                    <ListGroup.Item style={ isExceeded(amounts.savings, amounts.totalSavings) ? null : alertSavingSuccess }>
                         <b>Ahorro sugerido({savingsRate}%)</b>: {formatAmount(amounts.savings)}
                         <br/>
                         <b>Ahorro total</b>: {formatAmount(amounts.totalSavings)}

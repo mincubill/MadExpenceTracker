@@ -64,7 +64,7 @@ export const AmountsTable = ({incomesId, expencesId, operationResult, isMonthClo
                         <td style={ isExceeded(amounts.sugestedAditionalExpences, amounts.totalAditionalExpences) ? null : alertExceed }>
                             {formatAmount(amounts.totalAditionalExpences)}
                         </td>
-                        <td style={ isExceeded(amounts.sugestedBaseExpences, amounts.totalBaseExpences) ? null : alertSavingSuccess }>{formatAmount(amounts.totalSavings)}</td>
+                        <td style={ isExceeded(amounts.savings, amounts.totalSavings) ? null : alertSavingSuccess }>{formatAmount(amounts.totalSavings)}</td>
                         <td>
                             {formatAmount(amounts.totalIncomes)}
                         </td>
