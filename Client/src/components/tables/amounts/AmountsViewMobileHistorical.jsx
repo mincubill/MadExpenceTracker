@@ -15,6 +15,11 @@ export const AmountsViewMobileHistorical = ({amountsId, savingsRate, baseExpence
         backgroundColor: '#e77d7d'
     }
 
+    const alertSavingSuccess = {
+        color: 'whitesmoke',
+        backgroundColor: '#629443'
+    }
+
     useEffect(() => { 
             if(amountsId === '') {
                 setAmounts(undefined)
@@ -40,8 +45,10 @@ export const AmountsViewMobileHistorical = ({amountsId, savingsRate, baseExpence
                     <ListGroup.Item>
                         <b>Ingresos</b>: {formatAmount(amounts.totalIncomes)}
                     </ListGroup.Item>
-                    <ListGroup.Item>
+                    <ListGroup.Item style={ isExceeded(amounts.sugestedBaseExpences, amounts.totalBaseExpences) ? null : alertSavingSuccess }>
                         <b>Ahorro sugerido({savingsRate}%)</b>: {formatAmount(amounts.savings)}
+                        <br/>
+                        <b>Ahorro total</b>: {formatAmount(amounts.totalSavings)}
                     </ListGroup.Item>
                     <ListGroup.Item style={ isExceeded(amounts.sugestedBaseExpences, amounts.totalBaseExpences) ? null : alertExceed }>
                         <b>Gastos Base({baseExpencesRate}%)</b>: {formatAmount(amounts.totalBaseExpences)}

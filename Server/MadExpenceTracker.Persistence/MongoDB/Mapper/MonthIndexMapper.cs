@@ -21,7 +21,7 @@ namespace MadExpenceTracker.Persistence.MongoDB.Mapper
                         Month = item.Month,
                         Id = item.Id,
                         AditionalExpencesRate = item.AditionalExpencesRate,
-                        BaseExpencesRate = item.BaseExpencesRate
+                        BaseExpencesRate = item.BaseExpencesRate,
                     });
                 }
             }

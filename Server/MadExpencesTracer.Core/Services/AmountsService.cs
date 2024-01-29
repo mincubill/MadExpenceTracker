@@ -44,12 +44,13 @@ namespace MadExpenceTracker.Core.Services
             amounts.Amount = amounts.Amount?.Select(a => new Amount
             {
                 Id = a.Id,
-                Savings = a.Savings,
+                SugestedSavings = a.SugestedSavings,
                 SugestedAditionalExpences = a.SugestedAditionalExpences,
                 TotalAditionalExpences = a.TotalAditionalExpences,
                 SugestedBaseExpences = a.SugestedBaseExpences,
                 TotalBaseExpences = a.TotalBaseExpences,
                 TotalIncomes = a.TotalIncomes,
+                TotalSavings = a.TotalSavings,
                 RemainingAditionalExpences = a.SugestedAditionalExpences - a.TotalAditionalExpences,
                 RemainingBaseExpences = a.SugestedBaseExpences - a.TotalBaseExpences
             });

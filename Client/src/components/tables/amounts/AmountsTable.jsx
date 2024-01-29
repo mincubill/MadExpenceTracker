@@ -17,6 +17,11 @@ export const AmountsTable = ({incomesId, expencesId, operationResult, isMonthClo
         backgroundColor: '#e77d7d'
     }
 
+    const alertSavingSuccess = {
+        color: 'whitesmoke',
+        backgroundColor: '#629443'
+    }
+
     useEffect(() => {
         if(incomesId !== '' && expencesId !== '') {
             getCurrentAmounts(expencesId, incomesId).then(d => {
@@ -59,9 +64,7 @@ export const AmountsTable = ({incomesId, expencesId, operationResult, isMonthClo
                         <td style={ isExceeded(amounts.sugestedAditionalExpences, amounts.totalAditionalExpences) ? null : alertExceed }>
                             {formatAmount(amounts.totalAditionalExpences)}
                         </td>
-                        <td>
-                            {formatAmount(amounts.savings)}
-                        </td>
+                        <td style={ isExceeded(amounts.sugestedBaseExpences, amounts.totalBaseExpences) ? null : alertSavingSuccess }>{formatAmount(amounts.totalSavings)}</td>
                         <td>
                             {formatAmount(amounts.totalIncomes)}
                         </td>
@@ -73,6 +76,8 @@ export const AmountsTable = ({incomesId, expencesId, operationResult, isMonthClo
                         <td><b>Sugerido</b></td>
                         <td>{formatAmount(amounts.sugestedBaseExpences)}</td>
                         <td>{formatAmount(amounts.sugestedAditionalExpences)}</td>
+                        <td>{formatAmount(amounts.savings)}</td>
+                        
                     </tr> 
                 }
                 {amounts === undefined ? null : 

@@ -9,6 +9,7 @@ import { deleteExpence, getCurrentExpences, getExpenceById } from "../../../gate
 import { Fragment, useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
 import { formatAmount } from "../../../utils/numberFormatter";
+import { getExpenceType } from "../../../utils/expenceType";
 
 export const ExpencesViewMobile = ({setExpencesId, saveOperationResult, setExpencesMonth, isMonthClosedState}) => {
     const itemsPerPage = 10
@@ -86,7 +87,7 @@ export const ExpencesViewMobile = ({setExpencesId, saveOperationResult, setExpen
                     <ListGroup variant="flush">
                         {currentItems.map(e => 
                             <ListGroup.Item key={e.id}>
-                                <b>{e.name}</b>: {formatAmount(e.amount)} ({(e.expenceType === 1 ? "Base" : "Adicional")})
+                                <b>{e.name}</b>: {formatAmount(e.amount)} ({getExpenceType(e.expenceType)})
                                 <br />
                                 {moment(e.date).format("DD/MM/YYYY")}
                                 <div>

@@ -52,7 +52,9 @@ public static class MonthIndexFixture
                     AmountsId = Guid.Parse("9c64e4d9-c9af-4714-8650-c98e6ebecfa7"),
                     ExpencesId = Guid.Parse("fd76aa75-1628-4fd6-960a-64d62febbd9f"),
                     IncomesId = Guid.Parse("c5a76b10-96ea-4c14-b78a-2d01cac942e0"),
-                    SavingsRate = 20
+                    SavingsRate = 20,
+                    AditionalExpencesRate = 30,
+                    BaseExpencesRate = 50,
                 },
                 new MonthIndexMongo()
                 {
@@ -61,7 +63,9 @@ public static class MonthIndexFixture
                     AmountsId = Guid.Parse("9c64e4d9-c9af-4714-8650-c98e6ebecfa7"),
                     ExpencesId = Guid.Parse("fd76aa75-1628-4fd6-960a-64d62febbd9f"),
                     IncomesId = Guid.Parse("c5a76b10-96ea-4c14-b78a-2d01cac942e0"),
-                    SavingsRate = 20
+                    SavingsRate = 20,
+                    AditionalExpencesRate = 30,
+                    BaseExpencesRate = 50,
                 }
             },
 
@@ -77,7 +81,9 @@ public static class MonthIndexFixture
             AmountsId = Guid.Parse("9c64e4d9-c9af-4714-8650-c98e6ebecfa7"),
             ExpencesId = Guid.Parse("fd76aa75-1628-4fd6-960a-64d62febbd9f"),
             IncomesId = Guid.Parse("c5a76b10-96ea-4c14-b78a-2d01cac942e0"),
-            SavingsRate = 20
+            SavingsRate = 20,
+            AditionalExpencesRate = 30,
+            BaseExpencesRate = 50,
         };
     }
 }
