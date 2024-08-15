@@ -44,13 +44,13 @@ namespace MadExpenceTracker.Core.UseCase
             Incomes incomes = _incomePersistence.Get(incomesId) ?? throw new NotFoundException("");
             Amount amount = CalculateAmount(expences, incomes, config);
 
-            CheckIfExpencesMonthIsClosed(date.ToString(DATE_FORMAT));
-            CheckIfIncomesMonthIsClosed(date.ToString(DATE_FORMAT));
+            CheckIfExpencesMonthIsClosed(date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture));
+            CheckIfIncomesMonthIsClosed(date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture));
 
-            if (CreateNewExpencesCollection(date.ToString(DATE_FORMAT)) &&
-                CreateNewIncomesCollection(date.ToString(DATE_FORMAT)) &&
-                CloseExpencesMonth(date.ToString(DATE_FORMAT)) &&
-                CloseIncomesMonth(date.ToString(DATE_FORMAT)))
+            if (CreateNewExpencesCollection(date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)) &&
+                CreateNewIncomesCollection(date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)) &&
+                CloseExpencesMonth(date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)) &&
+                CloseIncomesMonth(date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)))
             {
                 CreateAmount(amount);
                 return CreateIndexEntry(monthToClose, expencesId, incomesId, amount, config);

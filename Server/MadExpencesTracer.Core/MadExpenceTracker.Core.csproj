@@ -6,9 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <SonarQubeSetting Include="sonar.coverage.exclusions">
-      <Value>**/Models/*</Value>
-      <Value>**/Exceptions/*</Value>
-    </SonarQubeSetting>
+	  <SonarQubeSetting Include="sonar.coverage.exclusions">
+		  <Value>**/Models/*</Value>
+		  <Value>**/Exceptions/*</Value>
+	  </SonarQubeSetting>
   </ItemGroup>
 </Project>

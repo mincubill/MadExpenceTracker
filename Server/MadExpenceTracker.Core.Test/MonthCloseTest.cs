@@ -38,21 +38,23 @@ namespace MadExpenceTracker.Core.Test
         [Test]
         public void MonthCloseTest()
         {
+            string month = "2024/8";
+            string newMonth = CURRENT_MONTH == month ? $"{DateTime.Now.Year}/{DateTime.Now.AddMonths(1).Month}" : month;
             Expences expences = ExpencesFixture.GetExpences();
             Incomes incomes = IncomesFixture.GetIncomes();
             _expencesPersistence.Setup(e => e.Get(expences.Id)).Returns(expences);
             _incomePersistence.Setup(i => i.Get(incomes.Id)).Returns(incomes);
             _expencesPersistence.Setup(e => e.IsMonthClosed(expences.RunningMonth)).Returns(true);
             _incomePersistence.Setup(e => e.IsMonthClosed(incomes.RunningMonth)).Returns(true);
-            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(CURRENT_MONTH)).Returns(true);
-            _incomePersistence.Setup(i => i.CreateNewIncomeDocument(CURRENT_MONTH)).Returns(true);
+            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(newMonth)).Returns(true);
+            _incomePersistence.Setup(i => i.CreateNewIncomeDocument(newMonth)).Returns(true);
             _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, expences.RunningMonth)).Returns(true);
             _incomePersistence.Setup(i => i.UpdateIncomesIsActive(false, incomes.RunningMonth)).Returns(true);
             _amountPersistence.Setup(a => a.AddAmount(AmountFixture.GetAmount())).Returns(AmountFixture.GetAmounts());
             _configurationPersistence.Setup(c => c.GetConfiguration()).Returns(ConfigurationFixture.GetConfiguration());
 
             MonthIndex res = _monthClose.CloseMonth(
-                "2023/12",
+                month,
                 ExpencesFixture.GetExpences().Id,
                 IncomesFixture.GetIncomes().Id);
             Assert.That(res.Id, Is.Not.EqualTo(Guid.Empty));
@@ -61,14 +63,16 @@ namespace MadExpenceTracker.Core.Test
         [Test]
         public void MonthCloseExceptionTest()
         {
+            string month = "2024/8";
+            string newMonth = CURRENT_MONTH == month ? $"{DateTime.Now.Year}/{DateTime.Now.AddMonths(1).Month}" : month;
             Expences expences = ExpencesFixture.GetExpences();
             Incomes incomes = IncomesFixture.GetIncomes();
             _expencesPersistence.Setup(e => e.Get(expences.Id)).Returns(expences);
             _incomePersistence.Setup(i => i.Get(incomes.Id)).Returns(incomes);
             _expencesPersistence.Setup(e => e.IsMonthClosed(expences.RunningMonth)).Returns(true);
             _incomePersistence.Setup(e => e.IsMonthClosed(incomes.RunningMonth)).Returns(true);
-            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(CURRENT_MONTH)).Returns(true);
-            _incomePersistence.Setup(i => i.CreateNewIncomeDocument(CURRENT_MONTH)).Returns(false);
+            _expencesPersistence.Setup(e => e.CreateNewExpencesDocument(month)).Returns(true);
+            _incomePersistence.Setup(i => i.CreateNewIncomeDocument(month)).Returns(false);
             _expencesPersistence.Setup(e => e.UpdateExpencesIsActive(false, expences.RunningMonth)).Returns(true);
             _incomePersistence.Setup(i => i.UpdateIncomesIsActive(false, incomes.RunningMonth)).Returns(true);
             _amountPersistence.Setup(a => a.AddAmount(AmountFixture.GetAmount())).Returns(AmountFixture.GetAmounts());
@@ -77,7 +81,7 @@ namespace MadExpenceTracker.Core.Test
 
             Assert.Throws<MonthCloseException>(() => {
                 _monthClose.CloseMonth(
-                "2023/12",
+                month,
                 ExpencesFixture.GetExpences().Id,
                 IncomesFixture.GetIncomes().Id);
             });

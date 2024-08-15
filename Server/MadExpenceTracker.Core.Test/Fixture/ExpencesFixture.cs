@@ -14,7 +14,7 @@ namespace MadExpenceTracker.Core.Test.Fixture
             return new Expences
             {
                 Id = Guid.Parse("fd76aa75-1628-4fd6-960a-64d62febbd9f"),
-                RunningMonth = "2023/12",
+                RunningMonth = "2024/8",
                 Expence = new List<Expence>
                 {
                     new Expence
