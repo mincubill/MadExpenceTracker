@@ -20,6 +20,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MadExpenceTracker.Core.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MadExpenceTracker.Server.Test", "MadExpenceTracker.Server.Test\MadExpenceTracker.Server.Test.csproj", "{C373F3A2-DB59-4E03-9A84-11401EB88C91}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{855C2863-2296-436C-8910-2AC4F5B4986F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{BE55FEB2-3352-4C81-8797-64F2242C5345}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2E35D75E-684E-49D9-A095-E9263A946389} = {855C2863-2296-436C-8910-2AC4F5B4986F}
+		{53557A6C-C770-4F30-994F-41AAF9FACBFA} = {855C2863-2296-436C-8910-2AC4F5B4986F}
+		{C633D368-F226-412C-B5E5-05E9B3EFF7F3} = {855C2863-2296-436C-8910-2AC4F5B4986F}
+		{74158542-D41F-48EF-9DD8-066110905759} = {BE55FEB2-3352-4C81-8797-64F2242C5345}
+		{9FD9C024-C344-40BA-A2AA-2D4E6DBE8488} = {BE55FEB2-3352-4C81-8797-64F2242C5345}
+		{C373F3A2-DB59-4E03-9A84-11401EB88C91} = {BE55FEB2-3352-4C81-8797-64F2242C5345}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D60F11AB-C939-4014-8E86-A1E25ABE504A}

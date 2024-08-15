@@ -15,6 +15,7 @@ namespace MadExpenceTracker.Core.UseCase
         private readonly IConfigurationPersistence _configuration;
         private readonly IMonthIndexPersistence _indexPersistence;
         private readonly string CURRENT_MONTH = $"{DateTime.Now.Year}/{DateTime.Now.Month}";
+        private const string DATE_FORMAT = "yyyy/M";
 
         public MonthClose(
             IExpencePersistence expencePersistence,
@@ -32,7 +33,7 @@ namespace MadExpenceTracker.Core.UseCase
 
         public MonthIndex CloseMonth(string monthToClose, Guid expencesId, Guid incomesId)
         {
-            if(!DateTime.TryParseExact(monthToClose, "yyyy/M", CultureInfo.InvariantCulture, DateTimeStyles.None,
+            if(!DateTime.TryParseExact(monthToClose, DATE_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None,
                 out DateTime date))
             {
                 throw new ArgumentException("month to close couldn't be parsed");
@@ -43,13 +44,13 @@ namespace MadExpenceTracker.Core.UseCase
             Incomes incomes = _incomePersistence.Get(incomesId) ?? throw new NotFoundException("");
             Amount amount = CalculateAmount(expences, incomes, config);
 
-            CheckIfExpencesMonthIsClosed(date.ToString("yyyy/M"));
-            CheckIfIncomesMonthIsClosed(date.ToString("yyyy/M"));
+            CheckIfExpencesMonthIsClosed(date.ToString(DATE_FORMAT));
+            CheckIfIncomesMonthIsClosed(date.ToString(DATE_FORMAT));
 
-            if (CreateNewExpencesCollection() &&
-                CreateNewIncomesCollection() &&
-                CloseExpencesMonth(date.ToString("yyyy/M")) &&
-                CloseIncomesMonth(date.ToString("yyyy/M")))
+            if (CreateNewExpencesCollection(date.ToString(DATE_FORMAT)) &&
+                CreateNewIncomesCollection(date.ToString(DATE_FORMAT)) &&
+                CloseExpencesMonth(date.ToString(DATE_FORMAT)) &&
+                CloseIncomesMonth(date.ToString(DATE_FORMAT)))
             {
                 CreateAmount(amount);
                 return CreateIndexEntry(monthToClose, expencesId, incomesId, amount, config);
@@ -74,14 +75,16 @@ namespace MadExpenceTracker.Core.UseCase
             return monthIndex;
         }
 
-        private bool CreateNewExpencesCollection()
+        private bool CreateNewExpencesCollection(string month)
         {
-            return _expencePersistence.CreateNewExpencesDocument(CURRENT_MONTH);
+            string newMonth = CURRENT_MONTH == month ? $"{DateTime.Now.Year}/{DateTime.Now.AddMonths(1).Month}" : month;
+            return _expencePersistence.CreateNewExpencesDocument(newMonth);
         }
 
-        private bool CreateNewIncomesCollection()
+        private bool CreateNewIncomesCollection(string month)
         {
-            return _incomePersistence.CreateNewIncomeDocument(CURRENT_MONTH);
+            string newMonth = CURRENT_MONTH == month ? $"{DateTime.Now.Year}/{DateTime.Now.AddMonths(1).Month}" : month;
+            return _incomePersistence.CreateNewIncomeDocument(newMonth);
         }
 
         private bool CloseExpencesMonth(string monthToClose)
@@ -103,7 +106,6 @@ namespace MadExpenceTracker.Core.UseCase
 
         private void CheckIfExpencesMonthIsClosed(string monthToClose)
         {
-            var wea = _expencePersistence.IsMonthClosed(monthToClose);
             if (!_expencePersistence.IsMonthClosed(monthToClose))
             {
                 throw new InvalidOperationException("Month of expences is already closed");
