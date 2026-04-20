@@ -20,8 +20,17 @@ namespace MadExpenceTracker.Core.Util
             byte savingRate = configuration.SavingsRate;
             byte baseRate = configuration.BaseExpencesRate;
             byte aditionalRate = configuration.AditionalExpencesRate;
-            long sugestedBase = Convert.ToInt64((totalIncomes - totalSavings) * (baseRate / 100f));
-            long sugestedAditional = Convert.ToInt64((totalIncomes - totalSavings) * (aditionalRate / 100f));
+            long sugestedBaseExpences = Convert.ToInt64((totalIncomes - totalSavings) * (baseRate / 100f));
+            long sugestedAditionalExpences = Convert.ToInt64((totalIncomes - totalSavings) * (aditionalRate / 100f));
+            long sugestedSaving = Convert.ToInt64(totalIncomes * (savingRate / 100f));
+            long remainingBaseExpences = sugestedBaseExpences - totalBaseExpences;
+            long remainingAdditionalExpences = 
+                CalculateRemainingAditionalExpences( sugestedBaseExpences, 
+                    totalBaseExpences, 
+                    sugestedAditionalExpences, 
+                    totalAditionalExpences, 
+                    sugestedSaving);
+            long remainingSaving = sugestedSaving;
             return new Amount
             {
                 Id = Guid.NewGuid(),
@@ -29,12 +38,28 @@ namespace MadExpenceTracker.Core.Util
                 TotalAditionalExpences = totalAditionalExpences,
                 TotalIncomes = totalIncomes,
                 TotalSavings = totalSavings,
-                SugestedSavings = Convert.ToInt64(totalIncomes * (savingRate / 100f)),
-                SugestedBaseExpences = sugestedBase,
-                SugestedAditionalExpences = sugestedAditional,
-                RemainingAditionalExpences = sugestedAditional - totalAditionalExpences,
-                RemainingBaseExpences = sugestedBase - totalBaseExpences,
+                SugestedSavings = remainingSaving,
+                SugestedBaseExpences = sugestedBaseExpences,
+                SugestedAditionalExpences = sugestedAditionalExpences,
+                // TODO: hacer que que si el utilizado es mayor haga descuento de la siguiente seccion
+                RemainingBaseExpences = remainingBaseExpences,
+                RemainingAditionalExpences = remainingAdditionalExpences,
             };
+        }
+
+        private static long CalculateRemainingAditionalExpences( long sugestedBaseExpences, 
+                                                                 long totalBaseExpences, 
+                                                                 long sugestedAditionalExpences, 
+                                                                 long totalAditionalExpences, 
+                                                                 long sugestedSaving)
+        {
+            if(sugestedBaseExpences - totalBaseExpences < 0)
+            {
+                long exceedingAmount = (sugestedBaseExpences - totalBaseExpences) -
+                                       (totalAditionalExpences - sugestedAditionalExpences);
+                return exceedingAmount;
+            }
+            return sugestedAditionalExpences - totalAditionalExpences;
         }
     }
 }
