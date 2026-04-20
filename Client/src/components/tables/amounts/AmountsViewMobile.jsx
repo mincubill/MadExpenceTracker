@@ -56,12 +56,12 @@ export const AmountsViewMobile = ({incomesId, expencesId, operationResult, isMon
                     <ListGroup.Item style={ isExceeded(amounts.sugestedBaseExpences, amounts.totalBaseExpences) ? null : alertExceed }>
                         <b>Gastos Base({configuration.baseExpencesRate}%)</b>: {formatAmount(amounts.totalBaseExpences)}
                         <br/>
-                        <b>Sugerido</b>: {formatAmount(amounts.sugestedAditionalExpences)}
+                        <b>Sugerido</b>: {formatAmount(amounts.sugestedBaseExpences)}
                         <br />
                         <b>Restante</b>: {formatAmount(amounts.remainingBaseExpences)}
                     </ListGroup.Item>
                     <ListGroup.Item style={ isExceeded(amounts.sugestedAditionalExpences, amounts.totalAditionalExpences) ? null : alertExceed }>
-                        <b>Gastos adicionales({configuration.totalAditionalExpences}%)</b>: {formatAmount(amounts.totalBaseExpences)}
+                        <b>Gastos adicionales({configuration.aditionalExpencesRate}%)</b>: {formatAmount(amounts.totalAditionalExpences)}
                         <br/>
                         <b>Sugerido</b>: {formatAmount(amounts.sugestedAditionalExpences)}
                         <br/>
